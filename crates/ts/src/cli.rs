@@ -223,4 +223,10 @@ pub struct TsKonveyorArgs {
     /// Resolved via nvm. Requires nvm to be installed.
     #[arg(long, requires = "dep_repo", help_heading = "Dependency Repo")]
     pub to_dep_node_version: Option<String>,
+    
+    /// Dump CSS class inventories to files in the output directory.
+    /// Writes old-css-inventory.txt and new-css-inventory.txt for
+    /// offline analysis of which classes were extracted from each version.
+    #[arg(long, help_heading = "Diagnostics")]
+    pub dump_css_inventory: bool,
 }
