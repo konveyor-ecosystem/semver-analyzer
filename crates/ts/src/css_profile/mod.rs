@@ -1457,6 +1457,12 @@ pub fn build_css_variable_resolution_map_from_dir(
     let mut definitions: HashMap<String, String> = HashMap::new();
     let mut property_targets: HashMap<String, String> = HashMap::new();
 
+    tracing::debug!(
+        dir = %dir.display(),
+        exists = dir.exists(),
+        "CSS resolve diag: starting resolution map build from directory"
+    );
+
     // Walk ALL CSS files recursively to find custom property definitions
     // AND standard property var() usages
     collect_css_definitions_recursive(dir, &mut definitions, &mut property_targets)?;
@@ -1467,8 +1473,54 @@ pub fn build_css_variable_resolution_map_from_dir(
         "Collected CSS custom property definitions and property targets"
     );
 
+    // Diagnostic: check specific tokens before resolution
+    for token in [
+        "--pf-v5-c-banner--m-gold--BackgroundColor",
+        "--pf-v5-global--warning-color--100",
+        "--pf-v6-c-banner--BackgroundColor",
+    ] {
+        if let Some(val) = definitions.get(token) {
+            tracing::debug!(
+                token = token,
+                value = %val,
+                "CSS resolve diag: token found in raw definitions"
+            );
+        } else {
+            tracing::debug!(
+                token = token,
+                "CSS resolve diag: token NOT found in raw definitions"
+            );
+        }
+    }
+
+    // Dump ALL banner-related definitions
+    let banner_defs: Vec<_> = definitions.iter()
+        .filter(|(k, _)| k.contains("banner") && k.contains("gold"))
+        .map(|(k, v)| format!("{} = {}", k, v))
+        .collect();
+    tracing::debug!(
+        count = banner_defs.len(),
+        entries = ?banner_defs,
+        "CSS resolve diag: all banner+gold definitions"
+    );
+
     // Iteratively resolve var() references
     resolve_var_chains(&mut definitions);
+
+    // Diagnostic: check after resolution
+    for token in [
+        "--pf-v5-c-banner--m-gold--BackgroundColor",
+        "--pf-v5-global--warning-color--100",
+    ] {
+        if let Some(val) = definitions.get(token) {
+            tracing::debug!(
+                token = token,
+                value = %val,
+                has_var = val.contains("var("),
+                "CSS resolve diag: token after resolution"
+            );
+        }
+    }
 
     // Keep only entries with terminal values (no remaining var() references)
     let resolved: CssVariableResolutionMap = definitions
@@ -1492,6 +1544,15 @@ fn collect_css_definitions_recursive(
     definitions: &mut HashMap<String, String>,
     property_targets: &mut HashMap<String, String>,
 ) -> Result<()> {
+    collect_css_definitions_recursive_inner(dir, definitions, property_targets, 0)
+}
+
+fn collect_css_definitions_recursive_inner(
+    dir: &Path,
+    definitions: &mut HashMap<String, String>,
+    property_targets: &mut HashMap<String, String>,
+    depth: usize,
+) -> Result<()> {
     if !dir.exists() {
         return Ok(());
     }
@@ -1501,7 +1562,7 @@ fn collect_css_definitions_recursive(
         let path = entry.path();
 
         if path.is_dir() {
-            collect_css_definitions_recursive(&path, definitions, property_targets)?;
+            collect_css_definitions_recursive_inner(&path, definitions, property_targets, depth + 1)?;
         } else if path.extension().is_some_and(|e| e == "css") {
             let fname = path.file_name().unwrap_or_default().to_string_lossy();
             if fname.contains(".min.") || fname.contains(".map") {
@@ -1509,7 +1570,25 @@ fn collect_css_definitions_recursive(
             }
 
             if let Ok(source) = std::fs::read_to_string(&path) {
+                let before = definitions.len();
                 collect_definitions_from_css(&source, definitions, property_targets);
+                let added = definitions.len() - before;
+                // Log Banner CSS file specifically
+                if fname.to_lowercase().contains("banner") && !path.to_string_lossy().contains("gdprBanner") && !path.to_string_lossy().contains("bannerController") {
+                    // Check: is the gold token in definitions NOW?
+                    let has_gold_in_defs = definitions.contains_key("--pf-v5-c-banner--m-gold--BackgroundColor");
+                    // Also check with lowercase in case lightningcss lowercases
+                    let has_gold_lower = definitions.keys().any(|k| k.to_lowercase().contains("gold") && k.to_lowercase().contains("banner"));
+                    tracing::debug!(
+                        file = %path.display(),
+                        definitions_added = added,
+                        total = definitions.len(),
+                        has_gold_in_source = source.contains("m-gold--BackgroundColor"),
+                        has_gold_in_defs = has_gold_in_defs,
+                        has_gold_any_case = has_gold_lower,
+                        "CSS resolve diag: processed PF Banner CSS file"
+                    );
+                }
             }
         }
     }
@@ -1532,7 +1611,13 @@ fn collect_definitions_from_css(
     definitions: &mut HashMap<String, String>,
     property_targets: &mut HashMap<String, String>,
 ) {
-    let stylesheet = match StyleSheet::parse(source, ParserOptions::default()) {
+    let stylesheet = match StyleSheet::parse(
+        source,
+        ParserOptions {
+            error_recovery: true,
+            ..ParserOptions::default()
+        },
+    ) {
         Ok(s) => s,
         Err(_) => return,
     };
@@ -1564,6 +1649,23 @@ fn collect_definitions_from_rule(
                         lightningcss::printer::PrinterOptions::default(),
                     ) {
                         let value = value_str.trim().to_string();
+                        // Diagnostic: trace banner properties
+                        if prop_name.contains("banner") && prop_name.contains("m-gold") {
+                            tracing::debug!(
+                                prop_name = %prop_name,
+                                value = %value,
+                                already_exists = definitions.contains_key(&prop_name),
+                                "CSS resolve diag: lightningcss extracted banner gold property"
+                            );
+                        }
+                        // Also check: what does lightningcss give us for this specific line?
+                        if prop_name.contains("banner") && (prop_name.contains("BackgroundColor") || prop_name.contains("backgroundcolor")) {
+                            tracing::debug!(
+                                prop_name = %prop_name,
+                                value = %value,
+                                "CSS resolve diag: banner BackgroundColor property extracted"
+                            );
+                        }
                         // Only insert if not already defined (first definition wins —
                         // `:root` definitions come before component overrides)
                         definitions.entry(prop_name).or_insert(value);
@@ -1806,8 +1908,8 @@ pub fn resolve_modifier_effects(
     modifiers: &mut crate::sd_types::ComponentCssModifiers,
     resolution_map: &CssVariableResolutionMap,
 ) {
-    for (_block, modifier_map) in modifiers.iter_mut() {
-        for (_class, effect) in modifier_map.iter_mut() {
+    for (block, modifier_map) in modifiers.iter_mut() {
+        for (class, effect) in modifier_map.iter_mut() {
             for (token_name, raw_value) in &effect.custom_property_overrides {
                 // Try to resolve the raw value (which is typically var(--something))
                 if let Some(resolved) = resolve_single_var(raw_value, resolution_map) {
@@ -1815,12 +1917,30 @@ pub fn resolve_modifier_effects(
                         effect
                             .resolved_overrides
                             .insert(token_name.clone(), resolved);
+                    } else if block == "banner" && class == "pf-m-gold" {
+                        // Diagnostic: log unresolved Banner gold tokens
+                        tracing::debug!(
+                            block = %block,
+                            class = %class,
+                            token = %token_name,
+                            raw_value = %raw_value,
+                            partially_resolved = %resolved,
+                            "CSS resolve diag: Banner gold token NOT fully resolved"
+                        );
                     }
                 } else if !raw_value.contains("var(") {
                     // Already a terminal value (e.g., "transparent", "0")
                     effect
                         .resolved_overrides
                         .insert(token_name.clone(), raw_value.clone());
+                } else if block == "banner" && class == "pf-m-gold" {
+                    tracing::debug!(
+                        block = %block,
+                        class = %class,
+                        token = %token_name,
+                        raw_value = %raw_value,
+                        "CSS resolve diag: Banner gold token resolve_single_var returned None"
+                    );
                 }
             }
         }
@@ -2943,8 +3063,141 @@ mod selector_relationship_tests {
             targets.get("--pf-v5-c-drawer__content--BackgroundColor").map(|s| s.as_str()),
             Some("background-color"),
         );
-        assert_eq!(
+         assert_eq!(
             targets.get("--pf-v5-c-drawer__panel--BackgroundColor").map(|s| s.as_str()),
+            Some("background-color"),
+        );
+    }
+
+    /// Banner modifier token definitions should be collected from
+    /// the base `.pf-v5-c-banner` rule block. The token
+    /// `--pf-v5-c-banner--m-gold--BackgroundColor` is defined in the
+    /// base block (not the modifier block) and its definition is needed
+    /// for the CSS variable resolution chain.
+    #[test]
+    fn test_banner_gold_token_collected_from_base_block() {
+        let css = r#"
+            .pf-v5-c-banner {
+                --pf-v5-c-banner--m-gold--BackgroundColor: var(--pf-v5-global--warning-color--100);
+                --pf-v5-c-banner--BackgroundColor: var(--pf-v5-global--BackgroundColor--dark-400);
+                background-color: var(--pf-v5-c-banner--BackgroundColor);
+            }
+            .pf-v5-c-banner.pf-m-gold {
+                --pf-v5-c-banner--BackgroundColor: var(--pf-v5-c-banner--m-gold--BackgroundColor);
+            }
+        "#;
+        let mut defs = HashMap::new();
+        let mut targets = HashMap::new();
+        collect_definitions_from_css(css, &mut defs, &mut targets);
+
+        assert!(
+            defs.contains_key("--pf-v5-c-banner--m-gold--BackgroundColor"),
+            "Base block definition of --pf-v5-c-banner--m-gold--BackgroundColor should be collected. \
+             Found keys: {:?}",
+            defs.keys().filter(|k| k.contains("gold")).collect::<Vec<_>>()
+        );
+        assert_eq!(
+            defs.get("--pf-v5-c-banner--m-gold--BackgroundColor").map(|s| s.as_str()),
+            Some("var(--pf-v5-global--warning-color--100)"),
+        );
+    }
+
+    /// Tests with the REAL compiled PF5 Banner CSS structure.
+    /// The compiled CSS has multiple `.pf-v5-c-banner` blocks:
+    ///   1. A dark-theme mixin block (global token overrides)
+    ///   2. A base block (component token definitions including gold)
+    /// Both should be parsed, and the gold token should be collected.
+    #[test]
+    fn test_banner_gold_token_collected_from_real_compiled_css() {
+        // This mirrors the actual compiled output from dist/components/Banner/banner.css
+        let css = r#"
+.pf-v5-c-banner.pf-m-gold, .pf-v5-c-banner.pf-m-blue {
+  --pf-v5-global--Color--100: var(--pf-v5-global--Color--dark-100);
+  --pf-v5-global--Color--200: var(--pf-v5-global--Color--dark-200);
+  --pf-v5-global--BackgroundColor--100: var(--pf-v5-global--BackgroundColor--light-100);
+}
+.pf-v5-c-banner {
+  --pf-v5-global--Color--100: var(--pf-v5-global--Color--light-100);
+  --pf-v5-global--BackgroundColor--100: var(--pf-v5-global--BackgroundColor--dark-100);
+}
+.pf-v5-c-banner {
+  --pf-v5-c-banner--m-blue--BackgroundColor: var(--pf-v5-global--palette--blue-200);
+  --pf-v5-c-banner--m-red--BackgroundColor: var(--pf-v5-global--danger-color--100);
+  --pf-v5-c-banner--m-green--BackgroundColor: var(--pf-v5-global--success-color--100);
+  --pf-v5-c-banner--m-gold--BackgroundColor: var(--pf-v5-global--warning-color--100);
+  --pf-v5-c-banner--BackgroundColor: var(--pf-v5-global--BackgroundColor--dark-400);
+  color: var(--pf-v5-c-banner--Color);
+  background-color: var(--pf-v5-c-banner--BackgroundColor);
+}
+.pf-v5-c-banner.pf-m-blue {
+  --pf-v5-c-banner--BackgroundColor: var(--pf-v5-c-banner--m-blue--BackgroundColor);
+}
+.pf-v5-c-banner.pf-m-red {
+  --pf-v5-c-banner--BackgroundColor: var(--pf-v5-c-banner--m-red--BackgroundColor);
+}
+.pf-v5-c-banner.pf-m-green {
+  --pf-v5-c-banner--BackgroundColor: var(--pf-v5-c-banner--m-green--BackgroundColor);
+}
+.pf-v5-c-banner.pf-m-gold {
+  --pf-v5-c-banner--BackgroundColor: var(--pf-v5-c-banner--m-gold--BackgroundColor);
+}
+"#;
+        let mut defs = HashMap::new();
+        let mut targets = HashMap::new();
+        collect_definitions_from_css(css, &mut defs, &mut targets);
+
+        // The gold token should be collected from the second .pf-v5-c-banner block
+        assert!(
+            defs.contains_key("--pf-v5-c-banner--m-gold--BackgroundColor"),
+            "Gold token should be collected from base block. \
+             Found banner keys: {:?}",
+            defs.keys().filter(|k| k.contains("banner")).collect::<Vec<_>>()
+        );
+
+        // The property target should also be collected
+        assert_eq!(
+            targets.get("--pf-v5-c-banner--BackgroundColor").map(|s| s.as_str()),
+            Some("background-color"),
+        );
+    }
+
+    /// The real PF5 compiled Banner CSS contains `color: var(false)` —
+    /// an invalid CSS declaration generated by the dark theme SCSS mixin
+    /// when `@include pf-v5-t-light(false)` compiles. Without error
+    /// recovery, lightningcss rejects the ENTIRE file and no definitions
+    /// are collected. With `error_recovery: true`, lightningcss skips the
+    /// invalid declaration and successfully extracts all valid definitions.
+    #[test]
+    fn test_banner_gold_token_collected_despite_var_false() {
+        let css = r#"
+.pf-v5-c-banner {
+  --pf-v5-c-banner--m-gold--BackgroundColor: var(--pf-v5-global--warning-color--100);
+  --pf-v5-c-banner--BackgroundColor: var(--pf-v5-global--BackgroundColor--dark-400);
+  background-color: var(--pf-v5-c-banner--BackgroundColor);
+}
+.pf-v5-c-banner.pf-m-gold {
+  --pf-v5-c-banner--BackgroundColor: var(--pf-v5-c-banner--m-gold--BackgroundColor);
+}
+:where(.pf-v5-theme-dark) .pf-v5-c-banner {
+  color: var(false);
+}
+"#;
+        let mut defs = HashMap::new();
+        let mut targets = HashMap::new();
+        collect_definitions_from_css(css, &mut defs, &mut targets);
+
+        assert!(
+            defs.contains_key("--pf-v5-c-banner--m-gold--BackgroundColor"),
+            "Gold token should be collected even with var(false) in the file. \
+             error_recovery must be enabled. Found keys: {:?}",
+            defs.keys().filter(|k| k.contains("banner")).collect::<Vec<_>>()
+        );
+        assert_eq!(
+            defs.get("--pf-v5-c-banner--m-gold--BackgroundColor").map(|s| s.as_str()),
+            Some("var(--pf-v5-global--warning-color--100)"),
+        );
+        assert_eq!(
+            targets.get("--pf-v5-c-banner--BackgroundColor").map(|s| s.as_str()),
             Some("background-color"),
         );
     }

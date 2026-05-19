@@ -3481,6 +3481,43 @@ fn compute_css_modifier_bridge(
         return hints;
     }
 
+    // Diagnostic: dump modifier data for debugging value mapping issues
+    if component == "Banner" || component == "Label" {
+        for (val, effect) in &old_pairs {
+            let non_global_keys: Vec<_> = effect.custom_property_overrides.keys()
+                .filter(|k| !is_global_css_token(k))
+                .collect();
+            let non_global_resolved: BTreeMap<&str, &str> = effect.resolved_overrides.iter()
+                .filter(|(k, _)| !is_global_css_token(k))
+                .map(|(k, v)| (k.as_str(), v.as_str()))
+                .collect();
+            let total_overrides = effect.custom_property_overrides.len();
+            let global_count = total_overrides - non_global_keys.len();
+            tracing::debug!(
+                component = %component,
+                value = %val,
+                total_overrides = total_overrides,
+                global_filtered = global_count,
+                non_global_keys = ?non_global_keys,
+                non_global_resolved = ?non_global_resolved,
+                "CSS bridge diag: old modifier data"
+            );
+        }
+        for (val, effect) in &new_pairs {
+            let keys: Vec<_> = effect.custom_property_overrides.keys().collect();
+            let resolved: BTreeMap<&str, &str> = effect.resolved_overrides.iter()
+                .map(|(k, v)| (k.as_str(), v.as_str()))
+                .collect();
+            tracing::debug!(
+                component = %component,
+                value = %val,
+                keys = ?keys,
+                resolved = ?resolved,
+                "CSS bridge diag: new modifier data"
+            );
+        }
+    }
+
     // Compute pairwise structural similarity and greedy-assign
     let mut candidates: Vec<(&str, &str, f64)> = Vec::new();
     for (old_val, old_effect) in &old_pairs {
@@ -3492,6 +3529,19 @@ fn compute_css_modifier_bridge(
 
     // Sort by similarity descending
     candidates.sort_by(|a, b| b.2.partial_cmp(&a.2).unwrap_or(std::cmp::Ordering::Equal));
+
+    // Diagnostic: dump pairwise scores for debugging
+    if component == "Banner" || component == "Label" {
+        for (old_val, new_val, sim) in &candidates {
+            tracing::debug!(
+                component = %component,
+                old = %old_val,
+                new = %new_val,
+                similarity = %format!("{:.4}", sim),
+                "CSS bridge diag: pairwise similarity"
+            );
+        }
+    }
 
     // Greedy assignment with minimum threshold
     let min_similarity = 0.3;
@@ -3865,6 +3915,25 @@ fn modifier_resolved_similarity(
 
     // Find shared CSS properties
     let shared: Vec<&&str> = old_css.keys().filter(|k| new_css.contains_key(**k)).collect();
+
+    // Diagnostic: log resolved similarity inputs when banner tokens are involved
+    let has_banner_token = old_css.values().any(|(k, _)| k.contains("banner"))
+        || new_css.values().any(|(k, _)| k.contains("banner"));
+    if has_banner_token {
+        let old_summary: Vec<_> = old_css.iter()
+            .map(|(prop, (token, (r, g, b)))| format!("{}={} #{:02x}{:02x}{:02x}", prop, token, r, g, b))
+            .collect();
+        let new_summary: Vec<_> = new_css.iter()
+            .map(|(prop, (token, (r, g, b)))| format!("{}={} #{:02x}{:02x}{:02x}", prop, token, r, g, b))
+            .collect();
+        tracing::debug!(
+            old_css = ?old_summary,
+            new_css = ?new_summary,
+            shared = shared.len(),
+            "CSS bridge diag: resolved similarity inputs"
+        );
+    }
+
     if shared.is_empty() {
         return 0.0;
     }
