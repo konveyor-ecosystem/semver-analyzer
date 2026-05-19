@@ -4435,13 +4435,18 @@ fn generate_prop_value_conformance_rules(
                 }
             }
 
-            // ── CSS modifier bridge for Phase 2 ──────────────────
+            // ── CSS modifier bridge for Phase 2 (two-tier) ──────
+            //
             // Compare actual CSS modifier effects to map old values to
-            // new values. This is the same bridge used in Phase 1 for
-            // type-changed props, now also applied to removed-and-replaced
-            // props. It uses structural and resolved-value similarity to
-            // discover mappings like gold→yellow that string similarity
-            // cannot find (0.167 < 0.32 threshold).
+            // new values. Uses a two-tier approach:
+            //   Tier 1: Match removed values against ADDED-only values
+            //           (values new to the replacement prop).
+            //   Tier 2: For any removed values still unmapped, try
+            //           SURVIVING values (values in both old and new).
+            //
+            // This prevents surviving values (e.g., "blue") from stealing
+            // mappings that should go to newly-added values (e.g., "yellow").
+            // Banner: gold should map to yellow (added), not blue (surviving).
             let removed_for_bridge: Vec<&String> = old_values
                 .difference(&new_values)
                 .collect();
@@ -12073,21 +12078,20 @@ mod tests {
         );
     }
 
-    /// TC006: Banner gold → yellow via CSS modifier bridge with global
-    /// token filtering.
+    /// TC006: Banner gold → yellow via CSS modifier bridge.
     ///
-    /// PF5 Banner modifiers override GLOBAL tokens (for dark/light theme
-    /// switching) alongside one component-specific background color token.
-    /// Without filtering, the 9 global token overrides pollute the
-    /// similarity comparison because:
-    ///   - Structural: global slots like "Color--100" don't match v6's "Color"
-    ///   - Resolved: global tokens carry generic theme values (#151515, #fff)
-    ///     that are identical across all modifiers, providing no discrimination
+    /// Uses REAL hex values from the PF5/PF6 CSS profiles to reproduce
+    /// the pipeline behavior. Tests that `is_global_css_token()` filtering
+    /// removes the 9 global theme token overrides, leaving only the
+    /// component-specific BackgroundColor for comparison.
     ///
-    /// With `is_global_css_token()` filtering, only the component-specific
-    /// `--pf-v5-c-banner--BackgroundColor` override participates, and its
-    /// resolved color (#f0ab00, warm amber) correctly maps to v6 yellow
-    /// (#ffe072, warm yellow) rather than red (#fbc5c5, pink).
+    /// V5 gold: #f0ab00 (warm amber, hue ~43°)
+    /// V6 yellow: #ffe072 (warm yellow, hue ~47°) — CORRECT match
+    /// V6 orange: #fccb8f (light orange, hue ~33°) — WRONG match
+    ///
+    /// The v6 modifiers override `--pf-v6-c-banner--BackgroundColor` and
+    /// `--pf-v6-c-banner--Color` (same keys for all modifiers, different
+    /// values). The target map maps these to `background-color` and `color`.
     #[test]
     fn test_css_bridge_banner_gold_to_yellow_with_global_tokens() {
         use crate::sd_types::{CssModifierEffect, CssModifierMap, ComponentCssModifiers};
@@ -12097,7 +12101,7 @@ mod tests {
 
         // PF5 .pf-m-gold: 9 global token overrides + 1 component override
         let mut gold = CssModifierEffect::default();
-        // Global theme overrides (dark-on-light context switching — NOT the gold color)
+        // Global theme overrides (filtered by is_global_css_token)
         gold.custom_property_overrides.insert("--pf-v5-global--Color--100".into(), "var(--pf-v5-global--Color--dark-100)".into());
         gold.custom_property_overrides.insert("--pf-v5-global--Color--200".into(), "var(--pf-v5-global--Color--dark-200)".into());
         gold.custom_property_overrides.insert("--pf-v5-global--BackgroundColor--100".into(), "var(--pf-v5-global--BackgroundColor--light-100)".into());
@@ -12107,9 +12111,9 @@ mod tests {
         gold.custom_property_overrides.insert("--pf-v5-global--link--Color--hover".into(), "var(--pf-v5-global--link--Color--dark--hover)".into());
         gold.custom_property_overrides.insert("--pf-v5-global--icon--Color--light".into(), "var(--pf-v5-global--icon--Color--light--dark)".into());
         gold.custom_property_overrides.insert("--pf-v5-global--icon--Color--dark".into(), "var(--pf-v5-global--icon--Color--dark--dark)".into());
-        // Component-specific override (THIS is the actual gold color)
+        // Component-specific override (the actual gold color)
         gold.custom_property_overrides.insert("--pf-v5-c-banner--BackgroundColor".into(), "var(--pf-v5-c-banner--m-gold--BackgroundColor)".into());
-        // Resolved values
+        // Resolved values (real pipeline hex values)
         gold.resolved_overrides.insert("--pf-v5-global--Color--100".into(), "#151515".into());
         gold.resolved_overrides.insert("--pf-v5-global--Color--200".into(), "#6a6e73".into());
         gold.resolved_overrides.insert("--pf-v5-global--BackgroundColor--100".into(), "#fff".into());
@@ -12123,54 +12127,61 @@ mod tests {
         old_banner.insert("pf-m-gold".into(), gold);
         old_mods.insert("banner".into(), old_banner);
 
-        // PF6 Banner modifiers: component-specific only
+        // PF6 Banner modifiers — use REAL structure: each modifier overrides
+        // the SAME base tokens (--pf-v6-c-banner--BackgroundColor and
+        // --pf-v6-c-banner--Color) with different resolved values.
+        // This matches how PF6 CSS actually works.
         let mut new_mods = ComponentCssModifiers::new();
         let mut new_banner = CssModifierMap::new();
 
-        let mut yellow = CssModifierEffect::default();
-        yellow.custom_property_overrides.insert("--pf-v6-c-banner--m-yellow--BackgroundColor".into(), "#ffe072".into());
-        yellow.custom_property_overrides.insert("--pf-v6-c-banner--m-yellow--Color".into(), "#151515".into());
-        yellow.resolved_overrides.insert("--pf-v6-c-banner--m-yellow--BackgroundColor".into(), "#ffe072".into());
-        yellow.resolved_overrides.insert("--pf-v6-c-banner--m-yellow--Color".into(), "#151515".into());
-        new_banner.insert("pf-m-yellow".into(), yellow);
-
-        let mut red = CssModifierEffect::default();
-        red.custom_property_overrides.insert("--pf-v6-c-banner--m-red--BackgroundColor".into(), "#fbc5c5".into());
-        red.custom_property_overrides.insert("--pf-v6-c-banner--m-red--Color".into(), "#151515".into());
-        red.resolved_overrides.insert("--pf-v6-c-banner--m-red--BackgroundColor".into(), "#fbc5c5".into());
-        red.resolved_overrides.insert("--pf-v6-c-banner--m-red--Color".into(), "#151515".into());
-        new_banner.insert("pf-m-red".into(), red);
-
-        let mut orange = CssModifierEffect::default();
-        orange.custom_property_overrides.insert("--pf-v6-c-banner--m-orange--BackgroundColor".into(), "#fccb8f".into());
-        orange.custom_property_overrides.insert("--pf-v6-c-banner--m-orange--Color".into(), "#151515".into());
-        orange.resolved_overrides.insert("--pf-v6-c-banner--m-orange--BackgroundColor".into(), "#fccb8f".into());
-        orange.resolved_overrides.insert("--pf-v6-c-banner--m-orange--Color".into(), "#151515".into());
-        new_banner.insert("pf-m-orange".into(), orange);
-
+        // ALL v6 color modifiers (real hex values from pipeline)
+        for (name, bg_hex) in [
+            ("pf-m-yellow", "#ffe072"),
+            ("pf-m-orange", "#fccb8f"),
+            ("pf-m-orangered", "#fbbea8"),
+            ("pf-m-red", "#fbc5c5"),
+            ("pf-m-green", "#d1f1bb"),
+            ("pf-m-teal", "#b9e5e5"),
+            ("pf-m-blue", "#b9dafc"),
+            ("pf-m-purple", "#d0c5f4"),
+        ] {
+            let mut m = CssModifierEffect::default();
+            // Real PF6 structure: modifier overrides the BASE component tokens
+            m.custom_property_overrides.insert(
+                "--pf-v6-c-banner--BackgroundColor".into(),
+                format!("var(--pf-v6-c-banner--{}--BackgroundColor)", name),
+            );
+            m.custom_property_overrides.insert(
+                "--pf-v6-c-banner--Color".into(),
+                format!("var(--pf-v6-c-banner--{}--Color)", name),
+            );
+            m.resolved_overrides.insert("--pf-v6-c-banner--BackgroundColor".into(), bg_hex.into());
+            m.resolved_overrides.insert("--pf-v6-c-banner--Color".into(), "#151515".into());
+            new_banner.insert(name.into(), m);
+        }
         new_mods.insert("banner".into(), new_banner);
 
-        // Target maps: custom property → CSS property
+        // Target maps (real: base component tokens → CSS properties)
         let mut old_targets = HashMap::new();
         old_targets.insert("--pf-v5-c-banner--BackgroundColor".to_string(), "background-color".to_string());
-        // Global tokens might also be in the target map from other CSS files
+        // Global tokens in target map (from other CSS files in the dep repo)
         old_targets.insert("--pf-v5-global--Color--100".to_string(), "color".to_string());
 
         let mut new_targets = HashMap::new();
-        new_targets.insert("--pf-v6-c-banner--m-yellow--BackgroundColor".to_string(), "background-color".to_string());
-        new_targets.insert("--pf-v6-c-banner--m-yellow--Color".to_string(), "color".to_string());
-        new_targets.insert("--pf-v6-c-banner--m-red--BackgroundColor".to_string(), "background-color".to_string());
-        new_targets.insert("--pf-v6-c-banner--m-red--Color".to_string(), "color".to_string());
-        new_targets.insert("--pf-v6-c-banner--m-orange--BackgroundColor".to_string(), "background-color".to_string());
-        new_targets.insert("--pf-v6-c-banner--m-orange--Color".to_string(), "color".to_string());
+        new_targets.insert("--pf-v6-c-banner--BackgroundColor".to_string(), "background-color".to_string());
+        new_targets.insert("--pf-v6-c-banner--Color".to_string(), "color".to_string());
 
+        // All v6 color values as candidates (matching Phase 2 behavior)
         let removed: Vec<String> = vec!["gold".into()];
-        let added: Vec<String> = vec!["yellow".into(), "red".into(), "orange".into()];
+        let candidates: Vec<String> = vec![
+            "yellow".into(), "orange".into(), "orangered".into(), "red".into(),
+            "green".into(), "teal".into(), "blue".into(), "purple".into(),
+        ];
         let removed_refs: Vec<&String> = removed.iter().collect();
-        let added_refs: Vec<&String> = added.iter().collect();
+        let candidate_refs: Vec<&String> = candidates.iter().collect();
 
         let hints = compute_css_modifier_bridge(
-            "Banner", &removed_refs, &added_refs,
+            "Banner", &removed_refs, &candidate_refs,
             &old_mods, &new_mods,
             &old_targets, &new_targets,
         );
@@ -12178,8 +12189,9 @@ mod tests {
         assert_eq!(
             hints.get("gold").map(String::as_str),
             Some("yellow"),
-            "Banner gold (#f0ab00) should map to yellow (#ffe072), not {:?}. \
-             Global token noise must be filtered from the comparison.",
+            "Banner gold (#f0ab00, hue ~43°) should map to yellow (#ffe072, hue ~47°), \
+             not {:?}. The color distance gold→yellow (4°) is much smaller than \
+             gold→orange (10°) or gold→any other color.",
             hints.get("gold"),
         );
     }
