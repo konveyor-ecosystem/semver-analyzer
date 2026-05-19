@@ -9,7 +9,7 @@ extensions:
     type: stdio
     name: mempalace
     description: Mempalace memory
-    cmd: python3.11
+    cmd: python3
     args:
     - -m
     - mempalace.mcp_server

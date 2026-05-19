@@ -82,16 +82,15 @@ ARG TOKEN_MAPPINGS_URL=https://raw.githubusercontent.com/konveyor-ecosystem/semv
 
 RUN dnf install -y git make gcc gcc-c++ && dnf clean all
 
-SHELL ["/bin/bash", "-c"]
 ENV NVM_DIR=/root/.nvm
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash \
+RUN bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash \
     && source "$NVM_DIR/nvm.sh" \
     && nvm install "$PF_FROM_NODE_VERSION" \
     && nvm install "$PF_TO_NODE_VERSION" \
     && nvm install "$PF_DEP_NODE_VERSION" \
     && nvm alias default "$PF_TO_NODE_VERSION" \
     && nvm use "$PF_FROM_NODE_VERSION" && corepack enable \
-    && nvm use "$PF_TO_NODE_VERSION" && corepack enable
+    && nvm use "$PF_TO_NODE_VERSION" && corepack enable'
 
 COPY --from=rust-builder /src/semver-analyzer/target/release/semver-analyzer /usr/local/bin/
 
@@ -101,7 +100,7 @@ RUN curl -fSL -o /src/patternfly-token-mappings.yaml "$TOKEN_MAPPINGS_URL"
 
 ENV YARN_ENABLE_SCRIPTS=false
 ENV PUPPETEER_SKIP_DOWNLOAD=true
-RUN source "$NVM_DIR/nvm.sh" && semver-analyzer analyze typescript \
+RUN bash -c 'source "$NVM_DIR/nvm.sh" && semver-analyzer analyze typescript \
     --repo /src/patternfly-react \
     --from "$PF_REACT_FROM" --to "$PF_REACT_TO" \
     --dep-repo /src/patternfly \
@@ -116,7 +115,7 @@ RUN source "$NVM_DIR/nvm.sh" && semver-analyzer analyze typescript \
     --to-build-command "$PF_TO_BUILD_CMD" \
     --no-llm \
     \
-    -o /src/semver_report.json
+    -o /src/semver_report.json'
 
 RUN mkdir -p /rules/semver_rules \
     && semver-analyzer konveyor typescript \
@@ -124,8 +123,6 @@ RUN mkdir -p /rules/semver_rules \
     --output-dir /rules/semver_rules \
     --ruleset-name patternfly-breaking-changes \
     --rename-patterns /src/patternfly-token-mappings.yaml
-
-SHELL ["/bin/sh", "-c"]
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -145,14 +142,13 @@ ARG TOPOLOGY_TO_BUILD_CMD="yarn build"
 
 RUN dnf install -y git make gcc gcc-c++ && dnf clean all
 
-SHELL ["/bin/bash", "-c"]
 ENV NVM_DIR=/root/.nvm
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash \
+RUN bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash \
     && source "$NVM_DIR/nvm.sh" \
     && nvm install "$TOPOLOGY_FROM_NODE_VERSION" \
     && nvm install "$TOPOLOGY_TO_NODE_VERSION" \
     && nvm alias default "$TOPOLOGY_TO_NODE_VERSION" \
-    && npm install -g yarn@1.22.22
+    && npm install -g yarn@1.22.22'
 
 COPY --from=rust-builder /src/semver-analyzer/target/release/semver-analyzer /usr/local/bin/
 
@@ -160,7 +156,7 @@ WORKDIR /src
 RUN git clone "$TOPOLOGY_REPO"
 
 ENV YARN_ENABLE_SCRIPTS=false
-RUN source "$NVM_DIR/nvm.sh" && semver-analyzer analyze typescript \
+RUN bash -c 'source "$NVM_DIR/nvm.sh" && semver-analyzer analyze typescript \
     --repo /src/react-topology \
     --from "$TOPOLOGY_FROM" --to "$TOPOLOGY_TO" \
     --from-node-version "$TOPOLOGY_FROM_NODE_VERSION" \
@@ -171,15 +167,13 @@ RUN source "$NVM_DIR/nvm.sh" && semver-analyzer analyze typescript \
     --to-build-command "$TOPOLOGY_TO_BUILD_CMD" \
     --no-llm \
     \
-    -o /src/topology_report.json
+    -o /src/topology_report.json'
 
 RUN mkdir -p /rules/semver_rules \
     && semver-analyzer konveyor typescript \
     --from-report /src/topology_report.json \
     --output-dir /rules/semver_rules \
     --ruleset-name topology-breaking-changes
-
-SHELL ["/bin/sh", "-c"]
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -199,13 +193,12 @@ ARG RCG_TO_BUILD_CMD="npm run build"
 
 RUN dnf install -y git make gcc gcc-c++ && dnf clean all
 
-SHELL ["/bin/bash", "-c"]
 ENV NVM_DIR=/root/.nvm
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash \
+RUN bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash \
     && source "$NVM_DIR/nvm.sh" \
     && nvm install "$RCG_FROM_NODE_VERSION" \
     && nvm install "$RCG_TO_NODE_VERSION" \
-    && nvm alias default "$RCG_TO_NODE_VERSION"
+    && nvm alias default "$RCG_TO_NODE_VERSION"'
 
 COPY --from=rust-builder /src/semver-analyzer/target/release/semver-analyzer /usr/local/bin/
 
@@ -214,7 +207,7 @@ ENV PUPPETEER_SKIP_DOWNLOAD=true
 WORKDIR /src
 RUN git clone "$RCG_REPO"
 
-RUN source "$NVM_DIR/nvm.sh" && semver-analyzer analyze typescript \
+RUN bash -c 'source "$NVM_DIR/nvm.sh" && semver-analyzer analyze typescript \
     --repo /src/react-component-groups \
     --from "$RCG_FROM" --to "$RCG_TO" \
     --from-node-version "$RCG_FROM_NODE_VERSION" \
@@ -225,15 +218,13 @@ RUN source "$NVM_DIR/nvm.sh" && semver-analyzer analyze typescript \
     --to-build-command "$RCG_TO_BUILD_CMD" \
     --no-llm \
     \
-    -o /src/rcg_report.json
+    -o /src/rcg_report.json'
 
 RUN mkdir -p /rules/semver_rules \
     && semver-analyzer konveyor typescript \
     --from-report /src/rcg_report.json \
     --output-dir /rules/semver_rules \
     --ruleset-name react-component-groups-breaking-changes
-
-SHELL ["/bin/sh", "-c"]
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -251,14 +242,13 @@ ARG SDK_TO_BUILD_CMD="yarn install && yarn build"
 
 RUN dnf install -y git make gcc gcc-c++ && dnf clean all
 
-SHELL ["/bin/bash", "-c"]
 ENV NVM_DIR=/root/.nvm
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash \
+RUN bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash \
     && source "$NVM_DIR/nvm.sh" \
     && nvm install "$SDK_FROM_NODE_VERSION" \
     && nvm install "$SDK_TO_NODE_VERSION" \
     && nvm alias default "$SDK_TO_NODE_VERSION" \
-    && npm install -g corepack && corepack enable
+    && npm install -g corepack && corepack enable'
 
 COPY --from=rust-builder /src/semver-analyzer/target/release/semver-analyzer /usr/local/bin/
 
@@ -266,7 +256,7 @@ WORKDIR /src
 RUN git clone "$SDK_REPO"
 
 # Resolve commits from npm publish dates
-RUN SDK_FROM_COMMIT=$(cd /src/dynamic-plugin-sdk && \
+RUN bash -c 'SDK_FROM_COMMIT=$(cd /src/dynamic-plugin-sdk && \
         git log --after="$(date -d "$SDK_FROM_DATE - 2 days" +%Y-%m-%d)" \
                 --before="$(date -d "$SDK_FROM_DATE + 2 days" +%Y-%m-%d)" \
                 --format="%H" -- packages/lib-core/package.json 2>/dev/null | head -1) \
@@ -282,15 +272,13 @@ RUN SDK_FROM_COMMIT=$(cd /src/dynamic-plugin-sdk && \
         --to-build-command "$SDK_TO_BUILD_CMD" \
         --no-llm \
         \
-        -o /src/sdk_report.json
+        -o /src/sdk_report.json'
 
 RUN mkdir -p /rules/semver_rules \
     && semver-analyzer konveyor typescript \
     --from-report /src/sdk_report.json \
     --output-dir /rules/semver_rules \
     --ruleset-name dynamic-plugin-sdk-breaking-changes
-
-SHELL ["/bin/sh", "-c"]
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -315,13 +303,12 @@ ARG REACT_TO_BUILD_CMD="yarn build"
 
 RUN dnf install -y git make gcc gcc-c++ java-17-openjdk-headless && dnf clean all
 
-SHELL ["/bin/bash", "-c"]
 ENV NVM_DIR=/root/.nvm
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash \
+RUN bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash \
     && source "$NVM_DIR/nvm.sh" \
     && nvm install "$REACT_FROM_NODE_VERSION" \
     && nvm alias default "$REACT_FROM_NODE_VERSION" \
-    && npm install -g yarn@1.22.22
+    && npm install -g yarn@1.22.22'
 
 COPY --from=rust-builder /src/semver-analyzer/target/release/semver-analyzer /usr/local/bin/
 
@@ -334,7 +321,7 @@ RUN git clone --bare "$REACT_REPO" react/.git \
 ARG REACT_FROM_INSTALL_CMD="yarn config set cache-folder /tmp/yarn-cache && rm -rf /tmp/yarn-cache && yarn install --ignore-scripts --ignore-optional --mutex file:/tmp/yarn-mutex --network-concurrency 1"
 ARG REACT_TO_INSTALL_CMD="yarn config set cache-folder /tmp/yarn-cache && rm -rf /tmp/yarn-cache && yarn install --ignore-scripts --ignore-optional --mutex file:/tmp/yarn-mutex --network-concurrency 1"
 
-RUN source "$NVM_DIR/nvm.sh" && semver-analyzer analyze typescript \
+RUN bash -c 'source "$NVM_DIR/nvm.sh" && semver-analyzer analyze typescript \
     --repo /src/react \
     --from "$REACT_FROM" --to "$REACT_TO" \
     --from-node-version "$REACT_FROM_NODE_VERSION" \
@@ -345,15 +332,13 @@ RUN source "$NVM_DIR/nvm.sh" && semver-analyzer analyze typescript \
     --to-build-command "$REACT_TO_BUILD_CMD" \
     --no-llm \
     \
-    -o /src/react_report.json
+    -o /src/react_report.json'
 
 RUN mkdir -p /rules/semver_rules \
     && semver-analyzer konveyor typescript \
     --from-report /src/react_report.json \
     --output-dir /rules/semver_rules \
     --ruleset-name react-breaking-changes
-
-SHELL ["/bin/sh", "-c"]
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -415,15 +400,13 @@ RUN mkdir -p /rules/semver_rules \
 # ═══════════════════════════════════════════════════════════════════════════
 # Stage 4: Runtime image
 # ═══════════════════════════════════════════════════════════════════════════
-FROM registry.access.redhat.com/ubi9/ubi-minimal
+FROM registry.access.redhat.com/ubi10/ubi-minimal
 
 RUN microdnf install -y --nodocs \
     bash \
     python3 \
+    python3-pip \
     python3-pyyaml \
-    python3.11 \
-    python3.11-pip \
-    python3.11-setuptools \
     git \
     which \
     procps-ng \
@@ -432,28 +415,11 @@ RUN microdnf install -y --nodocs \
     tar \
     libgomp \
     expect \
-    gcc \
-    make \
-    && curl -fsSL https://www.sqlite.org/2024/sqlite-autoconf-3450300.tar.gz \
-        | tar xz -C /tmp \
-    && cd /tmp/sqlite-autoconf-3450300 \
-    && ./configure --prefix=/usr/local && make -j$(nproc) && make install \
-    && echo /usr/local/lib > /etc/ld.so.conf.d/sqlite3.conf && ldconfig \
-    && rm -rf /tmp/sqlite-autoconf-3450300 \
-    && microdnf remove -y gcc make \
+    nodejs \
+    && npm install -g corepack && corepack enable \
     && microdnf clean all
 
-RUN ln -sf /usr/bin/python3.11 /usr/local/bin/python3.11 \
-    && ln -sf /usr/bin/pip3.11 /usr/local/bin/pip3.11
-
-RUN pip3.11 install --no-cache-dir --no-warn-script-location mempalace
-
-RUN curl -fsSL https://rpm.nodesource.com/setup_20.x | bash - \
-    && microdnf install -y --nodocs nodejs \
-    && microdnf clean all \
-    && corepack enable
-
-RUN ln -sf /usr/bin/python3.11 /usr/bin/python3
+RUN pip3 install --no-cache-dir --no-warn-script-location mempalace
 
 ARG TARGETARCH=amd64
 RUN curl -fsSL "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${TARGETARCH}" \
