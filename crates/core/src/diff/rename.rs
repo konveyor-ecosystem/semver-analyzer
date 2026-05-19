@@ -520,6 +520,73 @@ pub(super) fn detect_renames<'a, M: Default + Clone + PartialEq>(
         }
     }
 
+    // ── Pass 5: Word-level matching for same-interface properties ─────
+    //
+    // When a prop is renamed with a prefix/suffix change AND its type
+    // changes (e.g., errorTitle: string → titleText: ReactNode), all
+    // fingerprint passes fail (different types) and Pass 4 rejects it
+    // (LCS similarity too low for the 0.6 threshold).
+    //
+    // Decompose camelCase names into words and match by Jaccard word
+    // overlap, ignoring type entirely. This catches renames where the
+    // discriminating word is preserved across the rename:
+    //   errorTitle → titleText (shared word "title")
+    //   defaultErrorDescription → defaultBodyText (shared word "default")
+    //
+    // Only for same-interface properties (like Pass 4). Uses a lower
+    // threshold since word overlap is a strong signal even at low Jaccard.
+    {
+        const WORD_JACCARD_THRESHOLD: f64 = 0.25;
+
+        // Reuse the parent groupings from Pass 4 (same data, different scoring)
+        let mut removed_by_parent: HashMap<&str, Vec<(usize, &Symbol<M>)>> = HashMap::new();
+        let mut added_by_parent: HashMap<&str, Vec<(usize, &Symbol<M>)>> = HashMap::new();
+
+        for (ri, rsym) in removed.iter().enumerate() {
+            if rsym.kind != SymbolKind::Property {
+                continue;
+            }
+            if let Some((parent, _)) = rsym.qualified_name.rsplit_once('.') {
+                removed_by_parent
+                    .entry(parent)
+                    .or_default()
+                    .push((ri, rsym));
+            }
+        }
+        for (ai, asym) in added.iter().enumerate() {
+            if asym.kind != SymbolKind::Property {
+                continue;
+            }
+            if let Some((parent, _)) = asym.qualified_name.rsplit_once('.') {
+                added_by_parent.entry(parent).or_default().push((ai, asym));
+            }
+        }
+
+        for (parent, removed_props) in &removed_by_parent {
+            let added_props = match added_by_parent.get(parent) {
+                Some(a) => a,
+                None => continue,
+            };
+
+            if removed_props.len() > MAX_GROUP_SIZE || added_props.len() > MAX_GROUP_SIZE {
+                continue;
+            }
+
+            for (ri, rsym) in removed_props {
+                for (ai, asym) in added_props {
+                    let already = candidates.iter().any(|(r, a, _)| *r == *ri && *a == *ai);
+                    if already {
+                        continue;
+                    }
+                    let sim = word_jaccard_similarity(&rsym.name, &asym.name);
+                    if sim >= WORD_JACCARD_THRESHOLD {
+                        candidates.push((*ri, *ai, sim));
+                    }
+                }
+            }
+        }
+    }
+
     // Sort by similarity descending (best matches first)
     candidates.sort_by(|a, b| b.2.partial_cmp(&a.2).unwrap_or(std::cmp::Ordering::Equal));
 
@@ -528,19 +595,98 @@ pub(super) fn detect_renames<'a, M: Default + Clone + PartialEq>(
     let mut used_added = vec![false; added.len()];
     let mut matches = Vec::new();
 
-    for (ri, ai, sim) in candidates {
-        if sim < MIN_SIMILARITY {
+    for (ri, ai, sim) in &candidates {
+        if *sim < MIN_SIMILARITY {
             continue;
         }
-        if used_removed[ri] || used_added[ai] {
+        if used_removed[*ri] || used_added[*ai] {
             continue;
         }
-        used_removed[ri] = true;
-        used_added[ai] = true;
+        used_removed[*ri] = true;
+        used_added[*ai] = true;
         matches.push(RenameMatch {
-            old: removed[ri],
-            new: added[ai],
+            old: removed[*ri],
+            new: added[*ai],
         });
+    }
+
+    // ── Leftover 1:1 pairing within the same interface ─────────────────
+    //
+    // After all passes and greedy assignment, if exactly 1 removed and
+    // 1 added member remain unmatched within the same parent interface,
+    // pair them as a rename. This catches residual props that share no
+    // word overlap or LCS signal with their target but are the only
+    // remaining pair (e.g., errorDescription → bodyText after
+    // errorTitle → titleText was matched by Pass 5).
+    //
+    // Guard: only fires when at least one rename was already detected
+    // in the same interface (evidence of a naming pattern). Without
+    // existing renames, a lone removed+added pair is more likely to be
+    // an unrelated removal and addition.
+    {
+        let mut leftover_removed_by_parent: HashMap<&str, Vec<usize>> = HashMap::new();
+        let mut leftover_added_by_parent: HashMap<&str, Vec<usize>> = HashMap::new();
+        let mut matched_parents: std::collections::HashSet<&str> =
+            std::collections::HashSet::new();
+
+        // Track which parents already have at least one rename
+        for m in &matches {
+            if let Some((parent, _)) = m.old.qualified_name.rsplit_once('.') {
+                matched_parents.insert(parent);
+            }
+        }
+
+        // Collect leftover removed and added by parent
+        for (ri, rsym) in removed.iter().enumerate() {
+            if used_removed[ri] || rsym.kind != SymbolKind::Property {
+                continue;
+            }
+            if let Some((parent, _)) = rsym.qualified_name.rsplit_once('.') {
+                leftover_removed_by_parent
+                    .entry(parent)
+                    .or_default()
+                    .push(ri);
+            }
+        }
+        for (ai, asym) in added.iter().enumerate() {
+            if used_added[ai] || asym.kind != SymbolKind::Property {
+                continue;
+            }
+            if let Some((parent, _)) = asym.qualified_name.rsplit_once('.') {
+                leftover_added_by_parent
+                    .entry(parent)
+                    .or_default()
+                    .push(ai);
+            }
+        }
+
+        for (parent, left_removed) in &leftover_removed_by_parent {
+            // Only fire when:
+            // 1. Exactly 1 removed and 1 added remain in this interface
+            // 2. At least one rename was already detected in this interface
+            if left_removed.len() != 1 || !matched_parents.contains(parent) {
+                continue;
+            }
+            if let Some(left_added) = leftover_added_by_parent.get(parent) {
+                if left_added.len() != 1 {
+                    continue;
+                }
+                let ri = left_removed[0];
+                let ai = left_added[0];
+                // Minimal similarity guard: reject truly unrelated names.
+                // A threshold of 0.10 allows very dissimilar names (like
+                // "description" → "bodyText") while filtering out garbage.
+                let sim = name_similarity(&removed[ri].name, &added[ai].name);
+                if sim >= 0.10 {
+                    used_removed[ri] = true;
+                    used_added[ai] = true;
+                    matches.push(RenameMatch {
+                        old: removed[ri],
+                        new: added[ai],
+                    });
+                }
+            }
+        }
     }
 
     matches
@@ -802,6 +948,98 @@ pub fn name_similarity(a: &str, b: &str) -> f64 {
     let lcs_len = longest_common_subsequence_len(a, b);
     let max_len = a.len().max(b.len());
     lcs_len as f64 / max_len as f64
+}
+
+/// Common boolean/lifecycle prefixes in prop names that carry no semantic
+/// meaning for rename matching. These appear across many unrelated props
+/// (isOpen, isDisabled, hasIcon, onSelect, etc.) and would cause false
+/// matches via word overlap.
+const NOISE_PREFIXES: &[&str] = &[
+    "is", "has", "on", "use", "should", "can", "will", "did", "was", "set", "get",
+    "with", "no", "default",
+];
+
+/// Split a camelCase or PascalCase identifier into lowercase words.
+///
+/// Handles transitions like:
+/// - `errorTitle` → `["error", "title"]`
+/// - `titleText` → `["title", "text"]`
+/// - `isSelectableRaised` → `["selectable", "raised"]` (prefix "is" filtered)
+/// - `HTMLParser` → `["html", "parser"]` (consecutive uppercase → one word)
+/// - `bodyText` → `["body", "text"]`
+///
+/// Words shorter than 2 characters are discarded to avoid noise from
+/// single-letter splits (e.g., the `I` in `IProps`).
+///
+/// Common boolean/lifecycle prefixes (`is`, `has`, `on`, etc.) are stripped
+/// as they carry no semantic meaning for rename detection and would cause
+/// false matches between unrelated props (e.g., `isOpen` ↔ `isDisabled`
+/// both share "is").
+fn split_camel_case_words(name: &str) -> Vec<String> {
+    let mut words = Vec::new();
+    let mut current = String::new();
+    let bytes = name.as_bytes();
+
+    for i in 0..bytes.len() {
+        let c = bytes[i] as char;
+        if c.is_ascii_uppercase() {
+            // Check if this starts a new word:
+            // - Previous char was lowercase (camelCase boundary)
+            // - Next char is lowercase and current accumulator has content
+            //   (PascalCase boundary after an acronym like "HTML")
+            let prev_lower = i > 0 && (bytes[i - 1] as char).is_ascii_lowercase();
+            let next_lower =
+                i + 1 < bytes.len() && (bytes[i + 1] as char).is_ascii_lowercase();
+            let is_boundary = prev_lower || (next_lower && !current.is_empty());
+
+            if is_boundary && !current.is_empty() {
+                if current.len() >= 2 {
+                    words.push(current.to_lowercase());
+                }
+                current.clear();
+            }
+            current.push(c);
+        } else {
+            current.push(c);
+        }
+    }
+    if current.len() >= 2 {
+        words.push(current.to_lowercase());
+    }
+
+    // Filter out noise prefixes that appear as the first word.
+    // Only strip the first word — interior/trailing occurrences of these
+    // words may carry semantic meaning (e.g., "onSelect" strips "on",
+    // but "selectableInput" keeps all words).
+    if words.len() > 1 {
+        if let Some(first) = words.first() {
+            if NOISE_PREFIXES.contains(&first.as_str()) {
+                words.remove(0);
+            }
+        }
+    }
+
+    words
+}
+
+/// Compute word-level Jaccard similarity between two camelCase identifiers.
+///
+/// Splits both names into words, then returns |intersection| / |union|.
+/// Returns 0.0 if either name produces no words.
+fn word_jaccard_similarity(a: &str, b: &str) -> f64 {
+    let words_a: BTreeSet<String> = split_camel_case_words(a).into_iter().collect();
+    let words_b: BTreeSet<String> = split_camel_case_words(b).into_iter().collect();
+
+    if words_a.is_empty() || words_b.is_empty() {
+        return 0.0;
+    }
+
+    let intersection = words_a.intersection(&words_b).count();
+    if intersection == 0 {
+        return 0.0;
+    }
+    let union = words_a.union(&words_b).count();
+    intersection as f64 / union as f64
 }
 
 /// Length of the longest common subsequence of two strings.
@@ -1816,5 +2054,235 @@ mod token_tests {
         );
         assert_eq!(matches[0].old.name, "labelIcon");
         assert_eq!(matches[0].new.name, "labelHelp");
+    }
+
+    // ── camelCase word splitting tests ──
+
+    #[test]
+    fn test_split_camel_case_basic() {
+        assert_eq!(
+            split_camel_case_words("errorTitle"),
+            vec!["error", "title"]
+        );
+        assert_eq!(
+            split_camel_case_words("titleText"),
+            vec!["title", "text"]
+        );
+        assert_eq!(
+            split_camel_case_words("bodyText"),
+            vec!["body", "text"]
+        );
+        assert_eq!(
+            split_camel_case_words("errorDescription"),
+            vec!["error", "description"]
+        );
+    }
+
+    #[test]
+    fn test_split_camel_case_pascal() {
+        assert_eq!(
+            split_camel_case_words("ErrorState"),
+            vec!["error", "state"]
+        );
+        assert_eq!(
+            split_camel_case_words("CardHeader"),
+            vec!["card", "header"]
+        );
+    }
+
+    #[test]
+    fn test_split_camel_case_acronym() {
+        assert_eq!(
+            split_camel_case_words("HTMLParser"),
+            vec!["html", "parser"]
+        );
+    }
+
+    #[test]
+    fn test_split_camel_case_boolean_prefix() {
+        // "is" is a noise prefix and gets stripped
+        assert_eq!(
+            split_camel_case_words("isSelectableRaised"),
+            vec!["selectable", "raised"]
+        );
+        // "has" and "on" are also noise prefixes
+        assert_eq!(
+            split_camel_case_words("hasNavLinkWrapper"),
+            vec!["nav", "link", "wrapper"]
+        );
+        assert_eq!(
+            split_camel_case_words("onSelectableInputChange"),
+            vec!["selectable", "input", "change"]
+        );
+    }
+
+    #[test]
+    fn test_word_jaccard_shared_word() {
+        // errorTitle vs titleText: shared word "title"
+        let sim = word_jaccard_similarity("errorTitle", "titleText");
+        assert!(
+            sim > 0.25,
+            "errorTitle/titleText share 'title', Jaccard should be > 0.25. Got: {}",
+            sim
+        );
+
+        // errorTitle vs bodyText: no shared words
+        let sim = word_jaccard_similarity("errorTitle", "bodyText");
+        assert!(
+            sim < 0.01,
+            "errorTitle/bodyText share no words. Got: {}",
+            sim
+        );
+
+        // errorDescription vs titleText: no shared words
+        let sim = word_jaccard_similarity("errorDescription", "titleText");
+        assert!(
+            sim < 0.01,
+            "errorDescription/titleText share no words. Got: {}",
+            sim
+        );
+
+        // errorDescription vs bodyText: no shared words
+        let sim = word_jaccard_similarity("errorDescription", "bodyText");
+        assert!(
+            sim < 0.01,
+            "errorDescription/bodyText share no words. Got: {}",
+            sim
+        );
+    }
+
+    // ── Pass 5 + leftover 1:1 pairing tests ──
+
+    #[test]
+    fn test_pass5_word_match_cross_type_rename() {
+        // TC028 scenario: errorTitle (string) → titleText (ReactNode)
+        // and errorDescription (ReactNode) → bodyText (ReactNode).
+        // Passes 1-4 fail for errorTitle→titleText because string≠ReactNode.
+        // Pass 5 should catch it via shared word "title".
+        // Leftover 1:1 should then pair errorDescription→bodyText.
+        let removed = [
+            make_prop("errorTitle", "ErrorStateProps", "string"),
+            make_prop("errorDescription", "ErrorStateProps", "ReactNode"),
+        ];
+        let added = [
+            make_prop("titleText", "ErrorStateProps", "ReactNode"),
+            make_prop("bodyText", "ErrorStateProps", "ReactNode"),
+        ];
+
+        let removed_refs: Vec<&Symbol> = removed.iter().collect();
+        let added_refs: Vec<&Symbol> = added.iter().collect();
+        let matches = detect_renames(
+            &removed_refs,
+            &added_refs,
+            |_, _| true,
+            &["string", "number", "boolean", "void", "null"],
+        );
+
+        assert_eq!(
+            matches.len(),
+            2,
+            "Should detect both renames. Got: {:?}",
+            matches.iter().map(|m| format!("{} → {}", m.old.name, m.new.name)).collect::<Vec<_>>()
+        );
+
+        // Verify correct pairings
+        let title_match = matches.iter().find(|m| m.old.name == "errorTitle");
+        assert!(title_match.is_some(), "errorTitle should be matched");
+        assert_eq!(
+            title_match.unwrap().new.name, "titleText",
+            "errorTitle should be renamed to titleText (not bodyText)"
+        );
+
+        let desc_match = matches.iter().find(|m| m.old.name == "errorDescription");
+        assert!(desc_match.is_some(), "errorDescription should be matched");
+        assert_eq!(
+            desc_match.unwrap().new.name, "bodyText",
+            "errorDescription should be renamed to bodyText (not titleText)"
+        );
+    }
+
+    #[test]
+    fn test_pass5_does_not_false_match_unrelated_words() {
+        // Two props with no shared words should NOT match via Pass 5.
+        let removed = [make_prop("isDisabled", "FooProps", "boolean")];
+        let added = [make_prop("hasAnimations", "FooProps", "string")];
+
+        let removed_refs: Vec<&Symbol> = removed.iter().collect();
+        let added_refs: Vec<&Symbol> = added.iter().collect();
+        let matches = detect_renames(
+            &removed_refs,
+            &added_refs,
+            |_, _| true,
+            &["string", "number", "boolean", "void", "null"],
+        );
+
+        // Different types, different words, no shared prefix → no match
+        assert!(
+            matches.is_empty(),
+            "Unrelated props with different types and no shared words should not match. \
+             Got: {:?}",
+            matches.iter().map(|m| format!("{} → {}", m.old.name, m.new.name)).collect::<Vec<_>>()
+        );
+    }
+
+    #[test]
+    fn test_leftover_pairing_requires_existing_rename() {
+        // Leftover 1:1 should NOT fire when no other rename exists
+        // in the same interface (no naming pattern evidence).
+        let removed = [make_prop("errorDescription", "ErrorStateProps", "string")];
+        let added = [make_prop("bodyText", "ErrorStateProps", "ReactNode")];
+
+        let removed_refs: Vec<&Symbol> = removed.iter().collect();
+        let added_refs: Vec<&Symbol> = added.iter().collect();
+        let matches = detect_renames(
+            &removed_refs,
+            &added_refs,
+            |_, _| true,
+            &["string", "number", "boolean", "void", "null"],
+        );
+
+        // No existing renames in the interface → leftover should NOT fire.
+        // The types differ (string vs ReactNode) and names are dissimilar,
+        // so no pass should match these.
+        assert!(
+            matches.is_empty(),
+            "Leftover pairing should not fire without existing renames in the interface. \
+             Got: {:?}",
+            matches.iter().map(|m| format!("{} → {}", m.old.name, m.new.name)).collect::<Vec<_>>()
+        );
+    }
+
+    #[test]
+    fn test_leftover_pairing_with_three_props() {
+        // When 2 removed and 2 added remain (not exactly 1:1), leftover
+        // should NOT fire — too ambiguous.
+        let removed = [
+            make_prop("errorTitle", "ErrorStateProps", "string"),
+            make_prop("errorDescription", "ErrorStateProps", "string"),
+            make_prop("errorCode", "ErrorStateProps", "string"),
+        ];
+        let added = [
+            make_prop("titleText", "ErrorStateProps", "string"),
+            make_prop("bodyText", "ErrorStateProps", "string"),
+            make_prop("codeText", "ErrorStateProps", "string"),
+        ];
+
+        let removed_refs: Vec<&Symbol> = removed.iter().collect();
+        let added_refs: Vec<&Symbol> = added.iter().collect();
+        let matches = detect_renames(
+            &removed_refs,
+            &added_refs,
+            |_, _| true,
+            &["string", "number", "boolean", "void", "null"],
+        );
+
+        // Pass 5 should match errorTitle→titleText (shared word "title").
+        // Leftover has 2 removed (errorDescription, errorCode) and 2 added
+        // (bodyText, codeText) — NOT exactly 1:1, so leftover should NOT fire.
+        // Pass 1 might match errorDescription→bodyText and errorCode→codeText
+        // if they share fingerprints (all string type).
+        let title_match = matches.iter().find(|m| m.old.name == "errorTitle");
+        assert!(title_match.is_some(), "errorTitle should be matched");
+        assert_eq!(title_match.unwrap().new.name, "titleText");
     }
 }
