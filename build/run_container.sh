@@ -65,7 +65,7 @@ track_temp_file() {
 }
 
 # ── Defaults ─────────────────────────────────────────────────────────────
-DEFAULT_IMAGE="quay.io/pranavgaikwad/patternfly-tools:latest"
+DEFAULT_IMAGE="quay.io/konveyor/patternfly-tools:latest"
 CONTAINER_WORKSPACE="/workspace"
 
 MODE="mount"
@@ -93,7 +93,7 @@ Required:
 Container options:
   --bake                     Bake app into image instead of mounting (for slow mounts)
   --goose-config <PATH>      Override goose config directory
-  --image <NAME>             Container image (default: quay.io/pranavgaikwad/patternfly-tools:latest)
+  --image <NAME>             Container image (default: quay.io/konveyor/patternfly-tools:latest)
   --keep                     Keep container after completion (for debugging)
   --no-memory                Disable memory extension and skip memory volume mount
   --log-dir <PATH>           Directory to sync logs to (default: $PWD/.pf-migration-logs)

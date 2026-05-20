@@ -58,7 +58,7 @@ export GOOSE_PROVIDER=openai OPENAI_API_KEY=sk-...
 |--------|---------|-------------|
 | `--bake` | off | Bake app into image instead of mounting |
 | `--goose-config <PATH>` | baked default | Override goose config directory |
-| `--image <NAME>` | `quay.io/pranavgaikwad/patternfly-tools:latest` | Container image |
+| `--image <NAME>` | `quay.io/konveyor/patternfly-tools:latest` | Container image |
 | `--keep` | off | Keep container after completion (for debugging) |
 | `--no-memory` | off | Disable memory extension and skip memory volume mount |
 | `--log-dir <PATH>` | `.pf-migration-logs/` | Directory to sync logs to |
@@ -275,7 +275,7 @@ The `Containerfile` uses a 10-stage multi-stage build:
 
 ```bash
 podman build --format docker --layers=false \
-  -t quay.io/pranavgaikwad/patternfly-tools:latest \
+  -t quay.io/konveyor/patternfly-tools:latest \
   -f Containerfile .
 ```
 
