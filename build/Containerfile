@@ -4,7 +4,8 @@ FROM registry.access.redhat.com/ubi9/go-toolset AS go-builder
 ARG KANTRA_VERSION=v0.9.2-rc.1
 ARG KANTRA_REPO=https://github.com/konveyor/kantra.git
 ARG KANTRA_BRANCH=main
-ARG KANTRA_ARCH=amd64
+ARG TARGETARCH=amd64
+ARG KANTRA_ARCH=${TARGETARCH}
 USER root
 RUN dnf install -y unzip && dnf clean all
 

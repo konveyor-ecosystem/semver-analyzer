@@ -2,20 +2,52 @@ name: Container Build
 
 on:
   push:
-    branches: [main]
-    paths: ['build/**']
+    branches:
+      - main
+      - 'v[0-9]*'
+    tags:
+      - 'v[0-9]*'
   pull_request:
     branches: [main]
-    paths: ['build/**']
 
 jobs:
-  build:
-    name: Build Container Image
+  build-and-push:
+    name: Build and Push Container Image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Compute image tag
+        id: tag
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            echo "tag=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
+          elif [[ "$GITHUB_REF" == refs/heads/main ]]; then
+            echo "tag=latest" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=${GITHUB_REF#refs/heads/}" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Build container image
-        working-directory: build
-        run: podman build --format docker -t localhost/patternfly-tools:latest -f Containerfile .
+        id: build
+        uses: redhat-actions/buildah-build@main
+        with:
+          image: patternfly-tools
+          tags: ${{ steps.tag.outputs.tag }}
+          platforms: linux/amd64, linux/arm64
+          containerfiles: build/Containerfile
+          context: build
+
+      - name: Push to Quay
+        if: github.event_name == 'push'
+        uses: redhat-actions/push-to-registry@main
+        with:
+          registry: quay.io/konveyor
+          image: ${{ steps.build.outputs.image }}
+          tags: ${{ steps.build.outputs.tags }}
+          username: ${{ secrets.QUAY_PUBLISH_ROBOT }}
+          password: ${{ secrets.QUAY_PUBLISH_TOKEN }}
