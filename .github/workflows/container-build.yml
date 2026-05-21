@@ -28,6 +28,8 @@ jobs:
             echo "tag=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
           elif [[ "$GITHUB_REF" == refs/heads/main ]]; then
             echo "tag=latest" >> "$GITHUB_OUTPUT"
+          elif [[ "$GITHUB_REF" == refs/pull/* ]]; then
+            echo "tag=pr-${{ github.event.pull_request.number }}" >> "$GITHUB_OUTPUT"
           else
             echo "tag=${GITHUB_REF#refs/heads/}" >> "$GITHUB_OUTPUT"
           fi
