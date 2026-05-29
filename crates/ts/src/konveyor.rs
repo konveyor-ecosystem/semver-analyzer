@@ -18,6 +18,7 @@ use semver_analyzer_core::{
 };
 
 use crate::language::{ChildComponent, ChildComponentStatus};
+use crate::sd_types::{ReplacementEvidence, SdPipelineResult};
 
 // Re-export all types and functions from semver-analyzer-konveyor-core.
 // That crate now re-exports shared types from the `konveyor-core` crate,
@@ -216,6 +217,162 @@ pub(crate) fn classify_removed_props(
 }
 
 type ConstantGroupEntries<'a> = Vec<(&'a ApiChange, Option<String>, FixStrategyEntry)>;
+
+/// Build an enriched `FixStrategyEntry` for a restructured component by
+/// comparing old and new source profiles from the SD pipeline.
+///
+/// When a component still exists but had many props removed (the
+/// `still_exists_same_pkg` path), the default bare `LlmAssisted` strategy
+/// gives the LLM no context about what changed internally. This function
+/// populates the strategy with:
+///
+/// - `component`: the component name
+/// - `from`: describes the old internal rendering (e.g., "internally rendered
+///   LinkComponent defaulting to <a>, children flowed through li > LinkComponent")
+/// - `to`: describes the new rendering (e.g., "renders {children} directly
+///   inside li — consumer must provide their own link element as children")
+/// - `removed_members`: the removed props with their types
+///
+/// This context flows into the LLM prompt via `format_strategy_context()`,
+/// giving the LLM enough signal to choose the right replacement pattern
+/// (e.g., `<Button component="a">` instead of a bare `<a>` tag).
+fn build_restructured_strategy(
+    component_name: &str,
+    removed_members: &[RemovedMember],
+    sd: &SdPipelineResult,
+) -> FixStrategyEntry {
+    let mut entry = FixStrategyEntry::new("LlmAssisted");
+    entry.component = Some(component_name.to_string());
+
+    // Populate removed_members with type info for strategy context.
+    entry.removed_members = removed_members
+        .iter()
+        .map(|m| {
+            if let Some(clean_type) = extract_clean_type(&m.old_type) {
+                format!("{}: {}", m.name, clean_type)
+            } else {
+                m.name.clone()
+            }
+        })
+        .collect();
+
+    let old_profile = sd.old_profiles.get(component_name);
+    let new_profile = sd.new_profiles.get(component_name);
+
+    if let (Some(old_p), Some(new_p)) = (old_profile, new_profile) {
+        // Detect rendered components that were removed (internal elements
+        // the component no longer renders).
+        let old_rendered: BTreeSet<&str> = old_p
+            .rendered_components
+            .iter()
+            .map(|r| r.name.as_str())
+            .collect();
+        let new_rendered: BTreeSet<&str> = new_p
+            .rendered_components
+            .iter()
+            .map(|r| r.name.as_str())
+            .collect();
+        let removed_rendered: Vec<&str> = old_rendered
+            .difference(&new_rendered)
+            .copied()
+            .collect();
+
+        if !removed_rendered.is_empty() {
+            // Build "from" description: what the component used to render.
+            let mut from_parts = Vec::new();
+            for name in &removed_rendered {
+                // Check if a prop controls this rendered component. Match by:
+                // 1. Prop name case-insensitively equals the component name
+                //    (e.g., prop "linkComponent" controls <LinkComponent>)
+                // 2. Prop name is a camelCase variant of the component name
+                let default_info = old_p
+                    .prop_defaults
+                    .iter()
+                    .find(|(prop_name, _)| {
+                        prop_name.eq_ignore_ascii_case(name)
+                    })
+                    .map(|(prop_name, default_val)| {
+                        format!(
+                            " (via prop '{}', default: {})",
+                            prop_name, default_val
+                        )
+                    });
+                from_parts.push(format!(
+                    "Internally rendered <{}>{}",
+                    name,
+                    default_info.unwrap_or_default()
+                ));
+            }
+
+            // Show how the children slot path changed.
+            if old_p.children_slot_path != new_p.children_slot_path {
+                from_parts.push(format!(
+                    "Children slot: {} → {}",
+                    if old_p.children_slot_path.is_empty() {
+                        "(none)".to_string()
+                    } else {
+                        old_p.children_slot_path.join(" > ")
+                    },
+                    if new_p.children_slot_path.is_empty() {
+                        "(none)".to_string()
+                    } else {
+                        new_p.children_slot_path.join(" > ")
+                    },
+                ));
+            }
+
+            entry.from = Some(from_parts.join(". "));
+
+            // Build "to" description: what the consumer must now provide.
+            let mut to_parts = Vec::new();
+            to_parts.push(format!(
+                "Component now renders {{children}} directly{}",
+                if new_p.children_slot_path.is_empty() {
+                    String::new()
+                } else {
+                    format!(" inside {}", new_p.children_slot_path.join(" > "))
+                }
+            ));
+
+            // For each removed rendered component, explain what it was.
+            for name in &removed_rendered {
+                if let Some((prop_name, default_val)) = old_p
+                    .prop_defaults
+                    .iter()
+                    .find(|(prop_name, _)| prop_name.eq_ignore_ascii_case(name))
+                {
+                    let clean_default = default_val.trim_matches('\'').trim_matches('"');
+                    // Identify which removed props were forwarded to this
+                    // internal element. Props typed as the component's
+                    // linkComponentProps or containing "Props" in their name
+                    // are spread props. Others like href, target are direct.
+                    let forwarded: Vec<&str> = removed_members
+                        .iter()
+                        .filter(|m| m.name != *prop_name)
+                        .map(|m| m.name.as_str())
+                        .collect();
+
+                    to_parts.push(format!(
+                        "Previously rendered <{}> internally (prop '{}' \
+                         defaulted to '{}'). Consumer must now provide their \
+                         own <{}> element as children with props: {}",
+                        name,
+                        prop_name,
+                        clean_default,
+                        clean_default,
+                        forwarded.join(", ")
+                    ));
+                }
+            }
+
+            if !to_parts.is_empty() {
+                entry.to = Some(to_parts.join(". "));
+            }
+        }
+    }
+
+    entry
+}
 
 fn detect_collapsible_constant_groups<'a>(
     report: &'a AnalysisReport<TypeScript>,
@@ -439,7 +596,16 @@ fn find_sibling_replacement_in_report(
     candidates.into_iter().next().map(|(name, _)| name)
 }
 
-fn build_migration_message_v2(comp: &TypeSummary<TypeScript>) -> String {
+/// Build the P0-C migration message for a component.
+///
+/// `treat_as_removed` controls the message framing:
+/// - `true`: "was removed" (IMPORT trigger path) — for genuinely removed components
+/// - `false`: "has been restructured" (JSX_PROP path) — for components that still
+///   exist but had many props removed (API simplification, not true removal)
+fn build_migration_message_v2(
+    comp: &TypeSummary<TypeScript>,
+    treat_as_removed: bool,
+) -> String {
     let component_name = &comp.name;
     let removal_count = comp.member_summary.removed;
     let total = comp.member_summary.total;
@@ -509,7 +675,7 @@ fn build_migration_message_v2(comp: &TypeSummary<TypeScript>) -> String {
                 target.removed_only_members.join(", ")
             ));
         }
-    } else if comp.status == TypeStatus::Removed || (removal_count == total && total <= 2) {
+    } else if treat_as_removed || (removal_count == total && total <= 2) {
         // Fully removed component
         msg.push_str(&format!(
             "MIGRATION: <{}> was removed.\n\n\
@@ -702,7 +868,7 @@ fn build_migration_message_v2(comp: &TypeSummary<TypeScript>) -> String {
              Also remove {} from the import statement.",
             component_name, replacement, component_name
         ));
-    } else if comp.status == TypeStatus::Removed || (removal_count == total && total <= 2) {
+    } else if treat_as_removed || (removal_count == total && total <= 2) {
         // Fully removed — tell LLM to remove the import
         msg.push_str(&format!(
             "Remove {} from the import statement.",
@@ -774,10 +940,102 @@ pub fn generate_rules(
                         .or_insert_with(|| tree.root.clone());
                 }
             }
+
+            // Remap deprecated components to their replacement families so that
+            // rules for deprecated-and-replaced components (e.g., Tile → Card,
+            // Chip → Label) get the replacement family's label. This lets the
+            // fix engine consolidate them with the replacement family's strategy
+            // entry (target_structure, retained_props, unmapped_removed_props),
+            // giving the LLM full context about the target component's v6 API.
+            //
+            // IMPORTANT: Only remap components whose v6 package is /deprecated.
+            // Components that were promoted from /next to main (e.g.,
+            // DualListSelector) share the same name as their deprecated
+            // counterpart but should NOT be remapped to the replacement family
+            // (e.g., DragDrop). Without this guard, the blanket remapping
+            // contaminates /next and main rules with wrong family labels.
+            for dr in &sd.deprecated_replacements {
+                if let Some(new_family) = map.get(&dr.new_component).cloned() {
+                    let old_family = dr.old_component.clone();
+                    for (comp, value) in map.iter_mut() {
+                        if *value == old_family {
+                            // Only remap if this component's v6 package is deprecated.
+                            let comp_pkg = sd
+                                .component_packages
+                                .get(comp.as_str())
+                                .map(|p| p.as_str())
+                                .unwrap_or("");
+                            if comp_pkg.contains("/deprecated") {
+                                *value = new_family.clone();
+                            }
+                        }
+                    }
+                }
+            }
+
             map
         } else {
             HashMap::new()
         };
+
+    // ── Pre-scan: extract old component prop types for enum member rules ────
+    //
+    // Used by api_change_to_rules to resolve which components have props typed
+    // as a specific enum (e.g., DrawerColorVariant → DrawerPanelContent.colorVariant).
+    // This lets enum member removal rules target the correct component+prop+value
+    // instead of treating the enum as a JSX component.
+    let old_component_prop_types: HashMap<String, BTreeMap<String, String>> = report
+        .extensions
+        .sd_result
+        .as_ref()
+        .map(|sd| sd.old_component_prop_types.clone())
+        .unwrap_or_default();
+
+    // ── Pre-scan: detect "still exists" components ─────────────────────────
+    //
+    // Components where the TD pipeline marks `status = Removed` but the SD
+    // pipeline shows them still exported from the SAME package in v6. These
+    // components were simplified (many props removed) but NOT truly removed.
+    //
+    // Example: LoginMainFooterLinksItem — 4 of 6 props removed, but it's
+    // still exported from @patternfly/react-core. The v6 API changed from
+    // rendering an internal <a> tag to accepting children (e.g., a <Button>).
+    //
+    // For these components, P0-C should NOT say "was removed" or trigger on
+    // IMPORT. Instead, it should say "has been restructured" and trigger on
+    // the individual removed props (JSX_PROP), giving the LLM actionable
+    // per-prop context instead of a vague removal message.
+    let still_exists_same_pkg: HashSet<String> = report
+        .extensions
+        .sd_result
+        .as_ref()
+        .map(|sd| {
+            let mut set = HashSet::new();
+            for pkg in &report.packages {
+                for comp in &pkg.type_summaries {
+                    if comp.status != TypeStatus::Removed {
+                        continue;
+                    }
+                    // Check if the component still exists in the new packages
+                    // at the same package path (not moved to /deprecated).
+                    if let Some(new_pkg_path) = sd.component_packages.get(&comp.name) {
+                        if *new_pkg_path == pkg.name {
+                            tracing::debug!(
+                                component = %comp.name,
+                                package = %pkg.name,
+                                removed = comp.member_summary.removed,
+                                total = comp.member_summary.total,
+                                "Component marked Removed but still exists at same package — \
+                                 downgrading P0-C from IMPORT to JSX_PROP"
+                            );
+                            set.insert(comp.name.clone());
+                        }
+                    }
+                }
+            }
+            set
+        })
+        .unwrap_or_default();
 
     // ── Pre-scan: collect components referenced in composition pattern changes ──
     //
@@ -994,7 +1252,13 @@ pub fn generate_rules(
 
     for pkg in &report.packages {
         for comp in &pkg.type_summaries {
-            let qualifies = comp.status == TypeStatus::Removed
+            // Use effective status: components that still exist at the same
+            // package don't qualify via the Removed branch. They must qualify
+            // via the removal count/ratio branches instead.
+            let effectively_removed =
+                comp.status == TypeStatus::Removed && !still_exists_same_pkg.contains(&comp.name);
+
+            let qualifies = effectively_removed
                 || (comp.member_summary.removed >= 3 && comp.member_summary.removal_ratio > 0.5)
                 || comp.member_summary.removed >= 5;
             if !qualifies {
@@ -1150,6 +1414,60 @@ pub fn generate_rules(
                     if symbol_names.len() > sample_count {
                         message
                             .push_str(&format!(" and {} more.", symbol_names.len() - sample_count));
+                    }
+                }
+
+                // Enrich with per-constant change descriptions from the report.
+                // This gives the LLM specific guidance per component instead of
+                // a vague "N constants had type changes" message.
+                let mut per_constant_details = Vec::new();
+                for sym_name in symbol_names.iter().take(10) {
+                    // Look up the ApiChange for this symbol in the report
+                    for fc in &report.changes {
+                        for change in &fc.breaking_api_changes {
+                            if change.symbol == *sym_name
+                                && change.change == cg.change_type
+                            {
+                                let detail = match (&change.before, &change.after) {
+                                    (Some(before), Some(after)) => {
+                                        // Summarize the change concisely
+                                        let before_short = if before.len() > 80 {
+                                            format!("{}...", &before[..77])
+                                        } else {
+                                            before.clone()
+                                        };
+                                        let after_short = if after.len() > 80 {
+                                            format!("{}...", &after[..77])
+                                        } else {
+                                            after.clone()
+                                        };
+                                        format!(
+                                            "  - {}: {} → {}",
+                                            sym_name, before_short, after_short
+                                        )
+                                    }
+                                    (Some(before), None) => {
+                                        format!("  - {}: removed (was {})", sym_name, before)
+                                    }
+                                    _ => format!("  - {}: {}", sym_name, change.description),
+                                };
+                                per_constant_details.push(detail);
+                                break;
+                            }
+                        }
+                        if per_constant_details.len() >= 10 {
+                            break;
+                        }
+                    }
+                }
+                if !per_constant_details.is_empty() {
+                    message.push_str("\n\nPer-constant changes:\n");
+                    message.push_str(&per_constant_details.join("\n"));
+                    if symbol_names.len() > 10 {
+                        message.push_str(&format!(
+                            "\n  ... and {} more",
+                            symbol_names.len() - 10
+                        ));
                     }
                 }
 
@@ -1466,6 +1784,7 @@ pub fn generate_rules(
                 rename_patterns,
                 member_renames,
                 &component_to_family,
+                &old_component_prop_types,
             );
             rules.extend(new_rules);
         }
@@ -1558,13 +1877,19 @@ pub fn generate_rules(
             // V2 path: read from pre-aggregated TypeSummary data
             for pkg in &report.packages {
                 for comp in &pkg.type_summaries {
+                    // Use effective status: components that still exist at the
+                    // same package are NOT treated as "Removed" for P0-C
+                    // purposes. They must qualify via removal count/ratio.
+                    let effectively_removed = comp.status == TypeStatus::Removed
+                        && !still_exists_same_pkg.contains(&comp.name);
+
                     // A component qualifies for a P0-C rule if:
-                    // - it was fully removed, OR
+                    // - it was fully removed (and not still-exists), OR
                     // - it has many props removed (>50% ratio), OR
                     // - it has a high absolute count of removals (>=5), indicating
                     //   significant restructuring even if total prop count is large
                     //   (e.g., Modal: 11 of 28 props removed = composition change)
-                    let qualifies = comp.status == TypeStatus::Removed
+                    let qualifies = effectively_removed
                         || (comp.member_summary.removed >= 3
                             && comp.member_summary.removal_ratio > 0.5)
                         || comp.member_summary.removed >= 5;
@@ -1590,7 +1915,8 @@ pub fn generate_rules(
                         sanitize_id(component_name)
                     );
                     let rule_id = unique_id(base_id, &mut id_counts);
-                    let mut message = build_migration_message_v2(comp);
+                    let mut message =
+                        build_migration_message_v2(comp, effectively_removed);
 
                     // ── Sibling replacement lookup ──────────────────────────
                     // When a component is removed with no migration target,
@@ -1599,7 +1925,7 @@ pub fn generate_rules(
                     // TextContent was renamed to Content, then Text should also
                     // suggest Content as a replacement.
                     if comp.migration_target.is_none()
-                        && (comp.status == TypeStatus::Removed || comp.member_summary.total <= 2)
+                        && (effectively_removed || comp.member_summary.total <= 2)
                     {
                         let sibling_replacement = find_sibling_replacement_in_report(comp, report);
                         if let Some(ref replacement) = sibling_replacement {
@@ -1620,11 +1946,154 @@ pub fn generate_rules(
                         }
                     }
 
+                    // ── Deprecated replacement lookup ────────────────────
+                    // When TD misclassifies a rename (e.g., two old symbols
+                    // map to the same new symbol and the wrong one wins by
+                    // name similarity), the SD pipeline may have detected
+                    // the correct mapping via git rename tracking or
+                    // rendering swap analysis. Use it as a fallback.
+                    //
+                    // Guard: skip CommitCoChange evidence — it's correlation-
+                    // based (same commit touched both components) and produces
+                    // false positives (e.g., DualListSelector → DragDrop).
+                    if comp.migration_target.is_none()
+                        && message.contains("no detected direct replacement")
+                    {
+                        if let Some(ref sd) = report.extensions.sd_result {
+                            if let Some(dr) = sd.deprecated_replacements.iter().find(|dr| {
+                                dr.old_component == comp.name
+                                    && dr.evidence_source != ReplacementEvidence::CommitCoChange
+                            }) {
+                                let replacement = &dr.new_component;
+
+                                // Build prop mappings from SD component prop lists.
+                                let old_props = sd
+                                    .old_component_props
+                                    .get(&comp.name)
+                                    .cloned()
+                                    .unwrap_or_default();
+                                let new_props = sd
+                                    .new_component_props
+                                    .get(replacement)
+                                    .cloned()
+                                    .unwrap_or_default();
+                                let new_props_set: HashSet<&str> =
+                                    new_props.iter().map(|s| s.as_str()).collect();
+
+                                // Prefix for prefix-strip matching:
+                                //   "InvalidObject" → "invalidObject"
+                                let prefix = {
+                                    let mut chars = comp.name.chars();
+                                    match chars.next() {
+                                        Some(c) => {
+                                            c.to_lowercase().to_string() + chars.as_str()
+                                        }
+                                        None => String::new(),
+                                    }
+                                };
+
+                                let mut prop_mappings: Vec<(String, String)> = Vec::new();
+                                let mut unmapped: Vec<String> = Vec::new();
+
+                                for old_prop in &old_props {
+                                    if old_prop == "children" || old_prop == "className" {
+                                        continue;
+                                    }
+                                    if new_props_set.contains(old_prop.as_str()) {
+                                        // Exact match (e.g., ouiaId → ouiaId)
+                                        prop_mappings
+                                            .push((old_prop.clone(), old_prop.clone()));
+                                    } else if let Some(stripped) =
+                                        old_prop.strip_prefix(&prefix)
+                                    {
+                                        // Prefix-strip match:
+                                        //   invalidObjectTitleText → TitleText → titleText
+                                        let candidate = {
+                                            let mut chars = stripped.chars();
+                                            match chars.next() {
+                                                Some(c) => {
+                                                    c.to_lowercase().to_string()
+                                                        + chars.as_str()
+                                                }
+                                                None => String::new(),
+                                            }
+                                        };
+                                        if new_props_set.contains(candidate.as_str()) {
+                                            prop_mappings
+                                                .push((old_prop.clone(), candidate));
+                                        } else {
+                                            unmapped.push(old_prop.clone());
+                                        }
+                                    } else {
+                                        unmapped.push(old_prop.clone());
+                                    }
+                                }
+
+                                // Build replacement text.
+                                let old_text = format!(
+                                    "This component has no detected direct replacement.\n\
+                                     Replace all <{}> usages with the recommended alternative.",
+                                    component_name,
+                                );
+
+                                let mut new_text =
+                                    format!("Use <{replacement}> instead.");
+
+                                // Import guidance: use pkg.name (the published
+                                // package name) since the replacement is always
+                                // within the same package. The SD component_packages
+                                // map may contain internal workspace names.
+                                if pkg.name.as_str() != component_name.as_str() {
+                                    new_text.push_str(&format!(
+                                        "\n\nImport change:\n\
+                                         \x20 Replace: import {{ {component_name} }} from '{pkg_name}';\n\
+                                         \x20 With:    import {{ {replacement} }} from '{pkg_name}';",
+                                        pkg_name = pkg.name,
+                                    ));
+                                }
+
+                                // Prop mappings.
+                                if !prop_mappings.is_empty() {
+                                    new_text.push_str("\n\nProperty mapping:");
+                                    for (old_name, new_name) in &prop_mappings {
+                                        if old_name == new_name {
+                                            new_text.push_str(&format!(
+                                                "\n  - {component_name}.{old_name}  \u{2192}  {replacement}.{new_name}",
+                                            ));
+                                        } else {
+                                            new_text.push_str(&format!(
+                                                "\n  - {component_name}.{old_name}  \u{2192}  {replacement}.{new_name} (renamed)",
+                                            ));
+                                        }
+                                    }
+                                }
+
+                                // Unmapped props.
+                                if !unmapped.is_empty() {
+                                    new_text.push_str(&format!(
+                                        "\n\nRemoved with no direct equivalent: {}",
+                                        unmapped.join(", "),
+                                    ));
+                                }
+
+                                message = message.replace(&old_text, &new_text);
+
+                                tracing::debug!(
+                                    component = %comp.name,
+                                    replacement = %replacement,
+                                    evidence = ?dr.evidence_source,
+                                    prop_mappings = prop_mappings.len(),
+                                    "Enriched P0-C message via deprecated_replacement fallback"
+                                );
+                            }
+                        }
+                    }
+
                     // For removed types from deprecated directories with no
                     // migration target, enrich the message with the new API
                     // structure from the composition tree.
                     if comp.migration_target.is_none()
-                        && (comp.status == TypeStatus::Removed || comp.member_summary.total <= 2)
+                        && (effectively_removed || comp.member_summary.total <= 2)
                     {
                         if let Some(ref sd) = report.extensions.sd_result {
                             let source_family = comp.source_files.iter().find_map(|f| {
@@ -1702,7 +2171,7 @@ pub fn generate_rules(
 
                     let pattern = format!("^{}$", regex_escape(component_name));
 
-                    let when = if comp.status == TypeStatus::Removed {
+                    let when = if effectively_removed {
                         // Fully removed — trigger on import (from either path)
                         if is_from_deprecated {
                             KonveyorCondition::Or {
@@ -1873,6 +2342,26 @@ pub fn generate_rules(
                         p0c_labels.push(format!("family={}", family));
                     }
 
+                    // For restructured components (still exist but heavily
+                    // modified), enrich the fix strategy with source profile
+                    // data describing the old/new rendering pattern. This
+                    // gives the LLM context about what the component used to
+                    // render internally so it can choose the right replacement
+                    // pattern (e.g., <Button component="a"> vs bare <a>).
+                    let fix_strategy = if !effectively_removed {
+                        if let Some(ref sd) = report.extensions.sd_result {
+                            build_restructured_strategy(
+                                component_name,
+                                &comp.removed_members,
+                                sd,
+                            )
+                        } else {
+                            FixStrategyEntry::new("LlmAssisted")
+                        }
+                    } else {
+                        FixStrategyEntry::new("LlmAssisted")
+                    };
+
                     rules.push(KonveyorRule {
                         rule_id,
                         labels: p0c_labels,
@@ -1885,7 +2374,7 @@ pub fn generate_rules(
                         message,
                         links: Vec::new(),
                         when,
-                        fix_strategy: Some(FixStrategyEntry::new("LlmAssisted")),
+                        fix_strategy: Some(fix_strategy),
                     });
                 }
             }
@@ -2738,8 +3227,10 @@ pub fn generate_dependency_update_rules(
         }
     }
 
-    // Source 2: any package with a major version bump vs the from_ref.
-    let from_major = report
+    // Source 2: any package with a major version bump.
+    // Prefer per-package old_version to detect the bump; fall back to the
+    // repo-level from_ref major when per-package old version is unavailable.
+    let repo_from_major = report
         .comparison
         .from_ref
         .trim_start_matches('v')
@@ -2758,7 +3249,13 @@ pub fn generate_dependency_update_rules(
                 .next()
                 .and_then(|s| s.parse::<u64>().ok())
                 .unwrap_or(0);
-            if new_major > from_major {
+            let old_major = info
+                .old_version
+                .as_ref()
+                .and_then(|v| v.split('.').next())
+                .and_then(|s| s.parse::<u64>().ok())
+                .unwrap_or(repo_from_major);
+            if new_major > old_major {
                 packages_with_changes
                     .entry(info.name.clone())
                     .or_insert(info);
@@ -2880,17 +3377,28 @@ pub fn generate_dependency_update_rules(
                 name: Some(npm_name.clone()),
                 nameregex: None,
                 // Fire when the dependency version is at or below the old (pre-breaking) version.
-                // The old version is the from_ref version (e.g., "5.4.0").
                 // Use a high patch number to catch all patch releases of the old major.
+                //
+                // Prefer per-package old_version (handles packages like react-charts
+                // that have independent versioning: v7.x in PF5, v8.x in PF6).
+                // Fall back to repo-level from_ref when per-package version is unavailable.
                 upperbound: {
-                    // Extract the major version from the from_ref (e.g., "v5.4.0" -> "5")
-                    let from_ref = &report.comparison.from_ref;
-                    let major = from_ref
-                        .trim_start_matches('v')
-                        .split('.')
-                        .next()
+                    let major = info
+                        .old_version
+                        .as_ref()
+                        .and_then(|v| v.split('.').next())
                         .and_then(|s| s.parse::<u64>().ok())
-                        .unwrap_or(0);
+                        .unwrap_or_else(|| {
+                            // Fallback to repo-level from_ref
+                            report
+                                .comparison
+                                .from_ref
+                                .trim_start_matches('v')
+                                .split('.')
+                                .next()
+                                .and_then(|s| s.parse::<u64>().ok())
+                                .unwrap_or(0)
+                        });
                     Some(format!("{}.99.99", major))
                 },
                 lowerbound: None,
@@ -3158,25 +3666,65 @@ pub fn apply_suffix_renames(
 // NOTE: v1 generate_conformance_rules was removed — superseded by
 // sd-cf-* conformance rules in konveyor_v2.rs (generate_conformance_rules).
 
-pub fn build_package_name_cache(report: &AnalysisReport<TypeScript>) -> HashMap<String, String> {
-    let full_cache = build_package_info_cache(report);
-    full_cache
-        .into_iter()
-        .map(|(dir, info)| (dir, info.name))
-        .collect()
-}
-
 /// Build a cache of package directory name -> PackageInfo (name + version).
 ///
-/// Reads package.json from the to_ref (new version) using `git show` to get
-/// the target version for dependency update rules. Falls back to reading from
-/// disk if git fails.
+/// Reads package.json from both `from_ref` (old version) and `to_ref` (new version)
+/// using `git show` to get per-package version information for dependency update rules.
+/// The old version is needed because packages in a monorepo may have independent
+/// version numbers (e.g., `@patternfly/react-charts` is v7.x in PF5, v8.x in PF6),
+/// so the repo-level git tag cannot be used as a universal upperbound.
+/// Infer the path prefix before `packages/` from report file paths.
+///
+/// Standard repos use `packages/` at the repo root (prefix = ""), but some
+/// repos like `openshift/console` nest packages under `frontend/packages/`.
+/// This function scans file paths in the report to detect the most common
+/// prefix before the `packages/` segment.
+///
+/// Returns the prefix string including trailing slash (e.g., `"frontend/"`)
+/// or empty string if packages are at the root.
+fn infer_packages_prefix(report: &AnalysisReport<TypeScript>) -> String {
+    let mut prefix_counts: HashMap<String, usize> = HashMap::new();
+
+    for file_changes in &report.changes {
+        let file_str = file_changes.file.to_string_lossy();
+        // Find the "packages/" segment and extract everything before it
+        if let Some(pos) = file_str.find("/packages/") {
+            let prefix = &file_str[..pos + 1]; // include trailing slash
+            *prefix_counts.entry(prefix.to_string()).or_insert(0) += 1;
+        } else if file_str.starts_with("packages/") {
+            *prefix_counts.entry(String::new()).or_insert(0) += 1;
+        }
+    }
+
+    let inferred = prefix_counts
+        .into_iter()
+        .max_by_key(|(_, count)| *count)
+        .map(|(prefix, _)| prefix)
+        .unwrap_or_default();
+
+    if !inferred.is_empty() {
+        tracing::info!(
+            prefix = %inferred,
+            "Inferred packages prefix from report file paths"
+        );
+    }
+
+    inferred
+}
+
 pub fn build_package_info_cache(
     report: &AnalysisReport<TypeScript>,
 ) -> HashMap<String, PackageInfo> {
     let mut cache: HashMap<String, PackageInfo> = HashMap::new();
     let repo_path = &report.repository;
     let to_ref = &report.comparison.to_ref;
+    let from_ref = &report.comparison.from_ref;
+
+    // Infer the packages prefix from report file paths.
+    // Standard repos use "packages/" at the root, but some (e.g., openshift/console)
+    // use "frontend/packages/". We scan all file paths to find the prefix before
+    // "packages/" and use that for git and disk lookups.
+    let packages_prefix = infer_packages_prefix(report);
 
     for file_changes in &report.changes {
         let file_str = file_changes.file.to_string_lossy();
@@ -3190,12 +3738,18 @@ pub fn build_package_info_cache(
 
                 // Read package.json at the to_ref to get the target version.
                 // Use `git show <ref>:path` to avoid depending on the checkout state.
-                let pkg_json_git_path = format!("packages/{}/package.json", pkg_dir_name);
+                // Use the inferred prefix (e.g., "frontend/packages/" or "packages/").
+                let pkg_json_git_path =
+                    format!("{}packages/{}/package.json", packages_prefix, pkg_dir_name);
                 let (npm_name, npm_version) =
                     read_package_json_at_ref(repo_path, to_ref, &pkg_json_git_path)
                         .or_else(|| {
                             // Fallback: read from disk (current checkout)
-                            let pkg_json_path = repo_path
+                            let mut pkg_json_path = repo_path.to_path_buf();
+                            for seg in packages_prefix.split('/').filter(|s| !s.is_empty()) {
+                                pkg_json_path = pkg_json_path.join(seg);
+                            }
+                            pkg_json_path = pkg_json_path
                                 .join("packages")
                                 .join(pkg_dir_name)
                                 .join("package.json");
@@ -3203,9 +3757,16 @@ pub fn build_package_info_cache(
                         })
                         .unwrap_or((None, None));
 
+                // Read package.json at the from_ref to get the old version.
+                // This is critical for packages with independent versioning.
+                let old_version =
+                    read_package_json_at_ref(repo_path, from_ref, &pkg_json_git_path)
+                        .and_then(|(_, v)| v);
+
                 let info = PackageInfo {
                     name: npm_name.unwrap_or_else(|| pkg_dir_name.to_string()),
                     version: npm_version,
+                    old_version,
                 };
                 cache.insert(pkg_dir_name.to_string(), info);
             }
@@ -3215,15 +3776,17 @@ pub fn build_package_info_cache(
     // Discover ALL workspace packages via `git ls-tree` so packages without
     // breaking API changes (e.g., react-styles) still get dependency-update
     // rules when they have a major version bump.
+    let ls_tree_path = format!("{}packages/", packages_prefix);
     if let Ok(output) = std::process::Command::new("git")
-        .args(["ls-tree", "--name-only", to_ref, "packages/"])
+        .args(["ls-tree", "--name-only", to_ref, &ls_tree_path])
         .current_dir(repo_path)
         .output()
     {
         if output.status.success() {
             let listing = String::from_utf8_lossy(&output.stdout);
+            let strip_prefix = format!("{}packages/", packages_prefix);
             for line in listing.lines() {
-                let dir_name = line.trim_start_matches("packages/");
+                let dir_name = line.trim_start_matches(&strip_prefix);
                 if dir_name.is_empty() || cache.contains_key(dir_name) {
                     continue;
                 }
@@ -3231,9 +3794,15 @@ pub fn build_package_info_cache(
                 if let Some((npm_name, npm_version)) =
                     read_package_json_at_ref(repo_path, to_ref, &pkg_json_git_path)
                 {
+                    // Read old version from from_ref
+                    let old_version =
+                        read_package_json_at_ref(repo_path, from_ref, &pkg_json_git_path)
+                            .and_then(|(_, v)| v);
+
                     let info = PackageInfo {
                         name: npm_name.unwrap_or_else(|| dir_name.to_string()),
                         version: npm_version,
+                        old_version,
                     };
                     cache.insert(dir_name.to_string(), info);
                 }
@@ -3254,7 +3823,12 @@ pub fn build_package_info_cache(
             .or_insert_with(|| PackageInfo {
                 name: dir_name.to_string(),
                 version: None,
+                old_version: None,
             });
+        // Enrich old_version from report.packages if not already set
+        if entry.old_version.is_none() {
+            entry.old_version.clone_from(&pkg.old_version);
+        }
         // If the cache has a bare directory name but the report has the scoped name, upgrade
         if !pkg.name.starts_with('@') || entry.name.starts_with('@') {
             continue;
@@ -3267,10 +3841,11 @@ pub fn build_package_info_cache(
             entries = ?cache
                 .iter()
                 .map(|(k, v)| format!(
-                    "{}: {} ({})",
+                    "{}: {} ({} -> {})",
                     k,
                     v.name,
-                    v.version.as_deref().unwrap_or("?")
+                    v.old_version.as_deref().unwrap_or("?"),
+                    v.version.as_deref().unwrap_or("?"),
                 ))
                 .collect::<Vec<_>>(),
             "Package info cache built"
@@ -3375,72 +3950,7 @@ fn detect_css_prefix_changes(report: &AnalysisReport<TypeScript>) -> Vec<(String
         .collect()
 }
 
-pub fn generate_fix_guidance(
-    report: &AnalysisReport<TypeScript>,
-    rules: &[KonveyorRule],
-    file_pattern: &str,
-) -> FixGuidanceDoc {
-    let mut fixes = Vec::new();
-    let mut rule_idx = 0;
 
-    // API + behavioral changes (per-file, in same order as generate_rules)
-    for file_changes in &report.changes {
-        for api_change in &file_changes.breaking_api_changes {
-            if rule_idx < rules.len() {
-                let fix = api_change_to_fix(
-                    api_change,
-                    file_changes,
-                    &rules[rule_idx].rule_id,
-                    file_pattern,
-                );
-                fixes.push(fix);
-                rule_idx += 1;
-            }
-        }
-        for behavioral in &file_changes.breaking_behavioral_changes {
-            if rule_idx < rules.len() {
-                let fix =
-                    behavioral_change_to_fix(behavioral, file_changes, &rules[rule_idx].rule_id);
-                fixes.push(fix);
-                rule_idx += 1;
-            }
-        }
-    }
-
-    // Manifest changes
-    for manifest in &report.manifest_changes {
-        if rule_idx < rules.len() {
-            let fix = manifest_change_to_fix(manifest, &rules[rule_idx].rule_id);
-            fixes.push(fix);
-            rule_idx += 1;
-        }
-    }
-
-    let auto_fixable = fixes
-        .iter()
-        .filter(|f| matches!(f.confidence, FixConfidence::Exact | FixConfidence::High))
-        .count();
-    let manual_only = fixes
-        .iter()
-        .filter(|f| matches!(f.source, FixSource::Manual))
-        .count();
-    let needs_review = fixes.len() - auto_fixable - manual_only;
-
-    FixGuidanceDoc {
-        migration: MigrationInfo {
-            from_ref: report.comparison.from_ref.clone(),
-            to_ref: report.comparison.to_ref.clone(),
-            generated_by: format!("semver-analyzer v{}", report.metadata.tool_version),
-        },
-        summary: FixSummary {
-            total_fixes: fixes.len(),
-            auto_fixable,
-            needs_review,
-            manual_only,
-        },
-        fixes,
-    }
-}
 
 /// CSS-related change-type labels used for partitioning rules into the CSS file.
 const CSS_CHANGE_TYPES: &[&str] = &[
@@ -3552,6 +4062,7 @@ pub fn write_ruleset_dir(
 
 // ── Rule generators ─────────────────────────────────────────────────────
 
+#[allow(clippy::too_many_arguments)]
 fn api_change_to_rules(
     change: &ApiChange,
     file_changes: &FileChanges<TypeScript>,
@@ -3560,7 +4071,25 @@ fn api_change_to_rules(
     rename_patterns: &RenamePatterns,
     member_renames: &HashMap<String, String>,
     component_to_family: &HashMap<String, String>,
+    old_component_prop_types: &HashMap<String, BTreeMap<String, String>>,
 ) -> Vec<KonveyorRule> {
+    // Skip union-value-removed entries — the SD pipeline generates precise
+    // sd-prop-value-* rules with correct PropValueChange strategy and
+    // replacement mappings. Emitting these as Removed rules produces
+    // RemoveProp strategy (via consolidation into group rules) that
+    // incorrectly deletes the entire prop instead of changing its value.
+    //
+    // Detection: Removed(UnionValue{..}) entries have before="'value'" (a
+    // single-quoted literal) and after=None. Whole-property removals have
+    // before as a full type signature (e.g., "property: variant: ...").
+    if change.change == ApiChangeType::Removed
+        && matches!(change.kind, ApiChangeKind::Property | ApiChangeKind::Field)
+        && change.before.as_deref().map_or(false, is_single_quoted_value)
+        && change.after.is_none()
+    {
+        return vec![];
+    }
+
     let file_path = file_changes.file.display().to_string();
     let leaf_symbol = extract_leaf_symbol(&change.symbol);
     let effort = effort_for_api_change(&change.change);
@@ -3700,6 +4229,53 @@ fn api_change_to_rules(
         }
     }
 
+    // ── Enrich interface signature-changed rules with member-level renames ──
+    //
+    // When an interface's base class changes (e.g., ErrorStateProps extends
+    // Omit<EmptyStateProps, 'children'> → Omit<..., 'children' | 'titleText'>),
+    // the LLM needs to know which concrete props were renamed. Scan sibling
+    // ApiChange entries in the same file for member-level renames like
+    // ErrorStateProps.errorTitle → titleText.
+    if change.kind == ApiChangeKind::Interface
+        && matches!(
+            change.change,
+            ApiChangeType::SignatureChanged | ApiChangeType::TypeChanged
+        )
+    {
+        let interface_prefix = format!("{}.", change.symbol);
+        let mut member_renames_found: Vec<(String, String)> = Vec::new();
+        for sibling in &file_changes.breaking_api_changes {
+            if !sibling.symbol.starts_with(&interface_prefix) {
+                continue;
+            }
+            let prop_name = &sibling.symbol[interface_prefix.len()..];
+            if let Some(RemovalDisposition::ReplacedByMember { ref new_member }) =
+                sibling.removal_disposition
+            {
+                member_renames_found.push((prop_name.to_string(), new_member.clone()));
+            } else if sibling.change == ApiChangeType::Renamed {
+                if let Some(ref after) = sibling.after {
+                    // Extract just the prop name from after (might be "property: newName: type")
+                    let new_name = after
+                        .strip_prefix("property: ")
+                        .and_then(|s| s.split(':').next())
+                        .unwrap_or(after)
+                        .trim();
+                    member_renames_found.push((prop_name.to_string(), new_name.to_string()));
+                }
+            }
+        }
+        if !member_renames_found.is_empty() {
+            message.push_str("\n\nProp renames in this interface:");
+            for (old_name, new_name) in &member_renames_found {
+                message.push_str(&format!("\n  - {} → {}", old_name, new_name));
+            }
+            message.push_str(
+                "\n\nUpdate your code to use the new prop names listed above.",
+            );
+        }
+    }
+
     let mut labels = vec![
         "source=semver-analyzer".to_string(),
         format!("change-type={}", change_type_label),
@@ -3741,6 +4317,8 @@ fn api_change_to_rules(
             || matches!(
                 change.removal_disposition,
                 Some(RemovalDisposition::ReplacedByMember { .. })
+                    | Some(RemovalDisposition::TrulyRemoved)
+                    | Some(RemovalDisposition::MadeAutomatic)
             )
     };
     labels.push(format!("has-codemod={}", has_codemod));
@@ -3764,7 +4342,72 @@ fn api_change_to_rules(
         labels.push(format!("family={}", family));
     }
 
-    let condition = build_frontend_condition(change, leaf_symbol, from_pkg);
+    // For enum member changes (e.g., DrawerColorVariant.light200 removed),
+    // build JSX_PROP conditions scoped to the specific components that use
+    // the enum, with the member name as the value filter. This produces the
+    // same pattern as prop-value-change rules (e.g., variant="darker" on
+    // PageSection) and uses the scanner's existing StaticMemberExpression
+    // extraction for prop values.
+    let condition = if change.kind == ApiChangeKind::EnumMember && change.symbol.contains('.') {
+        let parts: Vec<&str> = change.symbol.splitn(2, '.').collect();
+        let enum_name = parts[0];
+        let member_name = parts[1];
+        let from = from_pkg.map(|s| s.to_string());
+
+        // Find all components that have props typed as this enum by
+        // scanning old_component_prop_types for type strings that contain
+        // the enum name.
+        let mut conditions: Vec<KonveyorCondition> = Vec::new();
+        for (component, props) in old_component_prop_types {
+            for (prop_name, type_str) in props {
+                if type_str.contains(enum_name) {
+                    conditions.push(KonveyorCondition::FrontendReferenced {
+                        referenced: FrontendReferencedFields {
+                            pattern: format!("^{}$", regex_escape(prop_name)),
+                            location: "JSX_PROP".to_string(),
+                            component: Some(format!("^{}$", regex_escape(component))),
+                            parent: None,
+                            value: Some(format!("^{}$", regex_escape(member_name))),
+                            from: from.clone(),
+                            file_pattern: None,
+                            parent_from: None,
+                            not_parent: None,
+                            child: None,
+                            not_child: None,
+                            requires_child: None,
+                        },
+                    });
+                }
+            }
+        }
+
+        if conditions.is_empty() {
+            // Fallback: no component uses this enum as a prop type, detect
+            // via import of the parent enum.
+            KonveyorCondition::FrontendReferenced {
+                referenced: FrontendReferencedFields {
+                    pattern: format!("^{}$", regex_escape(enum_name)),
+                    location: "IMPORT".to_string(),
+                    component: None,
+                    parent: None,
+                    value: None,
+                    from,
+                    file_pattern: None,
+                    parent_from: None,
+                    not_parent: None,
+                    child: None,
+                    not_child: None,
+                    requires_child: None,
+                },
+            }
+        } else if conditions.len() == 1 {
+            conditions.into_iter().next().unwrap()
+        } else {
+            KonveyorCondition::Or { or: conditions }
+        }
+    } else {
+        build_frontend_condition(change, leaf_symbol, from_pkg)
+    };
     let mut fix_strategy =
         api_change_to_strategy(change, rename_patterns, member_renames, &file_path);
 
@@ -3791,6 +4434,17 @@ fn api_change_to_rules(
     // will cover it. Skip the main rule. If no union values can be parsed
     // (structural type change, nullability, etc.), the main rule is emitted
     // as a catch-all since no per-value discrimination is possible.
+    // Skip no-op "X replaced by X" signature-changed rules where the
+    // component name didn't change (e.g., Chart relocated but not renamed).
+    // These produce useless guidance like "Migrate from <Chart> to <Chart>".
+    if change.change == ApiChangeType::SignatureChanged {
+        if let (Some(before), Some(after)) = (&change.before, &change.after) {
+            if before == after {
+                return vec![];
+            }
+        }
+    }
+
     let per_value_covered = matches!(change.kind, ApiChangeKind::Property | ApiChangeKind::Field)
         && change.change == ApiChangeType::TypeChanged
         && !extract_removed_union_values(change).is_empty();
@@ -4146,398 +4800,6 @@ fn manifest_change_to_rule(
         links: Vec::new(),
         when: condition,
         fix_strategy,
-    }
-}
-
-// ── Fix guidance generators ─────────────────────────────────────────────
-
-fn api_change_to_fix(
-    change: &ApiChange,
-    file_changes: &FileChanges<TypeScript>,
-    rule_id: &str,
-    file_pattern: &str,
-) -> FixGuidanceEntry {
-    let file_path = file_changes.file.display().to_string();
-    let leaf_symbol = extract_leaf_symbol(&change.symbol);
-    let search_pattern = build_pattern(&change.kind, &change.change, leaf_symbol, &change.before);
-
-    let (strategy, confidence, source, fix_description, replacement) = match change.change {
-        ApiChangeType::Renamed => {
-            let old_name = change
-                .before
-                .as_deref()
-                .map(|b| extract_leaf_symbol(b).to_string())
-                .unwrap_or_else(|| change.symbol.clone());
-            let new_name = change
-                .after
-                .as_deref()
-                .map(|a| extract_leaf_symbol(a).to_string())
-                .unwrap_or_else(|| change.symbol.clone());
-
-            let desc = format!(
-                "Rename all occurrences of '{}' to '{}'.\n\
-                 This is a mechanical find-and-replace that can be auto-applied.\n\
-                 Search pattern: {} (in {} files)",
-                old_name, new_name, search_pattern, file_pattern,
-            );
-            (
-                FixStrategy::Rename,
-                FixConfidence::Exact,
-                FixSource::Pattern,
-                desc,
-                Some(new_name),
-            )
-        }
-
-        ApiChangeType::SignatureChanged => {
-            let desc = if let (Some(ref before), Some(ref after)) = (&change.before, &change.after)
-            {
-                format!(
-                    "Update all call sites of '{}' to match the new signature.\n\n\
-                     Old signature: {}\n\
-                     New signature: {}\n\n\
-                     Review each call site and adjust arguments accordingly.\n\
-                     {}",
-                    change.symbol, before, after, change.description,
-                )
-            } else {
-                format!(
-                    "Update all call sites of '{}' to match the new signature.\n\
-                     {}\n\n\
-                     Review each usage and adjust arguments, type parameters, or \
-                     modifiers as described above.",
-                    change.symbol, change.description,
-                )
-            };
-
-            (
-                FixStrategy::UpdateSignature,
-                FixConfidence::High,
-                FixSource::Pattern,
-                desc,
-                None,
-            )
-        }
-
-        ApiChangeType::TypeChanged => {
-            let desc = if let (Some(ref before), Some(ref after)) = (&change.before, &change.after)
-            {
-                format!(
-                    "Update type annotations from '{}' to '{}'.\n\n\
-                     Old type: {}\n\
-                     New type: {}\n\n\
-                     Check all locations where this type is used in assignments, \
-                     function parameters, return types, and generic type arguments.\n\
-                     {}",
-                    change.symbol, change.symbol, before, after, change.description,
-                )
-            } else {
-                format!(
-                    "Update type references for '{}'.\n\
-                     {}\n\n\
-                     Check all locations where this type is used and update accordingly.",
-                    change.symbol, change.description,
-                )
-            };
-
-            (
-                FixStrategy::UpdateType,
-                FixConfidence::High,
-                FixSource::Pattern,
-                desc,
-                None,
-            )
-        }
-
-        ApiChangeType::Removed => {
-            let kind_label = api_kind_label(&change.kind);
-            let desc = format!(
-                "The {} '{}' has been removed.\n\n\
-                 Action required:\n\
-                 1. Find all usages of '{}' in your codebase\n\
-                 2. Identify an appropriate replacement (check the library's \
-                    migration guide or changelog)\n\
-                 3. Update each usage to use the replacement\n\
-                 4. Remove any imports of '{}'\n\n\
-                 {}",
-                kind_label, change.symbol, change.symbol, change.symbol, change.description,
-            );
-
-            (
-                FixStrategy::FindAlternative,
-                FixConfidence::Low,
-                FixSource::Manual,
-                desc,
-                None,
-            )
-        }
-
-        ApiChangeType::VisibilityChanged => {
-            let desc = format!(
-                "The visibility of '{}' has been reduced.\n\n\
-                 If you are importing or using '{}' from outside its module, \
-                 you need to find a public alternative.\n\
-                 {}\n\n\
-                 Check if there is a new public API that exposes the same functionality, \
-                 or refactor your code to avoid depending on this internal symbol.",
-                change.symbol, change.symbol, change.description,
-            );
-
-            (
-                FixStrategy::FindAlternative,
-                FixConfidence::Medium,
-                FixSource::Pattern,
-                desc,
-                None,
-            )
-        }
-    };
-
-    FixGuidanceEntry {
-        rule_id: rule_id.to_string(),
-        strategy,
-        confidence,
-        source,
-        symbol: change.symbol.clone(),
-        file: file_path,
-        fix_description,
-        before: change.before.clone(),
-        after: change.after.clone(),
-        search_pattern,
-        replacement,
-    }
-}
-
-fn behavioral_change_to_fix(
-    change: &BehavioralChange<TypeScript>,
-    file_changes: &FileChanges<TypeScript>,
-    rule_id: &str,
-) -> FixGuidanceEntry {
-    let file_path = file_changes.file.display().to_string();
-    let leaf_symbol = extract_leaf_symbol(&change.symbol);
-    let search_pattern = format!(r"\b{}\b", regex_escape(leaf_symbol));
-
-    let fix_description = format!(
-        "Behavioral change detected in '{}' (AI-generated finding).\n\n\
-         What changed: {}\n\n\
-         Action required:\n\
-         1. Review all usages of '{}' in your codebase\n\
-         2. Verify that your code handles the new behavior correctly\n\
-         3. Update tests that depend on the old behavior\n\
-         4. Pay special attention to edge cases and error handling\n\n\
-         This finding was generated by LLM analysis and should be \
-         verified by a developer.",
-        change.symbol, change.description, change.symbol,
-    );
-
-    FixGuidanceEntry {
-        rule_id: rule_id.to_string(),
-        strategy: FixStrategy::ManualReview,
-        confidence: FixConfidence::Medium,
-        source: FixSource::Llm,
-        symbol: change.symbol.clone(),
-        file: file_path,
-        fix_description,
-        before: None,
-        after: None,
-        search_pattern,
-        replacement: None,
-    }
-}
-
-fn manifest_change_to_fix(change: &ManifestChange<TypeScript>, rule_id: &str) -> FixGuidanceEntry {
-    let (strategy, confidence, source, fix_description, search, replacement) = match change
-        .change_type
-    {
-        TsManifestChangeType::ModuleSystemChanged => {
-            let is_cjs_to_esm = change
-                .after
-                .as_deref()
-                .map(|a| a == "module")
-                .unwrap_or(false);
-
-            if is_cjs_to_esm {
-                (
-                    FixStrategy::UpdateImport,
-                    FixConfidence::High,
-                    FixSource::Pattern,
-                    format!(
-                        "The package has changed from CommonJS to ESM.\n\n\
-                             Action required:\n\
-                             1. Convert all require() calls to import statements:\n\
-                             \n\
-                             Before: const {{ foo }} = require('package')\n\
-                             After:  import {{ foo }} from 'package'\n\
-                             \n\
-                             2. Convert module.exports to export statements:\n\
-                             \n\
-                             Before: module.exports = {{ foo }}\n\
-                             After:  export {{ foo }}\n\
-                             \n\
-                             3. Update your package.json \"type\" field if needed\n\
-                             4. Rename .js files to .mjs if mixing module systems\n\n\
-                             {}",
-                        change.description,
-                    ),
-                    r"\brequire\s*\(".to_string(),
-                    Some("import".to_string()),
-                )
-            } else {
-                (
-                    FixStrategy::UpdateImport,
-                    FixConfidence::High,
-                    FixSource::Pattern,
-                    format!(
-                        "The package has changed from ESM to CommonJS.\n\n\
-                             Action required:\n\
-                             1. Convert all import statements to require() calls:\n\
-                             \n\
-                             Before: import {{ foo }} from 'package'\n\
-                             After:  const {{ foo }} = require('package')\n\
-                             \n\
-                             2. Convert export statements to module.exports\n\
-                             3. Update your package.json \"type\" field if needed\n\n\
-                             {}",
-                        change.description,
-                    ),
-                    r"\bimport\s+".to_string(),
-                    Some("require".to_string()),
-                )
-            }
-        }
-
-        TsManifestChangeType::PeerDependencyAdded => {
-            // change.field is "peerDependencies.victory" — strip prefix to get bare package name
-            let dep_name = change
-                .field
-                .strip_prefix("peerDependencies.")
-                .unwrap_or(&change.field);
-            let source_pkg = change.source_package.as_deref().unwrap_or("the library");
-            (
-                FixStrategy::EnsureDependency,
-                FixConfidence::Exact,
-                FixSource::Pattern,
-                format!(
-                    "Package `{}` now requires `{}` as a peer dependency.\n\n\
-                         Action required:\n\
-                         1. Install the peer dependency: npm install {}\n\
-                         2. Verify version compatibility with your existing dependencies\n\n\
-                         {}",
-                    source_pkg, dep_name, dep_name, change.description,
-                ),
-                dep_name.to_string(),
-                change.after.clone(),
-            )
-        }
-
-        TsManifestChangeType::PeerDependencyRemoved => {
-            let dep_name = change
-                .field
-                .strip_prefix("peerDependencies.")
-                .unwrap_or(&change.field);
-            let source_pkg = change.source_package.as_deref().unwrap_or("the library");
-            (
-                FixStrategy::EnsureDependency,
-                FixConfidence::High,
-                FixSource::Pattern,
-                format!(
-                    "Package `{}` no longer requires `{}` as a peer dependency.\n\n\
-                         Action required:\n\
-                         1. Check if you still need '{}' as a direct dependency\n\
-                         2. If it was only required by this package, you may be able \
-                            to remove it\n\
-                         3. Verify that removing it doesn't break other dependencies\n\n\
-                         {}",
-                    source_pkg, dep_name, dep_name, change.description,
-                ),
-                dep_name.to_string(),
-                None,
-            )
-        }
-
-        TsManifestChangeType::PeerDependencyRangeChanged => {
-            let dep_name = change
-                .field
-                .strip_prefix("peerDependencies.")
-                .unwrap_or(&change.field);
-            let source_pkg = change.source_package.as_deref().unwrap_or("the library");
-            (
-                FixStrategy::EnsureDependency,
-                FixConfidence::High,
-                FixSource::Pattern,
-                format!(
-                    "Package `{}` changed peer dependency `{}` version range.\n\n\
-                         Before: {}\n\
-                         After:  {}\n\n\
-                         Action required:\n\
-                         1. Update '{}' to a version that satisfies the new range\n\
-                         2. Test for compatibility with the new version\n\n\
-                         {}",
-                    source_pkg,
-                    dep_name,
-                    change.before.as_deref().unwrap_or("(none)"),
-                    change.after.as_deref().unwrap_or("(none)"),
-                    dep_name,
-                    change.description,
-                ),
-                dep_name.to_string(),
-                change.after.clone(),
-            )
-        }
-
-        TsManifestChangeType::EntryPointChanged | TsManifestChangeType::ExportsEntryRemoved => (
-            FixStrategy::UpdateImport,
-            FixConfidence::Medium,
-            FixSource::Pattern,
-            format!(
-                "Package entry point or export map changed for '{}'.\n\n\
-                     Before: {}\n\
-                     After:  {}\n\n\
-                     Action required:\n\
-                     1. Update all import paths that reference the old entry point\n\
-                     2. Check the package's export map for the new path\n\n\
-                     {}",
-                change.field,
-                change.before.as_deref().unwrap_or("(none)"),
-                change.after.as_deref().unwrap_or("(none)"),
-                change.description,
-            ),
-            change.field.clone(),
-            change.after.clone(),
-        ),
-
-        _ => (
-            FixStrategy::ManualReview,
-            FixConfidence::Medium,
-            FixSource::Pattern,
-            format!(
-                "Package manifest field '{}' changed.\n\n\
-                     Before: {}\n\
-                     After:  {}\n\n\
-                     Review the change and update your configuration accordingly.\n\n\
-                     {}",
-                change.field,
-                change.before.as_deref().unwrap_or("(none)"),
-                change.after.as_deref().unwrap_or("(none)"),
-                change.description,
-            ),
-            change.field.clone(),
-            None,
-        ),
-    };
-
-    FixGuidanceEntry {
-        rule_id: rule_id.to_string(),
-        strategy,
-        confidence,
-        source,
-        symbol: change.field.clone(),
-        file: "package.json".to_string(),
-        fix_description,
-        before: change.before.clone(),
-        after: change.after.clone(),
-        search_pattern: search,
-        replacement,
     }
 }
 
@@ -5053,7 +5315,15 @@ mod tests {
             &RenamePatterns::empty(),
             &HashMap::new(),
         );
-        let fix_guidance = generate_fix_guidance(&report, &rules, "*.ts");
+        let strategies = extract_fix_strategies(&rules);
+        let fix_guidance = FixGuidanceDoc {
+            migration: MigrationInfo {
+                from_ref: report.comparison.from_ref.clone(),
+                to_ref: report.comparison.to_ref.clone(),
+                generated_by: "test".to_string(),
+            },
+            summary: compute_fix_summary(&strategies),
+        };
 
         write_ruleset_dir(&dir, "test-ruleset", &report, &rules).unwrap();
         let fix_dir = write_fix_guidance_dir(&dir, &fix_guidance).unwrap();
@@ -5122,341 +5392,6 @@ mod tests {
         assert!(yaml.contains("ruleID"));
         assert!(yaml.contains("frontend.referenced"));
         assert!(yaml.contains("variant"));
-    }
-
-    // ── Fix guidance tests ──────────────────────────────────────────────
-
-    #[test]
-    fn test_fix_guidance_renamed_is_exact() {
-        let changes = vec![FileChanges {
-            file: PathBuf::from("src/lib.d.ts"),
-            status: FileStatus::Modified,
-            renamed_from: None,
-            breaking_api_changes: vec![ApiChange {
-                symbol: "Chip".to_string(),
-                qualified_name: String::new(),
-                kind: ApiChangeKind::Class,
-                change: ApiChangeType::Renamed,
-                before: Some("Chip".to_string()),
-                after: Some("Label".to_string()),
-                description: "Chip renamed to Label".to_string(),
-                migration_target: None,
-                removal_disposition: None,
-            }],
-            breaking_behavioral_changes: vec![],
-            container_changes: vec![],
-        }];
-
-        let report = make_report(changes, vec![]);
-        let empty_cache = HashMap::new();
-        let rules = generate_rules(
-            &report,
-            "*.{ts,tsx}",
-            &empty_cache,
-            &RenamePatterns::empty(),
-            &HashMap::new(),
-        );
-        let guidance = generate_fix_guidance(&report, &rules, "*.{ts,tsx}");
-
-        assert_eq!(guidance.fixes.len(), 1);
-        let fix = &guidance.fixes[0];
-        assert!(matches!(fix.strategy, FixStrategy::Rename));
-        assert!(matches!(fix.confidence, FixConfidence::Exact));
-        assert!(matches!(fix.source, FixSource::Pattern));
-        assert_eq!(fix.replacement.as_deref(), Some("Label"));
-        assert!(fix.fix_description.contains("Rename all occurrences"));
-        assert!(fix.fix_description.contains("'Chip'"));
-        assert!(fix.fix_description.contains("'Label'"));
-    }
-
-    #[test]
-    fn test_fix_guidance_removed_is_manual() {
-        let changes = vec![FileChanges {
-            file: PathBuf::from("src/api.d.ts"),
-            status: FileStatus::Deleted,
-            renamed_from: None,
-            breaking_api_changes: vec![ApiChange {
-                symbol: "createUser".to_string(),
-                qualified_name: String::new(),
-                kind: ApiChangeKind::Function,
-                change: ApiChangeType::Removed,
-                before: None,
-                after: None,
-                description: "Function createUser was removed".to_string(),
-                migration_target: None,
-                removal_disposition: None,
-            }],
-            breaking_behavioral_changes: vec![],
-            container_changes: vec![],
-        }];
-
-        let report = make_report(changes, vec![]);
-        let empty_cache = HashMap::new();
-        let rules = generate_rules(
-            &report,
-            "*.ts",
-            &empty_cache,
-            &RenamePatterns::empty(),
-            &HashMap::new(),
-        );
-        let guidance = generate_fix_guidance(&report, &rules, "*.ts");
-
-        assert_eq!(guidance.fixes.len(), 1);
-        let fix = &guidance.fixes[0];
-        assert!(matches!(fix.strategy, FixStrategy::FindAlternative));
-        assert!(matches!(fix.confidence, FixConfidence::Low));
-        assert!(matches!(fix.source, FixSource::Manual));
-        assert!(fix.replacement.is_none());
-        assert!(fix.fix_description.contains("has been removed"));
-    }
-
-    #[test]
-    fn test_fix_guidance_signature_changed() {
-        let changes = vec![FileChanges {
-            file: PathBuf::from("src/utils.d.ts"),
-            status: FileStatus::Modified,
-            renamed_from: None,
-            breaking_api_changes: vec![ApiChange {
-                symbol: "formatDate".to_string(),
-                qualified_name: String::new(),
-                kind: ApiChangeKind::Function,
-                change: ApiChangeType::SignatureChanged,
-                before: Some("formatDate(d: Date): string".to_string()),
-                after: Some("formatDate(d: Date, locale: string): string".to_string()),
-                description: "Added required 'locale' parameter".to_string(),
-                migration_target: None,
-                removal_disposition: None,
-            }],
-            breaking_behavioral_changes: vec![],
-            container_changes: vec![],
-        }];
-
-        let report = make_report(changes, vec![]);
-        let empty_cache = HashMap::new();
-        let rules = generate_rules(
-            &report,
-            "*.ts",
-            &empty_cache,
-            &RenamePatterns::empty(),
-            &HashMap::new(),
-        );
-        let guidance = generate_fix_guidance(&report, &rules, "*.ts");
-
-        assert_eq!(guidance.fixes.len(), 1);
-        let fix = &guidance.fixes[0];
-        assert!(matches!(fix.strategy, FixStrategy::UpdateSignature));
-        assert!(matches!(fix.confidence, FixConfidence::High));
-        assert!(fix.fix_description.contains("Old signature:"));
-        assert!(fix.fix_description.contains("New signature:"));
-        assert_eq!(fix.before.as_deref(), Some("formatDate(d: Date): string"));
-        assert_eq!(
-            fix.after.as_deref(),
-            Some("formatDate(d: Date, locale: string): string")
-        );
-    }
-
-    #[test]
-    fn test_fix_guidance_behavioral_is_llm_source() {
-        let changes = vec![FileChanges {
-            file: PathBuf::from("src/auth.ts"),
-            status: FileStatus::Modified,
-            renamed_from: None,
-            breaking_api_changes: vec![],
-            breaking_behavioral_changes: vec![BehavioralChange {
-                symbol: "validateToken".to_string(),
-                kind: BehavioralChangeKind::Function,
-                category: None,
-                description: "Now throws on expired tokens instead of returning null".to_string(),
-                source_file: Some("src/auth.ts".to_string()),
-                confidence: None,
-                evidence_type: None,
-                referenced_symbols: vec![],
-                is_internal_only: None,
-            }],
-            container_changes: vec![],
-        }];
-
-        let report = make_report(changes, vec![]);
-        let empty_cache = HashMap::new();
-        let rules = generate_rules(
-            &report,
-            "*.ts",
-            &empty_cache,
-            &RenamePatterns::empty(),
-            &HashMap::new(),
-        );
-        let guidance = generate_fix_guidance(&report, &rules, "*.ts");
-
-        assert_eq!(guidance.fixes.len(), 1);
-        let fix = &guidance.fixes[0];
-        assert!(matches!(fix.strategy, FixStrategy::ManualReview));
-        assert!(matches!(fix.confidence, FixConfidence::Medium));
-        assert!(matches!(fix.source, FixSource::Llm));
-        assert!(fix.fix_description.contains("AI-generated"));
-        assert!(fix.fix_description.contains("throws on expired tokens"));
-    }
-
-    #[test]
-    fn test_fix_guidance_manifest_cjs_to_esm() {
-        let manifest = vec![ManifestChange {
-            field: "type".to_string(),
-            change_type: TsManifestChangeType::ModuleSystemChanged,
-            before: Some("commonjs".to_string()),
-            after: Some("module".to_string()),
-            description: "CJS to ESM migration".to_string(),
-            is_breaking: true,
-            source_package: None,
-        }];
-
-        let report = make_report(vec![], manifest);
-        let empty_cache = HashMap::new();
-        let rules = generate_rules(
-            &report,
-            "*.ts",
-            &empty_cache,
-            &RenamePatterns::empty(),
-            &HashMap::new(),
-        );
-        let guidance = generate_fix_guidance(&report, &rules, "*.ts");
-
-        assert_eq!(guidance.fixes.len(), 1);
-        let fix = &guidance.fixes[0];
-        assert!(matches!(fix.strategy, FixStrategy::UpdateImport));
-        assert!(matches!(fix.confidence, FixConfidence::High));
-        assert!(fix.fix_description.contains("require()"));
-        assert!(fix.fix_description.contains("import"));
-        assert_eq!(fix.replacement.as_deref(), Some("import"));
-    }
-
-    #[test]
-    fn test_fix_guidance_summary_counts() {
-        let changes = vec![FileChanges {
-            file: PathBuf::from("src/lib.d.ts"),
-            status: FileStatus::Modified,
-            renamed_from: None,
-            breaking_api_changes: vec![
-                ApiChange {
-                    symbol: "Chip".to_string(),
-                    qualified_name: String::new(),
-                    kind: ApiChangeKind::Class,
-                    change: ApiChangeType::Renamed,
-                    before: Some("Chip".to_string()),
-                    after: Some("Label".to_string()),
-                    description: "Renamed".to_string(),
-                    migration_target: None,
-                    removal_disposition: None,
-                },
-                ApiChange {
-                    symbol: "oldFn".to_string(),
-                    qualified_name: String::new(),
-                    kind: ApiChangeKind::Function,
-                    change: ApiChangeType::Removed,
-                    before: None,
-                    after: None,
-                    description: "Removed".to_string(),
-                    migration_target: None,
-                    removal_disposition: None,
-                },
-            ],
-            breaking_behavioral_changes: vec![BehavioralChange {
-                symbol: "process".to_string(),
-                kind: BehavioralChangeKind::Function,
-                category: None,
-                description: "Changed behavior".to_string(),
-                source_file: Some("src/lib.ts".to_string()),
-                confidence: None,
-                evidence_type: None,
-                referenced_symbols: vec![],
-                is_internal_only: None,
-            }],
-            container_changes: vec![],
-        }];
-
-        let report = make_report(changes, vec![]);
-        let empty_cache = HashMap::new();
-        let rules = generate_rules(
-            &report,
-            "*.ts",
-            &empty_cache,
-            &RenamePatterns::empty(),
-            &HashMap::new(),
-        );
-        let guidance = generate_fix_guidance(&report, &rules, "*.ts");
-
-        assert_eq!(guidance.summary.total_fixes, 3);
-        // Rename=Exact (auto), Removed=Low/Manual, Behavioral=Medium/LLM
-        assert_eq!(guidance.summary.auto_fixable, 1); // only Rename
-        assert_eq!(guidance.summary.manual_only, 1); // Removed
-        assert_eq!(guidance.summary.needs_review, 1); // Behavioral
-    }
-
-    #[test]
-    fn test_fix_guidance_yaml_roundtrip() {
-        let changes = vec![FileChanges {
-            file: PathBuf::from("src/index.d.ts"),
-            status: FileStatus::Modified,
-            renamed_from: None,
-            breaking_api_changes: vec![
-                ApiChange {
-                    symbol: "Foo".to_string(),
-                    qualified_name: String::new(),
-                    kind: ApiChangeKind::Class,
-                    change: ApiChangeType::Renamed,
-                    before: Some("Foo".to_string()),
-                    after: Some("Bar".to_string()),
-                    description: "Renamed Foo to Bar".to_string(),
-                    migration_target: None,
-                    removal_disposition: None,
-                },
-                ApiChange {
-                    symbol: "baz".to_string(),
-                    qualified_name: String::new(),
-                    kind: ApiChangeKind::Function,
-                    change: ApiChangeType::SignatureChanged,
-                    before: Some("baz(): void".to_string()),
-                    after: Some("baz(x: number): void".to_string()),
-                    description: "Added required param".to_string(),
-                    migration_target: None,
-                    removal_disposition: None,
-                },
-            ],
-            breaking_behavioral_changes: vec![],
-            container_changes: vec![],
-        }];
-
-        let manifest = vec![ManifestChange {
-            field: "type".to_string(),
-            change_type: TsManifestChangeType::ModuleSystemChanged,
-            before: Some("commonjs".to_string()),
-            after: Some("module".to_string()),
-            description: "CJS to ESM".to_string(),
-            is_breaking: true,
-            source_package: None,
-        }];
-
-        let report = make_report(changes, manifest);
-        let empty_cache = HashMap::new();
-        let rules = generate_rules(
-            &report,
-            "*.{ts,tsx}",
-            &empty_cache,
-            &RenamePatterns::empty(),
-            &HashMap::new(),
-        );
-        let guidance = generate_fix_guidance(&report, &rules, "*.{ts,tsx}");
-
-        let yaml = serde_yaml::to_string(&guidance).unwrap();
-        assert!(yaml.contains("strategy"));
-        assert!(yaml.contains("confidence"));
-        assert!(yaml.contains("fix_description"));
-        assert!(yaml.contains("search_pattern"));
-        assert!(yaml.contains("replacement"));
-        assert!(yaml.contains("rename"));
-        assert!(yaml.contains("update_signature"));
-        assert!(yaml.contains("update_import"));
-        assert!(yaml.contains("auto_fixable"));
-        assert!(yaml.contains("needs_review"));
-        assert!(yaml.contains("manual_only"));
     }
 
     // ── Frontend provider tests ─────────────────────────────────────
@@ -6722,7 +6657,11 @@ mod tests {
 
     // Regular API rules (removed, type-changed) from the same file SHOULD still consolidate
     #[test]
-    fn test_consolidation_regular_api_rules_still_merge() {
+    fn test_consolidation_removed_properties_are_singletons() {
+        // TC031: Removed properties must NOT consolidate — each needs its own
+        // rule so the scanner generates a separate incident per prop. When
+        // grouped into one `or` rule, only the first matching condition fires
+        // per JSX element, leaving other removed props unfixed.
         let mut rule_a = make_rule_with_labels(
             "semver-modal-title-removed",
             vec![
@@ -6750,10 +6689,13 @@ mod tests {
         let key_a = consolidation_key(&rule_a, &extract_package_from_path);
         let key_b = consolidation_key(&rule_b, &extract_package_from_path);
 
-        assert_eq!(
+        assert_ne!(
             key_a, key_b,
-            "Regular API rules from the same file should still consolidate"
+            "Removed property rules must be singletons (TC031: hasIcon + isDynamic)"
         );
+        // Each returns its own rule_id
+        assert_eq!(key_a, "semver-modal-title-removed");
+        assert_eq!(key_b, "semver-modal-actions-removed");
     }
 
     // End-to-end: consolidate_rules() should keep P0-C, CSS, and sibling rules intact
@@ -8028,6 +7970,449 @@ mod tests {
         );
     }
 
+    // ── P0-C still-exists guard ──────────────────────────────────────
+    //
+    // When a component has status=Removed but the SD pipeline shows it
+    // still exists at the same package, P0-C should NOT say "was removed"
+    // and should NOT trigger on IMPORT. Instead, it should use JSX_PROP
+    // triggers for individual removed props (the "restructured" path).
+    //
+    // Scenario: LoginMainFooterLinksItem — 4 of 6 props removed, but
+    // the component still exists at @patternfly/react-core. The v6 API
+    // simplified from rendering an internal <a> to accepting children.
+
+    #[test]
+    fn test_p0c_still_exists_uses_jsx_prop_not_import() {
+        use crate::sd_types::{
+            ComponentSourceProfile, CompositionTree, RenderedComponent, SdPipelineResult,
+        };
+
+        let changes = vec![make_file_changes(
+            "packages/react-core/src/components/LoginPage/LoginMainFooterLinksItem.tsx",
+            vec![make_api_change(
+                "LoginMainFooterLinksItem",
+                ApiChangeKind::Constant,
+                ApiChangeType::Removed,
+                "LoginMainFooterLinksItem API simplified",
+            )],
+            vec![],
+        )];
+
+        let mut report = make_report(changes, vec![]);
+        report.packages = vec![PackageChanges {
+            name: "@patternfly/react-core".to_string(),
+            old_version: None,
+            new_version: None,
+            type_summaries: vec![TypeSummary {
+                name: "LoginMainFooterLinksItem".to_string(),
+                definition_name: "LoginMainFooterLinksItemProps".to_string(),
+                status: TypeStatus::Removed,
+                member_summary: MemberSummary {
+                    total: 6,
+                    removed: 4,
+                    renamed: 0,
+                    type_changed: 0,
+                    added: 0,
+                    removal_ratio: 4.0 / 6.0,
+                },
+                removed_members: vec![
+                    RemovedMember {
+                        name: "href".to_string(),
+                        old_type: Some("string".to_string()),
+                        removal_disposition: None,
+                    },
+                    RemovedMember {
+                        name: "target".to_string(),
+                        old_type: Some("string".to_string()),
+                        removal_disposition: None,
+                    },
+                    RemovedMember {
+                        name: "linkComponent".to_string(),
+                        old_type: Some("ReactNode".to_string()),
+                        removal_disposition: None,
+                    },
+                    RemovedMember {
+                        name: "linkComponentProps".to_string(),
+                        old_type: Some("any".to_string()),
+                        removal_disposition: None,
+                    },
+                ],
+                type_changes: vec![],
+                migration_target: None,
+                behavioral_changes: vec![],
+                language_data: TsReportData {
+                    child_components: vec![],
+                    expected_children: vec![],
+                },
+                source_files: vec![],
+            }],
+            constants: vec![],
+            added_exports: vec![],
+        }];
+
+        // SD result: component still exists at the same package,
+        // with source profiles showing the rendering change.
+        let mut old_profiles = HashMap::new();
+        old_profiles.insert(
+            "LoginMainFooterLinksItem".to_string(),
+            ComponentSourceProfile {
+                name: "LoginMainFooterLinksItem".to_string(),
+                rendered_components: vec![RenderedComponent::unconditional("LinkComponent")],
+                prop_defaults: {
+                    let mut d = BTreeMap::new();
+                    d.insert("linkComponent".to_string(), "'a'".to_string());
+                    d.insert("href".to_string(), "''".to_string());
+                    d
+                },
+                children_slot_path: vec!["li".to_string(), "LinkComponent".to_string()],
+                has_children_prop: true,
+                ..ComponentSourceProfile::default()
+            },
+        );
+        let mut new_profiles = HashMap::new();
+        new_profiles.insert(
+            "LoginMainFooterLinksItem".to_string(),
+            ComponentSourceProfile {
+                name: "LoginMainFooterLinksItem".to_string(),
+                rendered_components: vec![],
+                prop_defaults: BTreeMap::new(),
+                children_slot_path: vec!["li".to_string()],
+                has_children_prop: true,
+                ..ComponentSourceProfile::default()
+            },
+        );
+
+        report.extensions.sd_result = Some(SdPipelineResult {
+            composition_trees: vec![CompositionTree {
+                root: "LoginPage".into(),
+                family_members: vec![
+                    "LoginPage".into(),
+                    "LoginMainFooterLinksItem".into(),
+                ],
+                edges: vec![],
+            }],
+            component_packages: {
+                let mut pkgs = HashMap::new();
+                pkgs.insert(
+                    "LoginMainFooterLinksItem".into(),
+                    "@patternfly/react-core".into(),
+                );
+                pkgs.insert("LoginPage".into(), "@patternfly/react-core".into());
+                pkgs
+            },
+            old_profiles,
+            new_profiles,
+            ..SdPipelineResult::default()
+        });
+
+        let rules = generate_rules(
+            &report,
+            "*.{ts,tsx}",
+            &HashMap::new(),
+            &RenamePatterns::empty(),
+            &HashMap::new(),
+        );
+
+        let p0c_rules: Vec<&KonveyorRule> = rules
+            .iter()
+            .filter(|r| r.rule_id.contains("component-import-deprecated"))
+            .collect();
+
+        // Should still generate a P0-C rule (qualifies via removal count/ratio)
+        assert!(
+            !p0c_rules.is_empty(),
+            "Should still generate P0-C for component with 4/6 removals (67% ratio). \
+             Rule IDs: {:?}",
+            rules.iter().map(|r| &r.rule_id).collect::<Vec<_>>()
+        );
+
+        let rule = p0c_rules[0];
+
+        // Should NOT say "was removed" — the component still exists
+        assert!(
+            !rule.message.contains("was removed"),
+            "Should NOT say 'was removed' for a still-existing component. \
+             Message: {}",
+            rule.message
+        );
+
+        // Should say "restructured"
+        assert!(
+            rule.message.contains("restructured"),
+            "Should say 'restructured' for a simplified component. \
+             Message: {}",
+            rule.message
+        );
+
+        // Should NOT trigger on IMPORT — should use JSX_PROP
+        let when_yaml = serde_yaml::to_string(&rule.when).unwrap();
+        assert!(
+            !when_yaml.contains("IMPORT"),
+            "Should NOT trigger on IMPORT for a still-existing component. \
+             When: {}",
+            when_yaml
+        );
+        assert!(
+            when_yaml.contains("JSX_PROP"),
+            "Should trigger on JSX_PROP for individual removed props. \
+             When: {}",
+            when_yaml
+        );
+
+        // Should list the removed props in the trigger
+        assert!(
+            when_yaml.contains("href"),
+            "Should have href in JSX_PROP trigger. When: {}",
+            when_yaml
+        );
+        assert!(
+            when_yaml.contains("target"),
+            "Should have target in JSX_PROP trigger. When: {}",
+            when_yaml
+        );
+
+        // Should instruct to keep the import, not remove it
+        assert!(
+            rule.message.contains("Keep"),
+            "Should tell user to keep the import. Message: {}",
+            rule.message
+        );
+
+        // Fix strategy should be enriched with source profile data
+        let strategy = rule
+            .fix_strategy
+            .as_ref()
+            .expect("Should have a fix strategy");
+        assert_eq!(strategy.strategy, "LlmAssisted");
+        assert_eq!(
+            strategy.component.as_deref(),
+            Some("LoginMainFooterLinksItem"),
+            "Strategy should name the component"
+        );
+
+        // Should describe the old rendering pattern
+        let from = strategy.from.as_ref().expect("Strategy should have 'from'");
+        assert!(
+            from.contains("LinkComponent"),
+            "Strategy 'from' should mention the removed rendered component. Got: {}",
+            from
+        );
+        assert!(
+            from.contains("linkComponent"),
+            "Strategy 'from' should mention the prop that controlled rendering. Got: {}",
+            from
+        );
+
+        // Should describe the new rendering pattern
+        let to = strategy.to.as_ref().expect("Strategy should have 'to'");
+        assert!(
+            to.contains("children"),
+            "Strategy 'to' should mention children rendering. Got: {}",
+            to
+        );
+        assert!(
+            to.contains("'a'"),
+            "Strategy 'to' should mention the old default element. Got: {}",
+            to
+        );
+
+        // Should list removed members with types
+        assert!(
+            !strategy.removed_members.is_empty(),
+            "Strategy should list removed members"
+        );
+        assert!(
+            strategy.removed_members.iter().any(|m| m.contains("href")),
+            "Removed members should include href. Got: {:?}",
+            strategy.removed_members
+        );
+    }
+
+    #[test]
+    fn test_p0c_still_exists_zero_removals_skips_p0c() {
+        use crate::sd_types::{CompositionTree, SdPipelineResult};
+
+        // EmptyStateHeader: status=Removed, 0 removals, still in packages.
+        // With the guard, it no longer qualifies via Removed status.
+        // With 0 removals, it also doesn't qualify via removal count.
+        // So no P0-C rule should be generated.
+        let changes = vec![make_file_changes(
+            "packages/react-core/src/components/EmptyState/EmptyStateHeader.tsx",
+            vec![make_api_change(
+                "EmptyStateHeader",
+                ApiChangeKind::Constant,
+                ApiChangeType::Removed,
+                "EmptyStateHeader removed",
+            )],
+            vec![],
+        )];
+
+        let mut report = make_report(changes, vec![]);
+        report.packages = vec![PackageChanges {
+            name: "@patternfly/react-core".to_string(),
+            old_version: None,
+            new_version: None,
+            type_summaries: vec![TypeSummary {
+                name: "EmptyStateHeader".to_string(),
+                definition_name: "EmptyStateHeaderProps".to_string(),
+                status: TypeStatus::Removed,
+                member_summary: MemberSummary {
+                    total: 6,
+                    removed: 0,
+                    renamed: 0,
+                    type_changed: 0,
+                    added: 0,
+                    removal_ratio: 0.0,
+                },
+                removed_members: vec![],
+                type_changes: vec![],
+                migration_target: None,
+                behavioral_changes: vec![],
+                language_data: TsReportData {
+                    child_components: vec![],
+                    expected_children: vec![],
+                },
+                source_files: vec![],
+            }],
+            constants: vec![],
+            added_exports: vec![],
+        }];
+
+        // SD result: component still exists at the same package
+        report.extensions.sd_result = Some(SdPipelineResult {
+            composition_trees: vec![CompositionTree {
+                root: "EmptyState".into(),
+                family_members: vec![
+                    "EmptyState".into(),
+                    "EmptyStateHeader".into(),
+                ],
+                edges: vec![],
+            }],
+            component_packages: {
+                let mut pkgs = HashMap::new();
+                pkgs.insert(
+                    "EmptyStateHeader".into(),
+                    "@patternfly/react-core".into(),
+                );
+                pkgs.insert("EmptyState".into(), "@patternfly/react-core".into());
+                pkgs
+            },
+            ..SdPipelineResult::default()
+        });
+
+        let rules = generate_rules(
+            &report,
+            "*.{ts,tsx}",
+            &HashMap::new(),
+            &RenamePatterns::empty(),
+            &HashMap::new(),
+        );
+
+        let p0c_rules: Vec<&KonveyorRule> = rules
+            .iter()
+            .filter(|r| r.rule_id.contains("component-import-deprecated"))
+            .collect();
+
+        // Should NOT generate P0-C — 0 removals and still-exists override
+        // means it doesn't qualify via any branch
+        assert!(
+            p0c_rules.is_empty(),
+            "EmptyStateHeader with 0 removals and still-exists should NOT get a P0-C rule. \
+             Got rules: {:?}",
+            p0c_rules
+                .iter()
+                .map(|r| &r.rule_id)
+                .collect::<Vec<_>>()
+        );
+    }
+
+    #[test]
+    fn test_p0c_truly_removed_not_in_packages_still_triggers() {
+        // A component that is truly removed (not in component_packages)
+        // should still get the "was removed" P0-C with IMPORT trigger.
+        use crate::sd_types::SdPipelineResult;
+
+        let changes = vec![make_file_changes(
+            "packages/react-core/src/components/Text/Text.tsx",
+            vec![make_api_change(
+                "Text",
+                ApiChangeKind::Constant,
+                ApiChangeType::Removed,
+                "Text component removed",
+            )],
+            vec![],
+        )];
+
+        let mut report = make_report(changes, vec![]);
+        report.packages = vec![PackageChanges {
+            name: "@patternfly/react-core".to_string(),
+            old_version: None,
+            new_version: None,
+            type_summaries: vec![TypeSummary {
+                name: "Text".to_string(),
+                definition_name: "TextProps".to_string(),
+                status: TypeStatus::Removed,
+                member_summary: MemberSummary {
+                    total: 6,
+                    removed: 0,
+                    renamed: 0,
+                    type_changed: 0,
+                    added: 0,
+                    removal_ratio: 0.0,
+                },
+                removed_members: vec![],
+                type_changes: vec![],
+                migration_target: None,
+                behavioral_changes: vec![],
+                language_data: TsReportData {
+                    child_components: vec![],
+                    expected_children: vec![],
+                },
+                source_files: vec![],
+            }],
+            constants: vec![],
+            added_exports: vec![],
+        }];
+
+        // SD result: Text is NOT in the new component_packages (truly removed)
+        report.extensions.sd_result = Some(SdPipelineResult {
+            composition_trees: vec![],
+            component_packages: HashMap::new(), // Empty — Text not in new packages
+            ..SdPipelineResult::default()
+        });
+
+        let rules = generate_rules(
+            &report,
+            "*.{ts,tsx}",
+            &HashMap::new(),
+            &RenamePatterns::empty(),
+            &HashMap::new(),
+        );
+
+        let p0c_rules: Vec<&KonveyorRule> = rules
+            .iter()
+            .filter(|r| r.rule_id.contains("component-import-deprecated"))
+            .collect();
+
+        // Should generate P0-C with "was removed" + IMPORT trigger
+        assert!(
+            !p0c_rules.is_empty(),
+            "Truly removed component should get a P0-C rule"
+        );
+        let rule = p0c_rules[0];
+        assert!(
+            rule.message.contains("was removed"),
+            "Truly removed component should say 'was removed'. Message: {}",
+            rule.message
+        );
+        let when_yaml = serde_yaml::to_string(&rule.when).unwrap();
+        assert!(
+            when_yaml.contains("IMPORT"),
+            "Truly removed component should trigger on IMPORT. When: {}",
+            when_yaml
+        );
+    }
+
     // build_migration_message_v2 with migration_target
     #[test]
     fn test_build_migration_message_v2_with_migration_target() {
@@ -8079,7 +8464,7 @@ mod tests {
             source_files: vec![],
         };
 
-        let msg = build_migration_message_v2(&comp);
+        let msg = build_migration_message_v2(&comp, true);
         assert!(
             msg.contains("Replace <EmptyStateHeader>"),
             "Should have migration header"
@@ -8158,7 +8543,8 @@ mod tests {
             source_files: vec![],
         };
 
-        let msg = build_migration_message_v2(&comp);
+        // treat_as_removed=false: status is Modified, so use the "restructured" path
+        let msg = build_migration_message_v2(&comp, false);
         assert!(msg.contains("restructured"), "Should mention restructured");
         assert!(
             msg.contains("10 of 14 props removed"),
@@ -8274,7 +8660,8 @@ mod tests {
             source_files: vec![],
         };
 
-        let msg = build_migration_message_v2(&comp);
+        // treat_as_removed=false: status is Modified, so use the "restructured" path
+        let msg = build_migration_message_v2(&comp, false);
 
         // ModalHeader: title is a known prop → "pass as props"
         assert!(
@@ -9805,6 +10192,118 @@ mod tests {
         );
     }
 
+    // ── Union value removals must NOT produce rules (SD pipeline covers them) ──
+
+    /// When a property has a union type and one value was removed (e.g.,
+    /// `variant: 'default' | 'tertiary'` → `variant: 'default'`), the diff
+    /// engine emits `Removed(UnionValue{value: "tertiary"})` with
+    /// `before="'tertiary'"` and `after=None`. These must NOT produce
+    /// `change-type=removed` rules because the fix-engine assigns
+    /// `RemoveProp` strategy to them, which deletes the entire prop.
+    /// The SD pipeline generates correct `sd-prop-value-*` rules with
+    /// `PropValueChange` strategy instead.
+    #[test]
+    fn test_removed_union_value_produces_no_td_rule() {
+        // Simulate what the diff engine produces for a removed union value
+        let changes = vec![FileChanges {
+            file: PathBuf::from(
+                "packages/react-core/src/components/Nav/Nav.NavProps.variant.d.ts",
+            ),
+            status: FileStatus::Modified,
+            renamed_from: None,
+            breaking_api_changes: vec![ApiChange {
+                symbol: "NavProps.variant".to_string(),
+                qualified_name: String::new(),
+                kind: ApiChangeKind::Property,
+                change: ApiChangeType::Removed,
+                before: Some("'tertiary'".to_string()),
+                after: None,
+                description: "Value 'tertiary' was removed from the `variant` prop".to_string(),
+                migration_target: None,
+                removal_disposition: None,
+            }],
+            breaking_behavioral_changes: vec![],
+            container_changes: vec![],
+        }];
+
+        let report = make_report(changes, vec![]);
+        let rules = generate_rules(
+            &report,
+            "*.{ts,tsx}",
+            &HashMap::new(),
+            &RenamePatterns::empty(),
+            &HashMap::new(),
+        );
+
+        // Should produce NO rules — the SD pipeline handles these
+        let removed_rules: Vec<_> = rules
+            .iter()
+            .filter(|r| {
+                r.labels
+                    .iter()
+                    .any(|l| l == "change-type=removed")
+            })
+            .collect();
+        assert!(
+            removed_rules.is_empty(),
+            "Removed union value should NOT produce a change-type=removed rule. \
+             Got: {:?}",
+            removed_rules
+                .iter()
+                .map(|r| &r.rule_id)
+                .collect::<Vec<_>>()
+        );
+    }
+
+    /// Whole-property removals (before is a full type signature or None)
+    /// should still produce rules — only single-quoted-value removals
+    /// (union value removals) are suppressed.
+    #[test]
+    fn test_whole_prop_removal_still_produces_rule() {
+        let changes = vec![FileChanges {
+            file: PathBuf::from(
+                "packages/react-core/src/components/Accordion/AccordionContent.AccordionContentProps.d.ts",
+            ),
+            status: FileStatus::Modified,
+            renamed_from: None,
+            breaking_api_changes: vec![ApiChange {
+                symbol: "AccordionContentProps.isHidden".to_string(),
+                qualified_name: String::new(),
+                kind: ApiChangeKind::Property,
+                change: ApiChangeType::Removed,
+                before: Some("property: isHidden: boolean".to_string()),
+                after: None,
+                description: "property `isHidden` was removed".to_string(),
+                migration_target: None,
+                removal_disposition: None,
+            }],
+            breaking_behavioral_changes: vec![],
+            container_changes: vec![],
+        }];
+
+        let report = make_report(changes, vec![]);
+        let rules = generate_rules(
+            &report,
+            "*.{ts,tsx}",
+            &HashMap::new(),
+            &RenamePatterns::empty(),
+            &HashMap::new(),
+        );
+
+        let removed_rules: Vec<_> = rules
+            .iter()
+            .filter(|r| {
+                r.labels
+                    .iter()
+                    .any(|l| l == "change-type=removed")
+            })
+            .collect();
+        assert!(
+            !removed_rules.is_empty(),
+            "Whole-property removal should still produce a change-type=removed rule"
+        );
+    }
+
     // NOTE: Full integration test for token rename pipeline lives in
     // crates/konveyor-core/tests/token_rename_pipeline.rs using real
     // fixture data (4028 token renames from PF v5→v6).
@@ -10465,5 +10964,350 @@ mod tests {
             &HashMap::new(),
         );
         insta::assert_yaml_snapshot!(snapshot_rules(rules));
+    }
+
+    // ── Deprecated replacement family remapping tests ────────────────────
+
+    #[test]
+    fn test_deprecated_replacement_remaps_family_label() {
+        // When a component is deprecated and replaced by a different-name
+        // component (e.g., Tile → Card), rules for the deprecated component
+        // should get the replacement family's label (family=Card, not family=Tile).
+        use crate::sd_types::{
+            CompositionTree, DeprecatedReplacement, ReplacementEvidence, SdPipelineResult,
+        };
+
+        let changes = vec![make_file_changes(
+            "packages/react-core/src/components/Tile/Tile.d.ts",
+            vec![make_api_change(
+                "Tile",
+                ApiChangeKind::Constant,
+                ApiChangeType::SignatureChanged,
+                "Component Tile was deprecated and replaced by Card",
+            )],
+            vec![],
+        )];
+
+        let mut report = make_report(changes, vec![]);
+        report.extensions.sd_result = Some(SdPipelineResult {
+            // New (v6) composition tree: Card family
+            composition_trees: vec![CompositionTree {
+                root: "Card".into(),
+                family_members: vec![
+                    "Card".into(),
+                    "CardHeader".into(),
+                    "CardBody".into(),
+                    "CardTitle".into(),
+                ],
+                edges: vec![],
+            }],
+            // Old (v5) composition tree: Tile was its own family
+            old_composition_trees: vec![
+                CompositionTree {
+                    root: "Tile".into(),
+                    family_members: vec!["Tile".into()],
+                    edges: vec![],
+                },
+                CompositionTree {
+                    root: "Card".into(),
+                    family_members: vec![
+                        "Card".into(),
+                        "CardHeader".into(),
+                        "CardBody".into(),
+                    ],
+                    edges: vec![],
+                },
+            ],
+            // Deprecated replacement: Tile → Card
+            deprecated_replacements: vec![DeprecatedReplacement {
+                old_component: "Tile".into(),
+                new_component: "Card".into(),
+                evidence_hosts: vec![],
+                evidence_source: ReplacementEvidence::CommitCoChange,
+            }],
+            // v6 package mapping: Tile is now in /deprecated, Card is in main.
+            // This is needed for the scoped family remapping guard which only
+            // remaps components whose v6 package is /deprecated.
+            component_packages: {
+                let mut pkgs = HashMap::new();
+                pkgs.insert("Tile".into(), "@patternfly/react-core/deprecated".into());
+                pkgs.insert("Card".into(), "@patternfly/react-core".into());
+                pkgs.insert("CardHeader".into(), "@patternfly/react-core".into());
+                pkgs.insert("CardBody".into(), "@patternfly/react-core".into());
+                pkgs.insert("CardTitle".into(), "@patternfly/react-core".into());
+                pkgs
+            },
+            ..SdPipelineResult::default()
+        });
+
+        let rules = generate_rules(
+            &report,
+            "*.{ts,tsx}",
+            &HashMap::new(),
+            &RenamePatterns::empty(),
+            &HashMap::new(),
+        );
+
+        // Find the Tile rule and verify it has family=Card
+        let tile_rule = rules
+            .iter()
+            .find(|r| r.rule_id.contains("tile"))
+            .expect("should have a rule for Tile");
+        assert!(
+            tile_rule.labels.contains(&"family=Card".to_string()),
+            "Tile rule should have family=Card label, got: {:?}",
+            tile_rule.labels
+        );
+        assert!(
+            !tile_rule.labels.contains(&"family=Tile".to_string()),
+            "Tile rule should NOT have family=Tile label"
+        );
+    }
+
+    // ── Fix 3: No-op signature-changed suppression tests ────────────────
+
+    /// Helper to call api_change_to_rules with minimal boilerplate.
+    fn call_api_change_to_rules(change: &ApiChange) -> Vec<KonveyorRule> {
+        let file_changes = FileChanges {
+            file: PathBuf::from("src/Test.d.ts"),
+            status: FileStatus::Modified,
+            renamed_from: None,
+            breaking_api_changes: vec![change.clone()],
+            breaking_behavioral_changes: vec![],
+            container_changes: vec![],
+        };
+        let mut id_counts = HashMap::new();
+        let rename_patterns = empty_rename_patterns();
+        let member_renames = HashMap::new();
+        let component_to_family = HashMap::new();
+        let old_prop_types = HashMap::new();
+        api_change_to_rules(
+            change,
+            &file_changes,
+            Some("@patternfly/react-core"),
+            &mut id_counts,
+            &rename_patterns,
+            &member_renames,
+            &component_to_family,
+            &old_prop_types,
+        )
+    }
+
+    /// No-op: "Chart replaced by Chart" should produce zero rules.
+    #[test]
+    fn test_signature_changed_noop_chart_suppressed() {
+        let change = ApiChange {
+            symbol: "Chart".into(),
+            qualified_name: String::new(),
+            kind: ApiChangeKind::Constant,
+            change: ApiChangeType::SignatureChanged,
+            before: Some("Chart".into()),
+            after: Some("Chart".into()),
+            description: "Component `Chart` was deprecated and replaced by `Chart`. \
+                          Migrate from `<Chart>` to `<Chart>`."
+                .into(),
+            migration_target: None,
+            removal_disposition: None,
+        };
+        let rules = call_api_change_to_rules(&change);
+        assert!(
+            rules.is_empty(),
+            "No-op Chart→Chart should produce zero rules. Got {} rules: {:?}",
+            rules.len(),
+            rules.iter().map(|r| &r.rule_id).collect::<Vec<_>>()
+        );
+    }
+
+    /// No-op: "DragDrop replaced by DragDrop" should also be suppressed.
+    #[test]
+    fn test_signature_changed_noop_dragdrop_suppressed() {
+        let change = ApiChange {
+            symbol: "DragDrop".into(),
+            qualified_name: String::new(),
+            kind: ApiChangeKind::Constant,
+            change: ApiChangeType::SignatureChanged,
+            before: Some("DragDrop".into()),
+            after: Some("DragDrop".into()),
+            description: "Component `DragDrop` was deprecated and replaced by `DragDrop`."
+                .into(),
+            migration_target: None,
+            removal_disposition: None,
+        };
+        let rules = call_api_change_to_rules(&change);
+        assert!(
+            rules.is_empty(),
+            "No-op DragDrop→DragDrop should produce zero rules"
+        );
+    }
+
+    /// Legitimate rename: "Chip replaced by Label" should still produce a rule.
+    #[test]
+    fn test_signature_changed_chip_to_label_preserved() {
+        let change = ApiChange {
+            symbol: "Chip".into(),
+            qualified_name: String::new(),
+            kind: ApiChangeKind::Constant,
+            change: ApiChangeType::SignatureChanged,
+            before: Some("Chip".into()),
+            after: Some("Label".into()),
+            description: "Component `Chip` was deprecated and replaced by `Label`. \
+                          Migrate from `<Chip>` to `<Label>`."
+                .into(),
+            migration_target: None,
+            removal_disposition: None,
+        };
+        let rules = call_api_change_to_rules(&change);
+        assert_eq!(
+            rules.len(),
+            1,
+            "Chip→Label rename should produce 1 rule. Got: {:?}",
+            rules.iter().map(|r| &r.rule_id).collect::<Vec<_>>()
+        );
+        assert!(
+            rules[0].description.contains("Chip"),
+            "Rule description should mention Chip"
+        );
+        assert!(
+            rules[0].description.contains("Label"),
+            "Rule description should mention Label"
+        );
+    }
+
+    /// Legitimate rename: "Tile replaced by Card" should still produce a rule.
+    #[test]
+    fn test_signature_changed_tile_to_card_preserved() {
+        let change = ApiChange {
+            symbol: "Tile".into(),
+            qualified_name: String::new(),
+            kind: ApiChangeKind::Constant,
+            change: ApiChangeType::SignatureChanged,
+            before: Some("Tile".into()),
+            after: Some("Card".into()),
+            description: "Component `Tile` was deprecated and replaced by `Card`."
+                .into(),
+            migration_target: None,
+            removal_disposition: None,
+        };
+        let rules = call_api_change_to_rules(&change);
+        assert_eq!(
+            rules.len(),
+            1,
+            "Tile→Card rename should produce 1 rule"
+        );
+    }
+
+    /// Base class change should still produce a rule (before != after as type sigs).
+    #[test]
+    fn test_signature_changed_base_class_change_preserved() {
+        let change = ApiChange {
+            symbol: "ModalProps".into(),
+            qualified_name: String::new(),
+            kind: ApiChangeKind::Interface,
+            change: ApiChangeType::SignatureChanged,
+            before: Some("React.Component".into()),
+            after: Some("Component".into()),
+            description: "ModalProps base class changed".into(),
+            migration_target: None,
+            removal_disposition: None,
+        };
+        let rules = call_api_change_to_rules(&change);
+        assert_eq!(
+            rules.len(),
+            1,
+            "Base class change should produce 1 rule"
+        );
+    }
+
+    /// Property addition (before=None) should still produce a rule.
+    #[test]
+    fn test_signature_changed_before_none_preserved() {
+        let change = ApiChange {
+            symbol: "ButtonProps.icon".into(),
+            qualified_name: String::new(),
+            kind: ApiChangeKind::Property,
+            change: ApiChangeType::SignatureChanged,
+            before: None,
+            after: Some("property: icon: ReactNode".into()),
+            description: "icon prop was added".into(),
+            migration_target: None,
+            removal_disposition: None,
+        };
+        let rules = call_api_change_to_rules(&change);
+        assert_eq!(
+            rules.len(),
+            1,
+            "Property with before=None should produce 1 rule"
+        );
+    }
+
+    /// Property removal (after=None) should still produce a rule.
+    #[test]
+    fn test_signature_changed_after_none_preserved() {
+        let change = ApiChange {
+            symbol: "ButtonProps.isActive".into(),
+            qualified_name: String::new(),
+            kind: ApiChangeKind::Property,
+            change: ApiChangeType::SignatureChanged,
+            before: Some("property: isActive: boolean".into()),
+            after: None,
+            description: "isActive prop was removed".into(),
+            migration_target: None,
+            removal_disposition: None,
+        };
+        let rules = call_api_change_to_rules(&change);
+        assert_eq!(
+            rules.len(),
+            1,
+            "Property with after=None should produce 1 rule"
+        );
+    }
+
+    /// Props interface no-op: "ModalProps replaced by ModalProps" suppressed.
+    #[test]
+    fn test_signature_changed_noop_props_interface_suppressed() {
+        let change = ApiChange {
+            symbol: "ModalProps".into(),
+            qualified_name: String::new(),
+            kind: ApiChangeKind::Interface,
+            change: ApiChangeType::SignatureChanged,
+            before: Some("ModalProps".into()),
+            after: Some("ModalProps".into()),
+            description: "Component `ModalProps` was deprecated and replaced by `ModalProps`."
+                .into(),
+            migration_target: None,
+            removal_disposition: None,
+        };
+        let rules = call_api_change_to_rules(&change);
+        assert!(
+            rules.is_empty(),
+            "No-op ModalProps→ModalProps should produce zero rules"
+        );
+    }
+
+    /// TypeChanged is NOT affected by the no-op filter (different change type).
+    #[test]
+    fn test_type_changed_with_same_before_after_not_affected() {
+        // Hypothetical: a TypeChanged entry where before == after
+        // (shouldn't happen in practice but verifies the guard is scoped
+        // to SignatureChanged only)
+        let change = ApiChange {
+            symbol: "CompProps.variant".into(),
+            qualified_name: String::new(),
+            kind: ApiChangeKind::Property,
+            change: ApiChangeType::TypeChanged,
+            before: Some("'a' | 'b'".into()),
+            after: Some("'a' | 'b'".into()),
+            description: "type not actually changed".into(),
+            migration_target: None,
+            removal_disposition: None,
+        };
+        let rules = call_api_change_to_rules(&change);
+        // TypeChanged with before == after should still produce a rule
+        // (the no-op guard only applies to SignatureChanged)
+        assert_eq!(
+            rules.len(),
+            1,
+            "TypeChanged should not be affected by the no-op SignatureChanged filter"
+        );
     }
 }
