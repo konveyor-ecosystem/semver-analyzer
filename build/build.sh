@@ -916,7 +916,7 @@ main() {
     generate_topology_rules
     generate_rcg_rules
     generate_sdk_rules
-    # generate_console_rules  # disabled — needs --package-name-map from updates branch
+    generate_console_rules
     generate_react_rules
     generate_react_types_rules
     copy_prompt

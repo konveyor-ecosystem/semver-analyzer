@@ -44,6 +44,18 @@ jobs:
           containerfiles: build/Containerfile
           context: build
 
+      - name: Apply rule count labels
+        run: |
+          IMAGE="${{ steps.build.outputs.image }}"
+          TAG="${{ steps.tag.outputs.tag }}"
+          CONTAINER=$(buildah from "${IMAGE}:${TAG}")
+          SUMMARY=$(buildah run "$CONTAINER" cat /opt/patternfly-tools/RULES_SUMMARY)
+          while IFS=': ' read -r name count _; do
+            buildah config --label "io.konveyor.rules.${name}.rule-count=${count}" "$CONTAINER"
+          done <<< "$SUMMARY"
+          buildah commit "$CONTAINER" "${IMAGE}:${TAG}"
+          buildah rm "$CONTAINER"
+
       - name: Push to Quay
         if: github.event_name == 'push'
         uses: redhat-actions/push-to-registry@main
