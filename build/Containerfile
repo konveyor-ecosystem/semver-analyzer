@@ -1,5 +1,5 @@
 # Stage 1: Go builder — kantra and kantra release assets
-FROM registry.access.redhat.com/ubi9/go-toolset AS go-builder
+FROM registry.access.redhat.com/ubi10/go-toolset AS go-builder
 
 ARG KANTRA_VERSION=v0.9.2-rc.1
 ARG KANTRA_REPO=https://github.com/konveyor/kantra.git
@@ -24,7 +24,7 @@ RUN : > /kantra-assets/maven-index.txt \
 
 
 # Stage 2: Rust builder — semver-analyzer, frontend-analyzer-provider, fix-engine-cli
-FROM registry.access.redhat.com/ubi9/ubi AS rust-builder
+FROM registry.access.redhat.com/ubi10/ubi AS rust-builder
 
 ARG SEMVER_REPO=https://github.com/konveyor-ecosystem/semver-analyzer.git
 ARG SEMVER_BRANCH=main
@@ -64,7 +64,7 @@ RUN strip \
 # ═══════════════════════════════════════════════════════════════════════════
 # Stage 3a: PatternFly React rules
 # ═══════════════════════════════════════════════════════════════════════════
-FROM registry.access.redhat.com/ubi9/ubi AS pf-rule-gen
+FROM registry.access.redhat.com/ubi10/ubi AS pf-rule-gen
 
 ARG PF_REACT_REPO=https://github.com/patternfly/patternfly-react.git
 ARG PF_CSS_REPO=https://github.com/patternfly/patternfly.git
@@ -81,7 +81,7 @@ ARG PF_DEP_NODE_VERSION=18
 ARG PF_DEP_BUILD_CMD="export NODE_ENV=development && yarn install && npx gulp buildPatternfly"
 ARG TOKEN_MAPPINGS_URL=https://raw.githubusercontent.com/konveyor-ecosystem/semver-analyzer/refs/heads/main/hack/integration/patternfly-token-mappings.yaml
 
-RUN dnf install -y git make gcc gcc-c++ && dnf clean all
+RUN dnf install -y git make gcc gcc-c++ python-setuptools && dnf clean all
 
 ENV NVM_DIR=/root/.nvm
 RUN bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash \
@@ -130,7 +130,7 @@ RUN grep -rch 'ruleID:' /rules 2>/dev/null | awk '{s+=$1} END {print s+0}' > /ru
 # ═══════════════════════════════════════════════════════════════════════════
 # Stage 3b: PatternFly React Topology rules
 # ═══════════════════════════════════════════════════════════════════════════
-FROM registry.access.redhat.com/ubi9/ubi AS topology-rule-gen
+FROM registry.access.redhat.com/ubi10/ubi AS topology-rule-gen
 
 ARG TOPOLOGY_REPO=https://github.com/patternfly/react-topology.git
 ARG TOPOLOGY_FROM=v5.4.1
@@ -182,7 +182,7 @@ RUN grep -rch 'ruleID:' /rules 2>/dev/null | awk '{s+=$1} END {print s+0}' > /ru
 # ═══════════════════════════════════════════════════════════════════════════
 # Stage 3c: PatternFly React Component Groups rules
 # ═══════════════════════════════════════════════════════════════════════════
-FROM registry.access.redhat.com/ubi9/ubi AS rcg-rule-gen
+FROM registry.access.redhat.com/ubi10/ubi AS rcg-rule-gen
 
 ARG RCG_REPO=https://github.com/patternfly/react-component-groups.git
 ARG RCG_FROM=v5.5.3
@@ -234,7 +234,7 @@ RUN grep -rch 'ruleID:' /rules 2>/dev/null | awk '{s+=$1} END {print s+0}' > /ru
 # ═══════════════════════════════════════════════════════════════════════════
 # Stage 3d: Dynamic Plugin SDK rules
 # ═══════════════════════════════════════════════════════════════════════════
-FROM registry.access.redhat.com/ubi9/ubi AS sdk-rule-gen
+FROM registry.access.redhat.com/ubi10/ubi AS sdk-rule-gen
 
 ARG SDK_REPO=https://github.com/openshift/dynamic-plugin-sdk.git
 ARG SDK_FROM_DATE=2023-04-13
@@ -289,7 +289,7 @@ RUN grep -rch 'ruleID:' /rules 2>/dev/null | awk '{s+=$1} END {print s+0}' > /ru
 # ═══════════════════════════════════════════════════════════════════════════
 # Stage 3e: Console SDK rules
 # ═══════════════════════════════════════════════════════════════════════════
-FROM registry.access.redhat.com/ubi9/ubi AS console-rule-gen
+FROM registry.access.redhat.com/ubi10/ubi AS console-rule-gen
 
 ARG CONSOLE_REPO=https://github.com/openshift/console.git
 ARG CONSOLE_FROM=origin/release-4.17
@@ -343,7 +343,7 @@ RUN grep -rch 'ruleID:' /rules 2>/dev/null | awk '{s+=$1} END {print s+0}' > /ru
 # ═══════════════════════════════════════════════════════════════════════════
 # Stage 3f: React rules
 # ═══════════════════════════════════════════════════════════════════════════
-FROM registry.access.redhat.com/ubi9/ubi AS react-rule-gen
+FROM registry.access.redhat.com/ubi10/ubi AS react-rule-gen
 
 ARG REACT_REPO=https://github.com/facebook/react.git
 ARG REACT_FROM=v17.0.2
@@ -353,7 +353,7 @@ ARG REACT_TO_NODE_VERSION=18
 ARG REACT_FROM_BUILD_CMD="yarn build"
 ARG REACT_TO_BUILD_CMD="yarn build"
 
-RUN dnf install -y git make gcc gcc-c++ java-17-openjdk-headless && dnf clean all
+RUN dnf install -y git make gcc gcc-c++ java-21-openjdk-headless && dnf clean all
 
 ENV NVM_DIR=/root/.nvm
 RUN bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash \
@@ -397,7 +397,7 @@ RUN grep -rch 'ruleID:' /rules 2>/dev/null | awk '{s+=$1} END {print s+0}' > /ru
 # ═══════════════════════════════════════════════════════════════════════════
 # Stage 3g: React Types rules (synthetic repo from DefinitelyTyped)
 # ═══════════════════════════════════════════════════════════════════════════
-FROM registry.access.redhat.com/ubi9/ubi AS react-types-gen
+FROM registry.access.redhat.com/ubi10/ubi AS react-types-gen
 
 ARG DT_REPO=https://github.com/DefinitelyTyped/DefinitelyTyped.git
 ARG REACT_TYPES_FROM=v17
