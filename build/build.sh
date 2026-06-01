@@ -675,15 +675,16 @@ generate_react_rules() {
     info "react: $REACT_FROM -> $REACT_TO"
     KONVEYOR_RENAME_PATTERNS="" KONVEYOR_PKG_NAME_MAP="" KONVEYOR_PKG_VERSION=""
 
-    local react_install_cmd="export ELECTRON_SKIP_BINARY_DOWNLOAD=1 && yarn config set cache-folder /tmp/yarn-cache && rm -rf /tmp/yarn-cache && yarn install --ignore-scripts --ignore-optional --mutex file:/tmp/yarn-mutex --network-concurrency 1"
+    local react_from_install_cmd="export ELECTRON_SKIP_BINARY_DOWNLOAD=1 YARN_CACHE_FOLDER=/tmp/yarn-cache-from && rm -rf /tmp/yarn-cache-from && yarn install --ignore-scripts --ignore-optional --mutex file:/tmp/yarn-mutex-from --network-concurrency 1"
+    local react_to_install_cmd="export ELECTRON_SKIP_BINARY_DOWNLOAD=1 YARN_CACHE_FOLDER=/tmp/yarn-cache-to && rm -rf /tmp/yarn-cache-to && yarn install --ignore-scripts --ignore-optional --mutex file:/tmp/yarn-mutex-to --network-concurrency 1"
 
     (run_analyze_and_rules "react" "$BUILD_TMP/react-report.json" "react-breaking-changes" \
         --repo "$repo_src" \
         --from "$REACT_FROM" --to "$REACT_TO" \
         --from-node-version 18 \
         --to-node-version 18 \
-        --from-install-command "$react_install_cmd" \
-        --to-install-command "$react_install_cmd" \
+        --from-install-command "$react_from_install_cmd" \
+        --to-install-command "$react_to_install_cmd" \
         --from-build-command "$REACT_BUILD_CMD" \
         --to-build-command "$REACT_BUILD_CMD") \
         || warn "React rule generation failed (Node 14 may not be available on this platform)"
