@@ -67,6 +67,12 @@ Full pipeline: extract API surfaces at both refs, diff, source-level analysis.
 | `--llm-timeout <secs>` | Timeout per LLM invocation (default: 120) |
 | `--llm-all-files` | Send all changed files to LLM, not just those with test changes |
 | `--build-command <cmd>` | Custom build command (auto-detected by default) |
+| `--from-build-command <cmd>` | Build command for the `--from` ref only |
+| `--to-build-command <cmd>` | Build command for the `--to` ref only |
+| `--from-node-version <ver>` | Node.js version for the `--from` ref (resolved via nvm) |
+| `--to-node-version <ver>` | Node.js version for the `--to` ref (resolved via nvm) |
+| `--from-install-command <cmd>` | Install command for the `--from` ref (overrides auto-detection) |
+| `--to-install-command <cmd>` | Install command for the `--to` ref (overrides auto-detection) |
 | `--dep-repo <path>` | Dependency repo path (e.g., CSS framework) |
 | `--dep-from <ref>` | Old ref for dependency repo |
 | `--dep-to <ref>` | New ref for dependency repo |

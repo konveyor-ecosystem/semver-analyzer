@@ -860,9 +860,18 @@ copy_run_script() {
     cp "$SCRIPT_DIR/eval.sh" "$BUILD_DIR/eval.sh"
     chmod +x "$BUILD_DIR/eval.sh"
     cp "$SCRIPT_DIR/eval_prompt.md" "$BUILD_DIR/eval_prompt.md"
-    if [[ -f "$SCRIPT_DIR/README.run.md" ]]; then
-        cp "$SCRIPT_DIR/README.run.md" "$BUILD_DIR/README.md"
-    fi
+    cat > "$BUILD_DIR/README.md" <<'README'
+# PatternFly Migration Tools
+
+Run `./run.sh --migrate /path/to/your-app` to get started, or `./run.sh --help` for all options.
+
+## Documentation
+
+- [Running the Pipeline](https://github.com/konveyor-ecosystem/semver-analyzer/blob/main/docs/running-the-pipeline.md)
+- [Generated Rules](https://github.com/konveyor-ecosystem/semver-analyzer/blob/main/docs/generated-rules.md)
+- [Recreating Rules](https://github.com/konveyor-ecosystem/semver-analyzer/blob/main/docs/recreating-rules.md)
+- [LLM Integration](https://github.com/konveyor-ecosystem/semver-analyzer/blob/main/docs/llm-integration.md)
+README
     info "Copied run.sh, eval.sh, eval_prompt.md, and README.md into archive"
 }
 
