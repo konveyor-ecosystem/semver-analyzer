@@ -20,6 +20,7 @@ There are two ways to run the migration:
 - [Building the Container Image](#building-the-container-image)
 - [Running Without Container (run.sh)](#running-without-container)
 - [Building Archives (build.sh)](#building-archives)
+- [EC2 Build (Ansible)](#ec2-build-ansible)
 - [Source Repositories](#source-repositories)
 
 ## Quick Start
@@ -344,6 +345,113 @@ Builds all tools from source and generates rules for all 7 libraries into a dist
 Prompts for target platform and kantra release. All repo URLs/branches are overridable via environment variables (e.g., `SEMVER_REPO_BRANCH=updates ./build.sh`).
 
 Requires: Go 1.23+, Rust (via rustup), Node.js 18+ and 20+ (via nvm), git, curl, unzip, python3.
+
+---
+
+## EC2 Build (Ansible)
+
+Builds multi-arch container images natively on EC2 instances (one amd64, one arm64) instead of using QEMU emulation. Each architecture builds on its native hardware, then a manifest list is created and pushed to Quay.io.
+
+### Prerequisites
+
+| Requirement | Description |
+|-------------|-------------|
+| Python 3, pip | For Ansible and boto3 |
+| Ansible | `pip install ansible` |
+| boto3 | `pip install boto3 botocore` |
+| Ansible collections | `ansible-galaxy collection install amazon.aws community.crypto` |
+| AWS credentials | Default boto3 chain (env vars, `~/.aws/credentials`, or instance profile) |
+| Quay credentials | Robot account username + token in a vault file |
+
+### Setup
+
+```bash
+# Install dependencies
+pip install ansible boto3 botocore
+ansible-galaxy collection install amazon.aws community.crypto
+
+# Create vault file with Quay credentials
+ansible-vault create build/vault.yml
+# Contents:
+#   quay_username: "konveyor+robot_name"
+#   quay_password: "secret_token"
+```
+
+### Usage
+
+Every deployment is identified by a `guid`. Re-running with the same GUID reuses existing infrastructure.
+
+```bash
+# Full build (provision EC2 + build + push)
+ansible-playbook build/ec2-build.yml \
+  -e @build/vault.yml --vault-password-file ~/.vault_pass \
+  -e guid=my-build-01
+
+# Provision infrastructure only
+ansible-playbook build/ec2-build.yml --tags provision \
+  -e @build/vault.yml --vault-password-file ~/.vault_pass \
+  -e guid=my-build-01
+
+# Build only (instances already running from prior provision)
+ansible-playbook build/ec2-build.yml --tags build \
+  -e @build/vault.yml --vault-password-file ~/.vault_pass \
+  -e guid=my-build-01
+
+# Destroy all infrastructure for a GUID
+ansible-playbook build/ec2-build.yml --tags destroy \
+  -e guid=my-build-01
+
+# Override Containerfile ARGs
+ansible-playbook build/ec2-build.yml \
+  -e @build/vault.yml --vault-password-file ~/.vault_pass \
+  -e guid=my-build-01 \
+  -e '{"containerfile_args_overrides": {"PF_REACT_TO": "v6.5.0", "SEMVER_BRANCH": "feature-x"}}'
+
+# Override infrastructure variables
+ansible-playbook build/ec2-build.yml \
+  -e @build/vault.yml --vault-password-file ~/.vault_pass \
+  -e guid=my-build-01 \
+  -e aws_region=us-west-2 \
+  -e image_tag=v1.0.0 \
+  -e ec2_instance_type_amd64=c5.4xlarge
+```
+
+### Variables
+
+#### Infrastructure
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `guid` | *(required)* | Unique deployment identifier for tracking AWS resources |
+| `aws_region` | `us-east-1` | AWS region |
+| `ec2_instance_type_amd64` | `c5.2xlarge` | Instance type for x86_64 build |
+| `ec2_instance_type_arm64` | `c6g.2xlarge` | Instance type for arm64 build |
+| `ec2_root_volume_size` | `80` | Root EBS volume size in GB |
+| `rhel_ami_amd64` | *(auto-detected)* | Override RHEL 9 AMI for x86_64 |
+| `rhel_ami_arm64` | *(auto-detected)* | Override RHEL 9 AMI for arm64 |
+
+#### Registry
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `registry` | `quay.io` | Container registry |
+| `registry_namespace` | `konveyor` | Registry namespace/organization |
+| `image_name` | `patternfly-tools` | Image name |
+| `image_tag` | `latest` | Image tag |
+
+#### Containerfile ARGs
+
+All Containerfile `ARG` values can be overridden via `containerfile_args_overrides`. See the playbook header or the Containerfile for the full list of available keys and their defaults.
+
+### Tags
+
+| Tag | Description |
+|-----|-------------|
+| `provision` | Create EC2 instances, security group, SSH key |
+| `build` | Build images, apply labels, push to registry, create manifest |
+| `destroy` | Terminate instances, delete security group and key pair |
+
+Running without tags executes `provision` + `build`. The `destroy` tag must be explicitly requested.
 
 ---
 
