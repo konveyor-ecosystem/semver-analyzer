@@ -50,7 +50,7 @@ PF_REACT_TO="${PF_REACT_TO:-v6.4.1}"
 PF_REPO_URL="https://github.com/patternfly/patternfly.git"
 PF_DEP_FROM="${PF_DEP_FROM:-v5.4.0}"
 PF_DEP_TO="${PF_DEP_TO:-v6.4.0}"
-TOKEN_MAPPINGS_URL="https://raw.githubusercontent.com/konveyor-ecosystem/semver-analyzer/refs/heads/main/hack/integration/patternfly-token-mappings.yaml"
+TOKEN_MAPPINGS_URL="https://raw.githubusercontent.com/konveyor-ecosystem/semver-analyzer/refs/heads/main/build/patternfly-token-mappings.yaml"
 
 # PatternFly React Topology
 TOPOLOGY_REPO_URL="https://github.com/patternfly/react-topology.git"
@@ -106,7 +106,8 @@ HOST_SEMVER_BIN=""
 info()  { printf "${GREEN}[INFO]${NC}  %s\n" "$*"; }
 warn()  { printf "${YELLOW}[WARN]${NC}  %s\n" "$*"; }
 error() { printf "${RED}[ERROR]${NC} %s\n" "$*" >&2; }
-step()  { printf "\n${BLUE}[STEP %s]${NC} %s\n" "$1" "$2"; }
+STEP_N=0
+step()  { STEP_N=$((STEP_N + 1)); printf "\n${BLUE}[STEP %d]${NC} %s\n" "$STEP_N" "$1"; }
 die()   { error "$@"; exit 1; }
 
 require_command() {
@@ -299,7 +300,7 @@ select_platform() {
 
 # ── Kantra ───────────────────────────────────────────────────────────────
 select_kantra_release() {
-    step "1/19" "Selecting kantra release"
+    step "Selecting kantra release"
     info "Querying GitHub for kantra releases..."
 
     local suffix
@@ -330,7 +331,7 @@ for r in releases:
 }
 
 download_kantra() {
-    step "2/19" "Downloading kantra release"
+    step "Downloading kantra release"
 
     local suffix
     suffix=$(platform_lookup kantra_suffix "$TARGET_PLATFORM")
@@ -361,7 +362,7 @@ download_kantra() {
 }
 
 build_kantra_from_source() {
-    step "3/19" "Building kantra from source (Go)"
+    step "Building kantra from source (Go)"
 
     local kantra_src="$BUILD_TMP/kantra-src"
 
@@ -388,7 +389,7 @@ build_kantra_from_source() {
 }
 
 build_java_external_provider() {
-    step "4/19" "Building java-external-provider from analyzer-lsp"
+    step "Building java-external-provider from analyzer-lsp"
 
     local analyzer_src="$BUILD_TMP/analyzer-lsp"
 
@@ -458,7 +459,7 @@ rust_build() {
 }
 
 build_semver_analyzer() {
-    step "5/19" "Building semver-analyzer"
+    step "Building semver-analyzer"
 
     local semver_src="$BUILD_TMP/semver-analyzer"
     local konveyor_core_src="$BUILD_TMP/konveyor-core"
@@ -488,7 +489,7 @@ build_host_semver_analyzer() {
         return
     fi
 
-    step "6/19" "Building semver-analyzer for host (needed for rule generation)"
+    step "Building semver-analyzer for host (needed for rule generation)"
 
     local semver_src="$BUILD_TMP/semver-analyzer"
     local host_target
@@ -499,7 +500,7 @@ build_host_semver_analyzer() {
 }
 
 build_frontend_analyzer_provider() {
-    step "7/19" "Building frontend-analyzer-provider"
+    step "Building frontend-analyzer-provider"
 
     local fap_src="$BUILD_TMP/frontend-analyzer-provider"
 
@@ -532,7 +533,7 @@ ensure_nvm() {
 }
 
 generate_pf_rules() {
-    step "9/19" "Generating PatternFly React rules"
+    step "Generating PatternFly React rules"
     ensure_nvm
 
     local nvm_dir="${NVM_DIR:-$HOME/.nvm}"
@@ -571,7 +572,7 @@ generate_pf_rules() {
 }
 
 generate_topology_rules() {
-    step "10/19" "Generating PatternFly Topology rules"
+    step "Generating PatternFly Topology rules"
     ensure_nvm
 
     local repo_src="$BUILD_TMP/react-topology"
@@ -591,7 +592,7 @@ generate_topology_rules() {
 }
 
 generate_rcg_rules() {
-    step "11/19" "Generating PatternFly Component Groups rules"
+    step "Generating PatternFly Component Groups rules"
     ensure_nvm
 
     local repo_src="$BUILD_TMP/react-component-groups"
@@ -611,7 +612,7 @@ generate_rcg_rules() {
 }
 
 generate_sdk_rules() {
-    step "12/19" "Generating Dynamic Plugin SDK rules"
+    step "Generating Dynamic Plugin SDK rules"
     ensure_nvm
 
     local repo_src="$BUILD_TMP/dynamic-plugin-sdk"
@@ -638,7 +639,7 @@ generate_sdk_rules() {
 }
 
 generate_console_rules() {
-    step "13/19" "Generating Console SDK rules"
+    step "Generating Console SDK rules"
     ensure_nvm
 
     local repo_src="$BUILD_TMP/console"
@@ -661,7 +662,7 @@ generate_console_rules() {
 }
 
 generate_react_rules() {
-    step "14/19" "Generating React rules"
+    step "Generating React rules"
     ensure_nvm
 
     local repo_src="$BUILD_TMP/react"
@@ -691,7 +692,7 @@ generate_react_rules() {
 }
 
 generate_react_types_rules() {
-    step "15/19" "Generating React Types rules"
+    step "Generating React Types rules"
 
     local dt_src="$BUILD_TMP/DefinitelyTyped"
     local repo_src="$BUILD_TMP/react-types"
@@ -741,7 +742,7 @@ generate_react_types_rules() {
 
 # ── Extras ───────────────────────────────────────────────────────────────
 download_token_mappings() {
-    step "8/25" "Downloading token mappings (before rule generation)"
+    step "Downloading token mappings (before rule generation)"
 
     curl -fSL -o "$BUILD_DIR/patternfly-token-mappings.yaml" "$TOKEN_MAPPINGS_URL" \
         >> "$BUILD_TMP/download-token-mappings.log" 2>&1 || die "Failed to download token mappings"
@@ -750,7 +751,7 @@ download_token_mappings() {
 }
 
 copy_prompt() {
-    step "16/19" "Copying prompt.md"
+    step "Copying prompt.md"
 
     cp "$SCRIPT_DIR/prompt.md" "$BUILD_DIR/prompt.md" \
         || die "prompt.md not found in $SCRIPT_DIR"
@@ -767,7 +768,7 @@ git_sha() {
 }
 
 generate_manifest() {
-    step "17/19" "Generating MANIFEST"
+    step "Generating MANIFEST"
 
     local build_date
     build_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
@@ -852,18 +853,21 @@ MANIFEST
 }
 
 copy_run_script() {
-    step "18/19" "Copying run.sh"
+    step "Copying run.sh, eval.sh, and prompt files"
 
     cp "$SCRIPT_DIR/run.sh" "$BUILD_DIR/run.sh"
     chmod +x "$BUILD_DIR/run.sh"
+    cp "$SCRIPT_DIR/eval.sh" "$BUILD_DIR/eval.sh"
+    chmod +x "$BUILD_DIR/eval.sh"
+    cp "$SCRIPT_DIR/eval_prompt.md" "$BUILD_DIR/eval_prompt.md"
     if [[ -f "$SCRIPT_DIR/README.run.md" ]]; then
         cp "$SCRIPT_DIR/README.run.md" "$BUILD_DIR/README.md"
     fi
-    info "Copied run.sh and README.md into archive"
+    info "Copied run.sh, eval.sh, eval_prompt.md, and README.md into archive"
 }
 
 package_archive() {
-    step "19/25" "Packaging archive"
+    step "Packaging archive"
 
     # Preserve build logs in the archive
     mkdir -p "$BUILD_DIR/logs"

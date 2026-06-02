@@ -103,6 +103,7 @@ Evaluation options:
   --eval-only <BRANCH>       Run evaluation only against an existing migrated branch (skips migration)
 
 Migration options (forwarded to run.sh):
+  --agent <NAME>             Agent: goose (default), claude, opencode
   --base-branch <NAME>       Branch of the application to migrate (default: main)
   --llm-timeout <SECS>       LLM timeout (default: 300)
   --non-interactive          Skip all prompts
