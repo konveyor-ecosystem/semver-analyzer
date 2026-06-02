@@ -1,9 +1,0 @@
-migration:
-  from_ref: origin/release-4.17
-  to_ref: origin/release-4.19
-  generated_by: semver-analyzer v0.0.5
-summary:
-  total_fixes: 243
-  auto_fixable: 1
-  needs_review: 221
-  manual_only: 21

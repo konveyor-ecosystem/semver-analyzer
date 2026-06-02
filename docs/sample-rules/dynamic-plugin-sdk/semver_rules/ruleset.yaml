@@ -1,4 +1,0 @@
-name: dynamic-plugin-sdk-breaking-changes
-description: Breaking changes detected between 097b4c9db08e1d1be28619f350b5e124abd85a40 and c362b0ab4cf0e8e0ddd1bc0c72b49637306f1e13 by semver-analyzer v0.0.5
-labels:
-- source=semver-analyzer

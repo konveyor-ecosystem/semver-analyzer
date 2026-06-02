@@ -1,4 +1,0 @@
-name: console-sdk-breaking-changes
-description: Breaking changes detected between origin/release-4.17 and origin/release-4.19 by semver-analyzer v0.0.5
-labels:
-- source=semver-analyzer
