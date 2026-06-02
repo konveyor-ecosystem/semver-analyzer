@@ -1,13 +1,15 @@
 name: Container Build
 
 on:
-  push:
-    branches:
-      - main
-      - 'v[0-9]*'
-    tags:
-      - 'v[0-9]*'
-  pull_request:
+  workflow_dispatch:
+  # Disabled — builds now run via Ansible on EC2 (see build/ec2-build.yml)
+  # push:
+  #   branches:
+  #     - main
+  #     - 'v[0-9]*'
+  #   tags:
+  #     - 'v[0-9]*'
+  # pull_request:
     branches: [main]
 
 jobs:
