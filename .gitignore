@@ -2,3 +2,5 @@ target
 build/.ansible/
 build/vault.yml
 *.retry
+.ignore/
+build/.pf-migration-logs
