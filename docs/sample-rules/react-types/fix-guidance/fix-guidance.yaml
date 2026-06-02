@@ -1,0 +1,9 @@
+migration:
+  from_ref: v17
+  to_ref: v18
+  generated_by: semver-analyzer v0.0.5
+summary:
+  total_fixes: 11
+  auto_fixable: 3
+  needs_review: 5
+  manual_only: 3

@@ -1,0 +1,50 @@
+{
+  "semver-dep-update-react-dom": {
+    "strategy": "EnsureDependency",
+    "package": "react-dom",
+    "new_version": "^18.3.1"
+  },
+  "semver-manifest-peerdependencies-eslint-peer-dependency-range-changed": {
+    "strategy": "EnsureDependency",
+    "package": "eslint",
+    "new_version": "^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0"
+  },
+  "semver-manifest-peerdependencies-react-peer-dependency-range-changed-group-6": {
+    "strategy": "EnsureDependency",
+    "mappings": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "package": "react",
+    "new_version": "^18.3.1"
+  },
+  "semver-dep-update-react": {
+    "strategy": "EnsureDependency",
+    "package": "react",
+    "new_version": "^18.3.1"
+  },
+  "semver-dep-update-react-art": {
+    "strategy": "EnsureDependency",
+    "package": "react-art",
+    "new_version": "^18.3.1"
+  },
+  "semver-dep-update-react-is": {
+    "strategy": "EnsureDependency",
+    "package": "react-is",
+    "new_version": "^18.3.1"
+  },
+  "semver-dep-update-react-test-renderer": {
+    "strategy": "EnsureDependency",
+    "package": "react-test-renderer",
+    "new_version": "^18.3.1"
+  },
+  "semver-manifest-peerdependencies-react-test-renderer-peer-dependency-range-changed": {
+    "strategy": "EnsureDependency",
+    "package": "react-test-renderer",
+    "new_version": "^18.3.1"
+  }
+}

@@ -1,0 +1,289 @@
+{
+  "semver-packages-react-dom-index-renderer-d-ts-renderer-call-removed-group-4": {
+    "strategy": "Manual",
+    "mappings": [
+      {},
+      {},
+      {},
+      {}
+    ],
+    "source_package": "@types/react-dom"
+  },
+  "semver-dep-update-types-react-dom": {
+    "strategy": "EnsureDependency",
+    "package": "@types/react-dom",
+    "new_version": "^18.3.0"
+  },
+  "semver-packages-react-dom-index-d-ts-flushsync-removed-group-5": {
+    "strategy": "Manual",
+    "mappings": [
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "source_package": "@types/react-dom"
+  },
+  "semver-manifest-peerdependencies-types-react-peer-dependency-range-changed": {
+    "strategy": "EnsureDependency",
+    "package": "@types/react",
+    "new_version": "^18.0.0"
+  },
+  "semver-packages-react-dom-test-utils-index-d-ts-renderintodocument-removed": {
+    "strategy": "Manual",
+    "source_package": "@types/react-dom"
+  },
+  "semver-packages-react-dom-index-d-ts-createportal-type-changed-group-9": {
+    "strategy": "PropTypeChange",
+    "from": "null | string",
+    "to": "Key | null",
+    "mappings": [
+      {
+        "from": "null | string",
+        "to": "Key | null"
+      },
+      {
+        "from": "(a: A) => R",
+        "to": "() => R"
+      },
+      {
+        "from": "(a: A) => R",
+        "to": "() => R"
+      },
+      {
+        "from": "DOMElement<DOMAttributes<T>, T>",
+        "to": "ReactElement<P>"
+      },
+      {
+        "from": "(element: T) => any",
+        "to": "(component?: Component<P, ComponentState> | Element) => any"
+      },
+      {
+        "from": "T",
+        "to": "Component<P, ComponentState> | Element | void"
+      },
+      {
+        "from": "CElement<P, T>",
+        "to": "ReactElement<P>"
+      },
+      {
+        "from": "(component: T) => any",
+        "to": "(component?: Component<P, ComponentState> | Element) => any"
+      },
+      {
+        "from": "T",
+        "to": "Component<P, ComponentState> | Element | void"
+      }
+    ],
+    "source_package": "@types/react-dom"
+  },
+  "semver-packages-react-dom-test-utils-index-d-ts-act-signature-changed-group-12": {
+    "strategy": "PropTypeChange",
+    "to": "T",
+    "mappings": [
+      {
+        "to": "T"
+      },
+      {
+        "to": "T"
+      },
+      {
+        "from": "HTMLElement"
+      },
+      {
+        "to": "T extends Component<P>"
+      },
+      {
+        "to": "C extends ComponentClass<P>"
+      },
+      {
+        "from": "DOMAttributes<{}>"
+      },
+      {
+        "from": "Element",
+        "to": "Component<P>"
+      },
+      {
+        "to": "C extends ComponentClass<P>"
+      },
+      {
+        "to": "T extends Component<P>"
+      },
+      {
+        "to": "C extends ComponentClass<P>"
+      },
+      {
+        "from": "Element"
+      },
+      {
+        "to": "P"
+      }
+    ],
+    "source_package": "@types/react-dom"
+  },
+  "semver-dep-update-types-react": {
+    "strategy": "EnsureDependency",
+    "package": "@types/react",
+    "new_version": "^18.3.0"
+  },
+  "semver-packages-react-dom-index-d-ts-unstable-rendersubtreeintocontainer-signature-changed": {
+    "strategy": "PropTypeChange",
+    "from": "Element",
+    "source_package": "@types/react-dom"
+  },
+  "semver-packages-react-dom-test-utils-index-d-ts-act-type-changed-group-16": {
+    "strategy": "PropTypeChange",
+    "from": "() => Promise<void>",
+    "to": "() => Promise<T> | T",
+    "mappings": [
+      {
+        "from": "() => Promise<void>",
+        "to": "() => Promise<T> | T"
+      },
+      {
+        "from": "Promise<undefined>",
+        "to": "Promise<T>"
+      },
+      {
+        "from": "() => VoidOrUndefinedOnly",
+        "to": "() => Promise<T> | T"
+      },
+      {
+        "from": "void",
+        "to": "Promise<T>"
+      },
+      {
+        "from": "string",
+        "to": "ClassType<P, T, C>"
+      },
+      {
+        "from": "element is ReactHTMLElement<T>",
+        "to": "element is CElement<P, T>"
+      },
+      {
+        "from": "string",
+        "to": "ClassType<P, T, C>"
+      },
+      {
+        "from": "element is DOMElement<P, T>",
+        "to": "element is CElement<P, T>"
+      },
+      {
+        "from": "FC<P>",
+        "to": "ClassType<P, T, C>"
+      },
+      {
+        "from": "element is FunctionComponentElement<P>",
+        "to": "element is CElement<P, T>"
+      },
+      {
+        "from": "DOMElement<any, T>",
+        "to": "ReactElement<P>"
+      },
+      {
+        "from": "T",
+        "to": "Component<P> | Element | void"
+      },
+      {
+        "from": "FunctionComponentElement",
+        "to": "ReactElement<P>"
+      },
+      {
+        "from": "void",
+        "to": "Component<P> | Element | void"
+      },
+      {
+        "from": "CElement<P, T>",
+        "to": "ReactElement<P>"
+      },
+      {
+        "from": "T",
+        "to": "Component<P> | Element | void"
+      }
+    ],
+    "source_package": "@types/react-dom"
+  },
+  "semver-packages-react-dom-index-renderer-d-ts-renderer-call-type-changed-group-12": {
+    "strategy": "PropTypeChange",
+    "from": "DOMElement<DOMAttributes<T>, T>",
+    "to": "ReactElement[]",
+    "component": "Renderer",
+    "prop": "(call)",
+    "mappings": [
+      {
+        "from": "DOMElement<DOMAttributes<T>, T>",
+        "to": "ReactElement[]",
+        "component": "Renderer",
+        "prop": "(call)"
+      },
+      {
+        "from": "T",
+        "to": "Component<any, ComponentState> | Element | void",
+        "component": "Renderer",
+        "prop": "(call)"
+      },
+      {
+        "from": "DOMElement<DOMAttributes, any>[]",
+        "to": "ReactElement[]",
+        "component": "Renderer",
+        "prop": "(call)"
+      },
+      {
+        "from": "Element",
+        "to": "Component<any, ComponentState> | Element | void",
+        "component": "Renderer",
+        "prop": "(call)"
+      },
+      {
+        "from": "FunctionComponentElement | FunctionComponentElement[]",
+        "to": "ReactElement[]",
+        "component": "Renderer",
+        "prop": "(call)"
+      },
+      {
+        "from": "void",
+        "to": "Component<any, ComponentState> | Element | void",
+        "component": "Renderer",
+        "prop": "(call)"
+      },
+      {
+        "from": "CElement<P, T>",
+        "to": "ReactElement[]",
+        "component": "Renderer",
+        "prop": "(call)"
+      },
+      {
+        "from": "T",
+        "to": "Component<any, ComponentState> | Element | void",
+        "component": "Renderer",
+        "prop": "(call)"
+      },
+      {
+        "from": "CElement<any, Component<any, ComponentState>>[]",
+        "to": "ReactElement[]",
+        "component": "Renderer",
+        "prop": "(call)"
+      },
+      {
+        "from": "Component<any, ComponentState>",
+        "to": "Component<any, ComponentState> | Element | void",
+        "component": "Renderer",
+        "prop": "(call)"
+      },
+      {
+        "from": "ReactElement<P>",
+        "to": "ReactElement[]",
+        "component": "Renderer",
+        "prop": "(call)"
+      },
+      {
+        "from": "Component<P, ComponentState> | Element | void",
+        "to": "Component<any, ComponentState> | Element | void",
+        "component": "Renderer",
+        "prop": "(call)"
+      }
+    ],
+    "source_package": "@types/react-dom"
+  }
+}

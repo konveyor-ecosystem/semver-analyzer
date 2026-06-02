@@ -1,0 +1,4927 @@
+- ruleID: semver-frontend-packages-console-dynamic-plugin-sdk-src-app-components-status-icons-d-ts-colorediconprops-type-changed
+  labels:
+  - source=semver-analyzer
+  - change-type=type-changed
+  - kind=type-alias
+  - has-codemod=true
+  - package=@openshift-console/dynamic-plugin-sdk
+  effort: 3
+  category: mandatory
+  description: |-
+    Return type of `ColoredIconProps` changed from `{
+        className?: string;
+        title?: string;
+        size?: 'sm' | 'md' | 'lg' | 'xl';
+    }` to `{
+        className?: string;
+        title?: string;
+        size?: IconSize;
+        dataTest?: string;
+    }`
+  message: |-
+    Type-alias 'ColoredIconProps' had its type changed (type-alias): Return type of `ColoredIconProps` changed from `{
+        className?: string;
+        title?: string;
+        size?: 'sm' | 'md' | 'lg' | 'xl';
+    }` to `{
+        className?: string;
+        title?: string;
+        size?: IconSize;
+        dataTest?: string;
+    }`
+
+    File: frontend/packages/console-dynamic-plugin-sdk/src/app/components/status/icons.d.ts
+    Before: {
+        className?: string;
+        title?: string;
+        size?: 'sm' | 'md' | 'lg' | 'xl';
+    }
+    After: {
+        className?: string;
+        title?: string;
+        size?: IconSize;
+        dataTest?: string;
+    }
+
+    Value changes:
+      Removed values:
+        - 'lg'
+        - 'md'
+        - 'sm'
+        - 'xl'
+  when:
+    or:
+    - frontend.referenced:
+        pattern: ^ColoredIconProps$
+        location: TYPE_REFERENCE
+        from: '@openshift-console/dynamic-plugin-sdk'
+    - frontend.referenced:
+        pattern: ^ColoredIconProps$
+        location: IMPORT
+        from: '@openshift-console/dynamic-plugin-sdk'
+- ruleID: semver-frontend-packages-console-dynamic-plugin-sdk-src-extensions-add-actions-d-ts-addaction-type-changed
+  labels:
+  - source=semver-analyzer
+  - change-type=type-changed
+  - kind=type-alias
+  - has-codemod=true
+  - package=@openshift-console/dynamic-plugin-sdk
+  effort: 3
+  category: mandatory
+  description: |-
+    Return type of `AddAction` changed from `ExtensionDeclaration<'dev-console.add/action', {
+        /** ID used to identify the action. */
+        id: string;
+        /** IDs used to identify the action groups the action would belong to. */
+        groupId?: string;
+        /** The label of the action */
+        label: string;
+        /** The description of the action. */
+        description: string;
+        /** The href to navigate to. */
+        href?: string;
+        /** A callback that performs an action on click */
+        callback?: CodeRef<(props: Record<string, any>) => void>;
+        /** The perspective display icon. */
+        icon?: CodeRef<React.ReactNode>;
+        /** Optional access review to control visibility / enablement of the action. */
+        accessReview?: AccessReviewResourceAttributes[];
+    }>` to `ExtensionDeclaration<'dev-console.add/action', {
+        /** ID used to identify the action. */
+        id: string;
+        /** IDs used to identify the action groups the action would belong to. */
+        groupId?: string;
+        /** The label of the action */
+        label: string;
+        /** The description of the action. */
+        description: string;
+        /** The href to navigate to. */
+        href?: string;
+        /** A callback that performs an action on click */
+        callback?: CodeRef<(props: Record<string, any>) => void>;
+        /** The perspective display icon. If possible, use a PatternFly icon for consistent icon colours and styling. */
+        icon?: CodeRef<React.ReactNode>;
+        /** Optional access review to control visibility / enablement of the action. */
+        accessReview?: AccessReviewResourceAttributes[];
+    }>`
+  message: |-
+    Type-alias 'AddAction' had its type changed (type-alias): Return type of `AddAction` changed from `ExtensionDeclaration<'dev-console.add/action', {
+        /** ID used to identify the action. */
+        id: string;
+        /** IDs used to identify the action groups the action would belong to. */
+        groupId?: string;
+        /** The label of the action */
+        label: string;
+        /** The description of the action. */
+        description: string;
+        /** The href to navigate to. */
+        href?: string;
+        /** A callback that performs an action on click */
+        callback?: CodeRef<(props: Record<string, any>) => void>;
+        /** The perspective display icon. */
+        icon?: CodeRef<React.ReactNode>;
+        /** Optional access review to control visibility / enablement of the action. */
+        accessReview?: AccessReviewResourceAttributes[];
+    }>` to `ExtensionDeclaration<'dev-console.add/action', {
+        /** ID used to identify the action. */
+        id: string;
+        /** IDs used to identify the action groups the action would belong to. */
+        groupId?: string;
+        /** The label of the action */
+        label: string;
+        /** The description of the action. */
+        description: string;
+        /** The href to navigate to. */
+        href?: string;
+        /** A callback that performs an action on click */
+        callback?: CodeRef<(props: Record<string, any>) => void>;
+        /** The perspective display icon. If possible, use a PatternFly icon for consistent icon colours and styling. */
+        icon?: CodeRef<React.ReactNode>;
+        /** Optional access review to control visibility / enablement of the action. */
+        accessReview?: AccessReviewResourceAttributes[];
+    }>`
+
+    File: frontend/packages/console-dynamic-plugin-sdk/src/extensions/add-actions.d.ts
+    Before: ExtensionDeclaration<'dev-console.add/action', {
+        /** ID used to identify the action. */
+        id: string;
+        /** IDs used to identify the action groups the action would belong to. */
+        groupId?: string;
+        /** The label of the action */
+        label: string;
+        /** The description of the action. */
+        description: string;
+        /** The href to navigate to. */
+        href?: string;
+        /** A callback that performs an action on click */
+        callback?: CodeRef<(props: Record<string, any>) => void>;
+        /** The perspective display icon. */
+        icon?: CodeRef<React.ReactNode>;
+        /** Optional access review to control visibility / enablement of the action. */
+        accessReview?: AccessReviewResourceAttributes[];
+    }>
+    After: ExtensionDeclaration<'dev-console.add/action', {
+        /** ID used to identify the action. */
+        id: string;
+        /** IDs used to identify the action groups the action would belong to. */
+        groupId?: string;
+        /** The label of the action */
+        label: string;
+        /** The description of the action. */
+        description: string;
+        /** The href to navigate to. */
+        href?: string;
+        /** A callback that performs an action on click */
+        callback?: CodeRef<(props: Record<string, any>) => void>;
+        /** The perspective display icon. If possible, use a PatternFly icon for consistent icon colours and styling. */
+        icon?: CodeRef<React.ReactNode>;
+        /** Optional access review to control visibility / enablement of the action. */
+        accessReview?: AccessReviewResourceAttributes[];
+    }>
+  when:
+    or:
+    - frontend.referenced:
+        pattern: ^AddAction$
+        location: TYPE_REFERENCE
+        from: '@openshift-console/dynamic-plugin-sdk'
+    - frontend.referenced:
+        pattern: ^AddAction$
+        location: IMPORT
+        from: '@openshift-console/dynamic-plugin-sdk'
+- ruleID: semver-frontend-packages-console-dynamic-plugin-sdk-src-extensions-catalog-d-ts-catalogitemattribute-type-changed-group-2
+  labels:
+  - change-type=type-changed
+  - has-codemod=true
+  - kind=type-alias
+  - package=@openshift-console/dynamic-plugin-sdk
+  - source=semver-analyzer
+  effort: 3
+  category: mandatory
+  description: 2 related changes
+  message: |
+    This rule contains 2 migration steps. Apply each one independently:
+
+    Step 1 of 2:
+    Type-alias 'CatalogItemAttribute' had its type changed (type-alias): Return type of `CatalogItemAttribute` changed from `{
+        label: string;
+        attribute: string;
+        description?: string;
+    }` to `{
+        label: string;
+        attribute: string;
+        description?: string;
+        comparator?: CodeRef<(a: string, b: string) => number>;
+    }`
+
+    File: frontend/packages/console-dynamic-plugin-sdk/src/extensions/catalog.d.ts
+    Before: {
+        label: string;
+        attribute: string;
+        description?: string;
+    }
+    After: {
+        label: string;
+        attribute: string;
+        description?: string;
+        comparator?: CodeRef<(a: string, b: string) => number>;
+    }
+
+    Step 2 of 2:
+    Type-alias 'CatalogItemBadge' had its type changed (type-alias): Return type of `CatalogItemBadge` changed from `{
+        text: string;
+        color?: 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey';
+        icon?: React.ReactNode;
+        variant?: 'outline' | 'filled';
+    }` to `{
+        text: string;
+        color?: 'blue' | 'teal' | 'green' | 'orange' | 'purple' | 'red' | 'grey';
+        icon?: React.ReactNode;
+        variant?: 'outline' | 'filled';
+    }`
+
+    File: frontend/packages/console-dynamic-plugin-sdk/src/extensions/catalog.d.ts
+    Before: {
+        text: string;
+        color?: 'blue' | 'cyan' | 'green' | 'orange' | 'purple' | 'red' | 'grey';
+        icon?: React.ReactNode;
+        variant?: 'outline' | 'filled';
+    }
+    After: {
+        text: string;
+        color?: 'blue' | 'teal' | 'green' | 'orange' | 'purple' | 'red' | 'grey';
+        icon?: React.ReactNode;
+        variant?: 'outline' | 'filled';
+    }
+
+    Value changes:
+      'cyan' → 'teal' (direct replacement)
+  when:
+    or:
+    - or:
+      - frontend.referenced:
+          pattern: ^CatalogItemAttribute$
+          location: TYPE_REFERENCE
+          from: '@openshift-console/dynamic-plugin-sdk'
+      - frontend.referenced:
+          pattern: ^CatalogItemAttribute$
+          location: IMPORT
+          from: '@openshift-console/dynamic-plugin-sdk'
+    - or:
+      - frontend.referenced:
+          pattern: ^CatalogItemBadge$
+          location: TYPE_REFERENCE
+          from: '@openshift-console/dynamic-plugin-sdk'
+      - frontend.referenced:
+          pattern: ^CatalogItemBadge$
+          location: IMPORT
+          from: '@openshift-console/dynamic-plugin-sdk'
+- ruleID: semver-frontend-packages-console-dynamic-plugin-sdk-src-extensions-cluster-configuration-d-ts-clusterconfigurationdropdownfield-removed-group-2
+  labels:
+  - change-type=removed
+  - has-codemod=false
+  - kind=type-alias
+  - package=@openshift-console/dynamic-plugin-sdk
+  - source=semver-analyzer
+  effort: 5
+  category: mandatory
+  description: 2 related changes
+  message: |
+    This rule contains 2 migration steps. Apply each one independently:
+
+    Step 1 of 2:
+    Type-alias 'ClusterConfigurationDropdownField' was removed (type-alias): Exported type alias `ClusterConfigurationDropdownField` was removed
+
+    File: frontend/packages/console-dynamic-plugin-sdk/src/extensions/cluster-configuration.d.ts
+    Before: type alias: ClusterConfigurationDropdownField: {
+        type: ClusterConfigurationFieldType.dropdown;
+        defaultValue?: ClusterConfigurationDropdownFieldValue;
+        options: {
+            value: ClusterConfigurationDropdownFieldValue;
+            label: string;
+            description?: string;
+        }[];
+        /**
+         * A patch operation that is used to save if the checkbox is checked.
+         * if `update.patch.value` is not defined a true (boolean) is automatically set.
+         * If `update.patch.value` is defined is must be a string, object or array.
+         * The text value will be automatically inserted into the placeholder `$value`.
+         */
+        resource: Resource;
+        path: Path;
+    }
+
+    Step 2 of 2:
+    Type-alias 'ClusterConfigurationDropdownFieldValue' was removed (type-alias): Exported type alias `ClusterConfigurationDropdownFieldValue` was removed
+
+    File: frontend/packages/console-dynamic-plugin-sdk/src/extensions/cluster-configuration.d.ts
+    Before: type alias: ClusterConfigurationDropdownFieldValue: string
+  when:
+    or:
+    - or:
+      - frontend.referenced:
+          pattern: ^ClusterConfigurationDropdownField$
+          location: TYPE_REFERENCE
+          from: '@openshift-console/dynamic-plugin-sdk'
+      - frontend.referenced:
+          pattern: ^ClusterConfigurationDropdownField$
+          location: IMPORT
+          from: '@openshift-console/dynamic-plugin-sdk'
+    - or:
+      - frontend.referenced:
+          pattern: ^ClusterConfigurationDropdownFieldValue$
+          location: TYPE_REFERENCE
+          from: '@openshift-console/dynamic-plugin-sdk'
+      - frontend.referenced:
+          pattern: ^ClusterConfigurationDropdownFieldValue$
+          location: IMPORT
+          from: '@openshift-console/dynamic-plugin-sdk'
+- ruleID: semver-frontend-packages-console-dynamic-plugin-sdk-src-extensions-console-types-d-ts-k8sverb-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=removed
+  - kind=type-alias
+  - has-codemod=false
+  - package=@openshift-console/dynamic-plugin-sdk
+  effort: 5
+  category: mandatory
+  description: Exported type alias `K8sVerb` was removed
+  message: |-
+    Type-alias 'K8sVerb' was removed (type-alias): Exported type alias `K8sVerb` was removed
+
+    File: frontend/packages/console-dynamic-plugin-sdk/src/extensions/console-types.d.ts
+    Before: type alias: K8sVerb: 'create' | 'get' | 'list' | 'update' | 'patch' | 'delete' | 'deletecollection' | 'watch' | 'impersonate'
+  when:
+    or:
+    - frontend.referenced:
+        pattern: ^K8sVerb$
+        location: TYPE_REFERENCE
+        from: '@openshift-console/dynamic-plugin-sdk'
+    - frontend.referenced:
+        pattern: ^K8sVerb$
+        location: IMPORT
+        from: '@openshift-console/dynamic-plugin-sdk'
+- ruleID: semver-frontend-packages-console-dynamic-plugin-sdk-src-extensions-console-types-d-ts-codeeditorprops-type-changed-group-2
+  labels:
+  - change-scope=additive
+  - change-type=type-changed
+  - family=editor
+  - family=factory
+  - has-codemod=false
+  - kind=type-alias
+  - package=@openshift-console/dynamic-plugin-sdk
+  - source=semver-analyzer
+  effort: 3
+  category: mandatory
+  description: 2 related changes
+  message: |
+    This rule contains 2 migration steps. Apply each one independently:
+
+    Step 1 of 2:
+    Type-alias 'CodeEditorProps' had its type changed (type-alias): Return type of `CodeEditorProps` changed from `{
+        value?: string;
+        language?: string;
+        options?: object;
+        minHeight?: string | number;
+        showShortcuts?: boolean;
+        showMiniMap?: boolean;
+        toolbarLinks?: React.ReactNodeArray;
+        onChange?: (newValue: any, event: any) => void;
+        onSave?: () => void;
+    }` to `Omit<BasicCodeEditorProps, 'code'> & CodeEditorToolbarProps & {
+        /** Code displayed in code editor. */
+        value?: string;
+        /** Minimum editor height in valid CSS height values. */
+        minHeight?: CSSStyleDeclaration['minHeight'];
+        /** Callback that is run when CTRL / CMD + S is pressed */
+        onSave?: () => void;
+    }`
+
+    File: frontend/packages/console-dynamic-plugin-sdk/src/extensions/console-types.d.ts
+    Before: {
+        value?: string;
+        language?: string;
+        options?: object;
+        minHeight?: string | number;
+        showShortcuts?: boolean;
+        showMiniMap?: boolean;
+        toolbarLinks?: React.ReactNodeArray;
+        onChange?: (newValue: any, event: any) => void;
+        onSave?: () => void;
+    }
+    After: Omit<BasicCodeEditorProps, 'code'> & CodeEditorToolbarProps & {
+        /** Code displayed in code editor. */
+        value?: string;
+        /** Minimum editor height in valid CSS height values. */
+        minHeight?: CSSStyleDeclaration['minHeight'];
+        /** Callback that is run when CTRL / CMD + S is pressed */
+        onSave?: () => void;
+    }
+
+    Step 2 of 2:
+    Type-alias 'ListPageHeaderProps' had its type changed (type-alias): Return type of `ListPageHeaderProps` changed from `{
+        title: string;
+        helpText?: React.ReactNode;
+        badge?: React.ReactNode;
+    }` to `{
+        /** A badge that is displayed next to the title of the heading */
+        badge?: React.ReactNode;
+        /** A primary action that is always rendered. */
+        children?: React.ReactNode;
+        /** An alert placed below the heading in the same PageSection. */
+        helpAlert?: React.ReactNode;
+        /** A subtitle placed below the title. */
+        helpText?: React.ReactNode;
+        /**
+         * The "Add to favourites" button is shown by default while in the admin perspective.
+         * This prop allows you to hide the button. It should be hidden when `ListPageHeader`
+         * is not the primary page header to avoid having multiple favourites buttons.
+         */
+        hideFavoriteButton?: boolean;
+        /** The heading title. If no title is set, only the `children`, `badge`, and `helpAlert` props will be rendered */
+        title: string;
+    }`
+
+    File: frontend/packages/console-dynamic-plugin-sdk/src/extensions/console-types.d.ts
+    Before: {
+        title: string;
+        helpText?: React.ReactNode;
+        badge?: React.ReactNode;
+    }
+    After: {
+        /** A badge that is displayed next to the title of the heading */
+        badge?: React.ReactNode;
+        /** A primary action that is always rendered. */
+        children?: React.ReactNode;
+        /** An alert placed below the heading in the same PageSection. */
+        helpAlert?: React.ReactNode;
+        /** A subtitle placed below the title. */
+        helpText?: React.ReactNode;
+        /**
+         * The "Add to favourites" button is shown by default while in the admin perspective.
+         * This prop allows you to hide the button. It should be hidden when `ListPageHeader`
+         * is not the primary page header to avoid having multiple favourites buttons.
+         */
+        hideFavoriteButton?: boolean;
+        /** The heading title. If no title is set, only the `children`, `badge`, and `helpAlert` props will be rendered */
+        title: string;
+    }
+  when:
+    or:
+    - or:
+      - frontend.referenced:
+          pattern: ^CodeEditorProps$
+          location: TYPE_REFERENCE
+          from: '@openshift-console/dynamic-plugin-sdk'
+      - frontend.referenced:
+          pattern: ^CodeEditorProps$
+          location: IMPORT
+          from: '@openshift-console/dynamic-plugin-sdk'
+    - or:
+      - frontend.referenced:
+          pattern: ^ListPageHeaderProps$
+          location: TYPE_REFERENCE
+          from: '@openshift-console/dynamic-plugin-sdk'
+      - frontend.referenced:
+          pattern: ^ListPageHeaderProps$
+          location: IMPORT
+          from: '@openshift-console/dynamic-plugin-sdk'
+- ruleID: semver-frontend-packages-console-dynamic-plugin-sdk-src-extensions-console-types-d-ts-codeeditorref-type-changed-group-5
+  labels:
+  - change-type=type-changed
+  - family=factory
+  - has-codemod=true
+  - kind=type-alias
+  - package=@openshift-console/dynamic-plugin-sdk
+  - source=semver-analyzer
+  effort: 3
+  category: mandatory
+  description: 5 related changes
+  message: |
+    This rule contains 5 migration steps. Apply each one independently:
+
+    Step 1 of 5:
+    Type-alias 'CodeEditorRef' had its type changed (type-alias): Return type of `CodeEditorRef` changed from `{
+        editor?: MonacoEditor['editor'];
+    }` to `{
+        editor: monaco.editor.IStandaloneCodeEditor;
+        monaco: typeof monaco;
+    }`
+
+    File: frontend/packages/console-dynamic-plugin-sdk/src/extensions/console-types.d.ts
+    Before: {
+        editor?: MonacoEditor['editor'];
+    }
+    After: {
+        editor: monaco.editor.IStandaloneCodeEditor;
+        monaco: typeof monaco;
+    }
+
+    Step 2 of 5:
+    Type-alias 'HorizontalNavProps' had its type changed (type-alias): Return type of `HorizontalNavProps` changed from `{
+        resource?: K8sResourceCommon;
+        pages: NavPage[];
+    }` to `{
+        resource?: K8sResourceCommon;
+        pages: NavPage[];
+        customData?: object;
+        contextId?: string;
+    }`
+
+    File: frontend/packages/console-dynamic-plugin-sdk/src/extensions/console-types.d.ts
+    Before: {
+        resource?: K8sResourceCommon;
+        pages: NavPage[];
+    }
+    After: {
+        resource?: K8sResourceCommon;
+        pages: NavPage[];
+        customData?: object;
+        contextId?: string;
+    }
+
+    Step 3 of 5:
+    Type-alias 'NodeKind' had its type changed (type-alias): Return type of `NodeKind` changed from `{
+        spec: {
+            taints?: Taint[];
+            unschedulable?: boolean;
+        };
+        status?: {
+            capacity?: {
+                [key: string]: string;
+            };
+            allocatable?: {
+                [key: string]: string;
+            };
+            conditions?: NodeCondition[];
+            images?: {
+                names: string[];
+                sizeBytes?: number;
+            }[];
+            phase?: string;
+            nodeInfo?: {
+                operatingSystem: string;
+            };
+            addresses?: NodeAddress[];
+        };
+    } & K8sResourceCommon` to `{
+        spec: {
+            taints?: Taint[];
+            unschedulable?: boolean;
+        };
+        status?: {
+            capacity?: {
+                [key: string]: string;
+            };
+            allocatable?: {
+                [key: string]: string;
+            };
+            conditions?: NodeCondition[];
+            images?: {
+                names: string[];
+                sizeBytes?: number;
+            }[];
+            phase?: string;
+            nodeInfo?: {
+                operatingSystem: string;
+                architecture: string;
+            };
+            addresses?: NodeAddress[];
+        };
+    } & K8sResourceCommon`
+
+    File: frontend/packages/console-dynamic-plugin-sdk/src/extensions/console-types.d.ts
+    Before: {
+        spec: {
+            taints?: Taint[];
+            unschedulable?: boolean;
+        };
+        status?: {
+            capacity?: {
+                [key: string]: string;
+            };
+            allocatable?: {
+                [key: string]: string;
+            };
+            conditions?: NodeCondition[];
+            images?: {
+                names: string[];
+                sizeBytes?: number;
+            }[];
+            phase?: string;
+            nodeInfo?: {
+                operatingSystem: string;
+            };
+            addresses?: NodeAddress[];
+        };
+    } & K8sResourceCommon
+    After: {
+        spec: {
+            taints?: Taint[];
+            unschedulable?: boolean;
+        };
+        status?: {
+            capacity?: {
+                [key: string]: string;
+            };
+            allocatable?: {
+                [key: string]: string;
+            };
+            conditions?: NodeCondition[];
+            images?: {
+                names: string[];
+                sizeBytes?: number;
+            }[];
+            phase?: string;
+            nodeInfo?: {
+                operatingSystem: string;
+                architecture: string;
+            };
+            addresses?: NodeAddress[];
+        };
+    } & K8sResourceCommon
+
+    Step 4 of 5:
+    Type-alias 'RowProps' had its type changed (type-alias): Return type of `RowProps` changed from `{
+        obj: D;
+        rowData: R;
+        activeColumnIDs: Set<string>;
+    }` to `{
+        obj: D;
+        rowData: R;
+        activeColumnIDs: Set<string>;
+        index: number;
+        onSelect?: OnSelect;
+    }`
+
+    File: frontend/packages/console-dynamic-plugin-sdk/src/extensions/console-types.d.ts
+    Before: {
+        obj: D;
+        rowData: R;
+        activeColumnIDs: Set<string>;
+    }
+    After: {
+        obj: D;
+        rowData: R;
+        activeColumnIDs: Set<string>;
+        index: number;
+        onSelect?: OnSelect;
+    }
+
+    Step 5 of 5:
+    Type-alias 'VirtualizedTableProps' had its type changed (type-alias): Return type of `VirtualizedTableProps` changed from `{
+        data: D[];
+        unfilteredData: D[];
+        loaded: boolean;
+        loadError: any;
+        columns: TableColumn<D>[];
+        Row: React.ComponentType<RowProps<D, R>>;
+        NoDataEmptyMsg?: React.ComponentType<{}>;
+        EmptyMsg?: React.ComponentType<{}>;
+        scrollNode?: () => HTMLElement;
+        onSelect?: OnSelect;
+        label?: string;
+        'aria-label'?: string;
+        gridBreakPoint?: TableGridBreakpoint;
+        rowData?: R;
+        mock?: boolean;
+        sortColumnIndex?: number;
+        sortDirection?: SortByDirection;
+    }` to `{
+        data: D[];
+        unfilteredData: D[];
+        loaded: boolean;
+        loadError: any;
+        columns: TableColumn<D>[];
+        Row: React.ComponentType<RowProps<D, R>>;
+        NoDataEmptyMsg?: React.ComponentType<{}>;
+        EmptyMsg?: React.ComponentType<{}>;
+        scrollNode?: () => HTMLElement;
+        onSelect?: OnSelect;
+        allRowsSelected?: boolean;
+        canSelectAll?: boolean;
+        label?: string;
+        'aria-label'?: string;
+        gridBreakPoint?: TableGridBreakpoint;
+        rowData?: R;
+        mock?: boolean;
+        sortColumnIndex?: number;
+        sortDirection?: SortByDirection;
+        csvData?: string;
+        onRowsRendered?: OnRowsRendered;
+    }`
+
+    File: frontend/packages/console-dynamic-plugin-sdk/src/extensions/console-types.d.ts
+    Before: {
+        data: D[];
+        unfilteredData: D[];
+        loaded: boolean;
+        loadError: any;
+        columns: TableColumn<D>[];
+        Row: React.ComponentType<RowProps<D, R>>;
+        NoDataEmptyMsg?: React.ComponentType<{}>;
+        EmptyMsg?: React.ComponentType<{}>;
+        scrollNode?: () => HTMLElement;
+        onSelect?: OnSelect;
+        label?: string;
+        'aria-label'?: string;
+        gridBreakPoint?: TableGridBreakpoint;
+        rowData?: R;
+        mock?: boolean;
+        sortColumnIndex?: number;
+        sortDirection?: SortByDirection;
+    }
+    After: {
+        data: D[];
+        unfilteredData: D[];
+        loaded: boolean;
+        loadError: any;
+        columns: TableColumn<D>[];
+        Row: React.ComponentType<RowProps<D, R>>;
+        NoDataEmptyMsg?: React.ComponentType<{}>;
+        EmptyMsg?: React.ComponentType<{}>;
+        scrollNode?: () => HTMLElement;
+        onSelect?: OnSelect;
+        allRowsSelected?: boolean;
+        canSelectAll?: boolean;
+        label?: string;
+        'aria-label'?: string;
+        gridBreakPoint?: TableGridBreakpoint;
+        rowData?: R;
+        mock?: boolean;
+        sortColumnIndex?: number;
+        sortDirection?: SortByDirection;
+        csvData?: string;
+        onRowsRendered?: OnRowsRendered;
+    }
+  when:
+    or:
+    - or:
+      - frontend.referenced:
+          pattern: ^CodeEditorRef$
+          location: TYPE_REFERENCE
+          from: '@openshift-console/dynamic-plugin-sdk'
+      - frontend.referenced:
+          pattern: ^CodeEditorRef$
+          location: IMPORT
+          from: '@openshift-console/dynamic-plugin-sdk'
+    - or:
+      - frontend.referenced:
+          pattern: ^HorizontalNavProps$
+          location: TYPE_REFERENCE
+          from: '@openshift-console/dynamic-plugin-sdk'
+      - frontend.referenced:
+          pattern: ^HorizontalNavProps$
+          location: IMPORT
+          from: '@openshift-console/dynamic-plugin-sdk'
+    - or:
+      - frontend.referenced:
+          pattern: ^NodeKind$
+          location: TYPE_REFERENCE
+          from: '@openshift-console/dynamic-plugin-sdk'
+      - frontend.referenced:
+          pattern: ^NodeKind$
+          location: IMPORT
+          from: '@openshift-console/dynamic-plugin-sdk'
+    - or:
+      - frontend.referenced:
+          pattern: ^RowProps$
+          location: TYPE_REFERENCE
+          from: '@openshift-console/dynamic-plugin-sdk'
+      - frontend.referenced:
+          pattern: ^RowProps$
+          location: IMPORT
+          from: '@openshift-console/dynamic-plugin-sdk'
+    - or:
+      - frontend.referenced:
+          pattern: ^VirtualizedTableProps$
+          location: TYPE_REFERENCE
+          from: '@openshift-console/dynamic-plugin-sdk'
+      - frontend.referenced:
+          pattern: ^VirtualizedTableProps$
+          location: IMPORT
+          from: '@openshift-console/dynamic-plugin-sdk'
+- ruleID: semver-frontend-packages-console-dynamic-plugin-sdk-src-extensions-details-item-d-ts-detailsitem-type-changed
+  labels:
+  - source=semver-analyzer
+  - change-type=type-changed
+  - kind=type-alias
+  - has-codemod=true
+  - package=@openshift-console/dynamic-plugin-sdk
+  effort: 3
+  category: mandatory
+  description: |-
+    Return type of `DetailsItem` changed from `ExtensionDeclaration<'console.resource/details-item', {
+        /** The subject resource's API group, version, and kind. */
+        model: ExtensionK8sModel;
+        /** A unique identifier. */
+        id: string;
+        /**
+         * Determines if the item will appear in the 'left' or 'right' column of the resource summary on
+         * the details page. Default: 'right'
+         */
+        column: DetailsItemColumn;
+        /** The details item title. */
+        title: string;
+        /**
+         * An optional, fully-qualified path to a resource property to used as the details item
+         * value. Only [primitive type](https://developer.mozilla.org/en-US/docs/Glossary/Primitive)
+         * values can be rendered directly. Use the component property to handle other data types.
+         */
+        path?: string;
+        /**
+         * An optional React component that will render the details item value.
+         */
+        component?: CodeRef<React.ComponentType<DetailsItemComponentProps>>;
+        /**
+         * An optional sort weight, relative to all other details items in the same column. Represented
+         * by any valid [JavaScript
+         * Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#number_type).
+         * Items in each column are sorted independently, lowest to highest. Items without sort weights
+         * are sorted after items with sort weights.
+         */
+        sortWeight?: number;
+    }>` to `ExtensionDeclaration<'console.resource/details-item', {
+        /** The subject resource's API group, version, and kind. */
+        model: ExtensionK8sModel;
+        /** A unique identifier. */
+        id: string;
+        /**
+         * Determines if the item will appear in the 'left' or 'right' column of the resource summary on
+         * the details page. Default: 'right'
+         */
+        column: DetailsItemColumn;
+        /** The details item title. */
+        title: string;
+        /**
+         * An optional description that will appear in the title popover.
+         */
+        description?: string;
+        /**
+         * An optional, fully-qualified path to a resource property to used as the details item
+         * value. Only [primitive type](https://developer.mozilla.org/en-US/docs/Glossary/Primitive)
+         * values can be rendered directly. Use the component property to handle other data types.
+         */
+        path?: string;
+        /**
+         * An optional React component that will render the details item value.
+         */
+        component?: CodeRef<React.ComponentType<DetailsItemComponentProps>>;
+        /**
+         * An optional sort weight, relative to all other details items in the same column. Represented
+         * by any valid [JavaScript
+         * Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#number_type).
+         * Items in each column are sorted independently, lowest to highest. Items without sort weights
+         * are sorted after items with sort weights.
+         */
+        sortWeight?: number;
+    }>`
+  message: |-
+    Type-alias 'DetailsItem' had its type changed (type-alias): Return type of `DetailsItem` changed from `ExtensionDeclaration<'console.resource/details-item', {
+        /** The subject resource's API group, version, and kind. */
+        model: ExtensionK8sModel;
+        /** A unique identifier. */
+        id: string;
+        /**
+         * Determines if the item will appear in the 'left' or 'right' column of the resource summary on
+         * the details page. Default: 'right'
+         */
+        column: DetailsItemColumn;
+        /** The details item title. */
+        title: string;
+        /**
+         * An optional, fully-qualified path to a resource property to used as the details item
+         * value. Only [primitive type](https://developer.mozilla.org/en-US/docs/Glossary/Primitive)
+         * values can be rendered directly. Use the component property to handle other data types.
+         */
+        path?: string;
+        /**
+         * An optional React component that will render the details item value.
+         */
+        component?: CodeRef<React.ComponentType<DetailsItemComponentProps>>;
+        /**
+         * An optional sort weight, relative to all other details items in the same column. Represented
+         * by any valid [JavaScript
+         * Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#number_type).
+         * Items in each column are sorted independently, lowest to highest. Items without sort weights
+         * are sorted after items with sort weights.
+         */
+        sortWeight?: number;
+    }>` to `ExtensionDeclaration<'console.resource/details-item', {
+        /** The subject resource's API group, version, and kind. */
+        model: ExtensionK8sModel;
+        /** A unique identifier. */
+        id: string;
+        /**
+         * Determines if the item will appear in the 'left' or 'right' column of the resource summary on
+         * the details page. Default: 'right'
+         */
+        column: DetailsItemColumn;
+        /** The details item title. */
+        title: string;
+        /**
+         * An optional description that will appear in the title popover.
+         */
+        description?: string;
+        /**
+         * An optional, fully-qualified path to a resource property to used as the details item
+         * value. Only [primitive type](https://developer.mozilla.org/en-US/docs/Glossary/Primitive)
+         * values can be rendered directly. Use the component property to handle other data types.
+         */
+        path?: string;
+        /**
+         * An optional React component that will render the details item value.
+         */
+        component?: CodeRef<React.ComponentType<DetailsItemComponentProps>>;
+        /**
+         * An optional sort weight, relative to all other details items in the same column. Represented
+         * by any valid [JavaScript
+         * Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#number_type).
+         * Items in each column are sorted independently, lowest to highest. Items without sort weights
+         * are sorted after items with sort weights.
+         */
+        sortWeight?: number;
+    }>`
+
+    File: frontend/packages/console-dynamic-plugin-sdk/src/extensions/details-item.d.ts
+    Before: ExtensionDeclaration<'console.resource/details-item', {
+        /** The subject resource's API group, version, and kind. */
+        model: ExtensionK8sModel;
+        /** A unique identifier. */
+        id: string;
+        /**
+         * Determines if the item will appear in the 'left' or 'right' column of the resource summary on
+         * the details page. Default: 'right'
+         */
+        column: DetailsItemColumn;
+        /** The details item title. */
+        title: string;
+        /**
+         * An optional, fully-qualified path to a resource property to used as the details item
+         * value. Only [primitive type](https://developer.mozilla.org/en-US/docs/Glossary/Primitive)
+         * values can be rendered directly. Use the component property to handle other data types.
+         */
+        path?: string;
+        /**
+         * An optional React component that will render the details item value.
+         */
+        component?: CodeRef<React.ComponentType<DetailsItemComponentProps>>;
+        /**
+         * An optional sort weight, relative to all other details items in the same column. Represented
+         * by any valid [JavaScript
+         * Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#number_type).
+         * Items in each column are sorted independently, lowest to highest. Items without sort weights
+         * are sorted after items with sort weights.
+         */
+        sortWeight?: number;
+    }>
+    After: ExtensionDeclaration<'console.resource/details-item', {
+        /** The subject resource's API group, version, and kind. */
+        model: ExtensionK8sModel;
+        /** A unique identifier. */
+        id: string;
+        /**
+         * Determines if the item will appear in the 'left' or 'right' column of the resource summary on
+         * the details page. Default: 'right'
+         */
+        column: DetailsItemColumn;
+        /** The details item title. */
+        title: string;
+        /**
+         * An optional description that will appear in the title popover.
+         */
+        description?: string;
+        /**
+         * An optional, fully-qualified path to a resource property to used as the details item
+         * value. Only [primitive type](https://developer.mozilla.org/en-US/docs/Glossary/Primitive)
+         * values can be rendered directly. Use the component property to handle other data types.
+         */
+        path?: string;
+        /**
+         * An optional React component that will render the details item value.
+         */
+        component?: CodeRef<React.ComponentType<DetailsItemComponentProps>>;
+        /**
+         * An optional sort weight, relative to all other details items in the same column. Represented
+         * by any valid [JavaScript
+         * Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#number_type).
+         * Items in each column are sorted independently, lowest to highest. Items without sort weights
+         * are sorted after items with sort weights.
+         */
+        sortWeight?: number;
+    }>
+  when:
+    or:
+    - frontend.referenced:
+        pattern: ^DetailsItem$
+        location: TYPE_REFERENCE
+        from: '@openshift-console/dynamic-plugin-sdk'
+    - frontend.referenced:
+        pattern: ^DetailsItem$
+        location: IMPORT
+        from: '@openshift-console/dynamic-plugin-sdk'
+- ruleID: semver-openshift-console-dynamic-plugin-sdk-constant-type-changed-llmassisted-combined
+  labels:
+  - source=semver-analyzer
+  - change-type=type-changed
+  - kind=constant
+  - has-codemod=true
+  - package=@openshift-console/dynamic-plugin-sdk
+  effort: 3
+  category: mandatory
+  description: 13 constants from @openshift-console/dynamic-plugin-sdk have breaking changes
+  message: |-
+    13 constants from `@openshift-console/dynamic-plugin-sdk` had breaking changes (type-changed).
+    Affected constants include: useAccessReview, isResolvedDashboardsOverviewHealthPrometheusSubsystem, isDashboardsOverviewHealthURLSubsystem, isResolvedDashboardsOverviewHealthURLSubsystem, isDashboardsOverviewHealthResourceSubsystem and 8 more.
+
+    Per-constant changes:
+      - useAccessReview: (resourceAttributes: AccessReviewResourceAttributes, impersonate?: Impersonat... → (resourceAttributes: AccessReviewResourceAttributes, impersonate?: Impersonat...
+      - isResolvedDashboardsOverviewHealthPrometheusSubsystem: (e: Extension) => e is ResolvedExtension<DashboardsOverviewHealthPrometheusSu... → (e: Extension) => e is ResolvedExtension<DashboardsOverviewHealthPrometheusSu...
+      - isDashboardsOverviewHealthURLSubsystem: (e: Extension) => e is DashboardsOverviewHealthURLSubsystem<any, K8sResourceC... → (e: Extension) => e is DashboardsOverviewHealthURLSubsystem
+      - isResolvedDashboardsOverviewHealthURLSubsystem: (e: Extension) => e is ResolvedExtension<DashboardsOverviewHealthURLSubsystem... → (e: Extension) => e is ResolvedExtension<DashboardsOverviewHealthURLSubsystem>
+      - isDashboardsOverviewHealthResourceSubsystem: (e: Extension) => e is DashboardsOverviewHealthResourceSubsystem<ResourcesObj... → (e: Extension) => e is DashboardsOverviewHealthResourceSubsystem
+      - isResolvedDashboardsOverviewHealthResourceSubsystem: (e: Extension) => e is ResolvedExtension<DashboardsOverviewHealthResourceSubs... → (e: Extension) => e is ResolvedExtension<DashboardsOverviewHealthResourceSubs...
+      - isDashboardsOverviewHealthOperator: (e: Extension) => e is DashboardsOverviewHealthOperator<K8sResourceCommon> → (e: Extension) => e is DashboardsOverviewHealthOperator
+      - isResolvedDashboardsOverviewHealthOperator: (e: Extension) => e is ResolvedExtension<DashboardsOverviewHealthOperator<K8s... → (e: Extension) => e is ResolvedExtension<DashboardsOverviewHealthOperator>
+      - isDashboardsOverviewInventoryItem: (e: Extension) => e is DashboardsOverviewInventoryItem<K8sModel, { [key: stri... → (e: Extension) => e is DashboardsOverviewInventoryItem
+      - isDashboardsOverviewInventoryItemReplacement: (e: Extension) => e is DashboardsOverviewInventoryItemReplacement<K8sModel, {... → (e: Extension) => e is DashboardsOverviewInventoryItemReplacement
+      ... and 3 more
+  when:
+    frontend.referenced:
+      pattern: ^(isDashboardsOverviewHealthOperator|isDashboardsOverviewHealthResourceSubsystem|isDashboardsOverviewHealthURLSubsystem|isDashboardsOverviewInventoryItem|isDashboardsOverviewInventoryItemReplacement|isDashboardsOverviewResourceActivity|isDashboardsProjectOverviewInventoryItem|isNodeStatus|isResolvedDashboardsOverviewHealthOperator|isResolvedDashboardsOverviewHealthPrometheusSubsystem|isResolvedDashboardsOverviewHealthResourceSubsystem|isResolvedDashboardsOverviewHealthURLSubsystem|useAccessReview)$
+      location: IMPORT
+      from: '@openshift-console/dynamic-plugin-sdk'
+- ruleID: sd-required-prop-multiplekeyselector-keys
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<MultipleKeySelector> now requires the `keys` prop (type: `{ [key: string]: string }`)'
+  message: |-
+    <MultipleKeySelector> has a new required prop `keys` (type: `{ [key: string]: string }`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <MultipleKeySelector keys={...} />
+  when:
+    frontend.referenced:
+      pattern: ^MultipleKeySelector$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-multiplekeyselector-name
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<MultipleKeySelector> now requires the `name` prop (type: `string`)'
+  message: |-
+    <MultipleKeySelector> has a new required prop `name` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <MultipleKeySelector name={...} />
+  when:
+    frontend.referenced:
+      pattern: ^MultipleKeySelector$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-eventsource-namespace
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<EventSource> now requires the `namespace` prop (type: `string`)'
+  message: |-
+    <EventSource> has a new required prop `namespace` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <EventSource namespace={...} />
+  when:
+    frontend.referenced:
+      pattern: ^EventSource$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-eventsource-normalizedsource
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<EventSource> now requires the `normalizedSource` prop (type: `KnEventCatalogMetaData`)'
+  message: |-
+    <EventSource> has a new required prop `normalizedSource` (type: `KnEventCatalogMetaData`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <EventSource normalizedSource={...} />
+  when:
+    frontend.referenced:
+      pattern: ^EventSource$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-deployimage-namespace
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<DeployImage> now requires the `namespace` prop (type: `string`)'
+  message: |-
+    <DeployImage> has a new required prop `namespace` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <DeployImage namespace={...} />
+  when:
+    frontend.referenced:
+      pattern: ^DeployImage$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-machinelink-host
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/metal3-plugin
+  effort: 1
+  category: mandatory
+  description: '<MachineLink> now requires the `host` prop (type: `BareMetalHostKind`)'
+  message: |-
+    <MachineLink> has a new required prop `host` (type: `BareMetalHostKind`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <MachineLink host={...} />
+  when:
+    frontend.referenced:
+      pattern: ^MachineLink$
+      location: JSX_COMPONENT
+      from: '@patternfly/metal3-plugin'
+- ruleID: sd-required-prop-apiserversection-title
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<ApiServerSection> now requires the `title` prop (type: `string`)'
+  message: |-
+    <ApiServerSection> has a new required prop `title` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <ApiServerSection title={...} />
+  when:
+    frontend.referenced:
+      pattern: ^ApiServerSection$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-sinkpubsubmodal-labeltitle
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<SinkPubsubModal> now requires the `labelTitle` prop (type: `string`)'
+  message: |-
+    <SinkPubsubModal> has a new required prop `labelTitle` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <SinkPubsubModal labelTitle={...} />
+  when:
+    frontend.referenced:
+      pattern: ^SinkPubsubModal$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-sinkpubsubmodal-resourcedropdown
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<SinkPubsubModal> now requires the `resourceDropdown` prop (type: `FirehoseResource[]`)'
+  message: |-
+    <SinkPubsubModal> has a new required prop `resourceDropdown` (type: `FirehoseResource[]`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <SinkPubsubModal resourceDropdown={...} />
+  when:
+    frontend.referenced:
+      pattern: ^SinkPubsubModal$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-sinkpubsubmodal-resourcename
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<SinkPubsubModal> now requires the `resourceName` prop (type: `string`)'
+  message: |-
+    <SinkPubsubModal> has a new required prop `resourceName` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <SinkPubsubModal resourceName={...} />
+  when:
+    frontend.referenced:
+      pattern: ^SinkPubsubModal$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-repositorypipelinerunlistpage-obj
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<RepositoryPipelineRunListPage> now requires the `obj` prop (type: `RepositoryKind`)'
+  message: |-
+    <RepositoryPipelineRunListPage> has a new required prop `obj` (type: `RepositoryKind`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <RepositoryPipelineRunListPage obj={...} />
+  when:
+    frontend.referenced:
+      pattern: ^RepositoryPipelineRunListPage$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-pipelineform-pipelineformcomponent
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<PipelineForm> now requires the `PipelineFormComponent` prop (type: `React.ComponentType<any>`)'
+  message: |-
+    <PipelineForm> has a new required prop `PipelineFormComponent` (type: `React.ComponentType<any>`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <PipelineForm PipelineFormComponent={...} />
+  when:
+    frontend.referenced:
+      pattern: ^PipelineForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-pipelineform-formname
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<PipelineForm> now requires the `formName` prop (type: `string`)'
+  message: |-
+    <PipelineForm> has a new required prop `formName` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <PipelineForm formName={...} />
+  when:
+    frontend.referenced:
+      pattern: ^PipelineForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-pipelineform-obj
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<PipelineForm> now requires the `obj` prop (type: `K8sResourceKind`)'
+  message: |-
+    <PipelineForm> has a new required prop `obj` (type: `K8sResourceKind`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <PipelineForm obj={...} />
+  when:
+    frontend.referenced:
+      pattern: ^PipelineForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-pipelineform-validationschema
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<PipelineForm> now requires the `validationSchema` prop (type: `any`)'
+  message: |-
+    <PipelineForm> has a new required prop `validationSchema` (type: `any`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <PipelineForm validationSchema={...} />
+  when:
+    frontend.referenced:
+      pattern: ^PipelineForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-linkedpipelineruntaskstatus-pipelinerun
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<LinkedPipelineRunTaskStatus> now requires the `pipelineRun` prop (type: `PipelineRunKind`)'
+  message: |-
+    <LinkedPipelineRunTaskStatus> has a new required prop `pipelineRun` (type: `PipelineRunKind`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <LinkedPipelineRunTaskStatus pipelineRun={...} />
+  when:
+    frontend.referenced:
+      pattern: ^LinkedPipelineRunTaskStatus$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-linkedpipelineruntaskstatus-taskruns
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<LinkedPipelineRunTaskStatus> now requires the `taskRuns` prop (type: `TaskRunKind[]`)'
+  message: |-
+    <LinkedPipelineRunTaskStatus> has a new required prop `taskRuns` (type: `TaskRunKind[]`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <LinkedPipelineRunTaskStatus taskRuns={...} />
+  when:
+    frontend.referenced:
+      pattern: ^LinkedPipelineRunTaskStatus$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-pvcdropdown-name
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<PVCDropdown> now requires the `name` prop (type: `string`)'
+  message: |-
+    <PVCDropdown> has a new required prop `name` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <PVCDropdown name={...} />
+  when:
+    frontend.referenced:
+      pattern: ^PVCDropdown$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-createsecretmodal-formtype
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<CreateSecretModal> now requires the `formType` prop (type: `SecretFormType`)'
+  message: |-
+    <CreateSecretModal> has a new required prop `formType` (type: `SecretFormType`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <CreateSecretModal formType={...} />
+  when:
+    frontend.referenced:
+      pattern: ^CreateSecretModal$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-revisionroutedecorator-element
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<RevisionRouteDecorator> now requires the `element` prop (type: `Node`)'
+  message: |-
+    <RevisionRouteDecorator> has a new required prop `element` (type: `Node`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <RevisionRouteDecorator element={...} />
+  when:
+    frontend.referenced:
+      pattern: ^RevisionRouteDecorator$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-revisionroutedecorator-radius
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<RevisionRouteDecorator> now requires the `radius` prop (type: `number`)'
+  message: |-
+    <RevisionRouteDecorator> has a new required prop `radius` (type: `number`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <RevisionRouteDecorator radius={...} />
+  when:
+    frontend.referenced:
+      pattern: ^RevisionRouteDecorator$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-revisionroutedecorator-x
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<RevisionRouteDecorator> now requires the `x` prop (type: `number`)'
+  message: |-
+    <RevisionRouteDecorator> has a new required prop `x` (type: `number`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <RevisionRouteDecorator x={...} />
+  when:
+    frontend.referenced:
+      pattern: ^RevisionRouteDecorator$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-revisionroutedecorator-y
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<RevisionRouteDecorator> now requires the `y` prop (type: `number`)'
+  message: |-
+    <RevisionRouteDecorator> has a new required prop `y` (type: `number`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <RevisionRouteDecorator y={...} />
+  when:
+    frontend.referenced:
+      pattern: ^RevisionRouteDecorator$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-pingsourcesection-title
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<PingSourceSection> now requires the `title` prop (type: `string`)'
+  message: |-
+    <PingSourceSection> has a new required prop `title` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <PingSourceSection title={...} />
+  when:
+    frontend.referenced:
+      pattern: ^PingSourceSection$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-pushsecretdropdown-name
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/shipwright-plugin
+  effort: 1
+  category: mandatory
+  description: '<PushSecretDropdown> now requires the `name` prop (type: `string`)'
+  message: |-
+    <PushSecretDropdown> has a new required prop `name` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <PushSecretDropdown name={...} />
+  when:
+    frontend.referenced:
+      pattern: ^PushSecretDropdown$
+      location: JSX_COMPONENT
+      from: '@patternfly/shipwright-plugin'
+- ruleID: sd-required-prop-pushsecretdropdown-selectedkey
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/shipwright-plugin
+  effort: 1
+  category: mandatory
+  description: '<PushSecretDropdown> now requires the `selectedKey` prop (type: `string`)'
+  message: |-
+    <PushSecretDropdown> has a new required prop `selectedKey` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <PushSecretDropdown selectedKey={...} />
+  when:
+    frontend.referenced:
+      pattern: ^PushSecretDropdown$
+      location: JSX_COMPONENT
+      from: '@patternfly/shipwright-plugin'
+- ruleID: sd-required-prop-sinkpubsub-resourcetype
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<SinkPubsub> now requires the `resourceType` prop (type: `string`)'
+  message: |-
+    <SinkPubsub> has a new required prop `resourceType` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <SinkPubsub resourceType={...} />
+  when:
+    frontend.referenced:
+      pattern: ^SinkPubsub$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-sinkpubsub-source
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<SinkPubsub> now requires the `source` prop (type: `K8sResourceKind`)'
+  message: |-
+    <SinkPubsub> has a new required prop `source` (type: `K8sResourceKind`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <SinkPubsub source={...} />
+  when:
+    frontend.referenced:
+      pattern: ^SinkPubsub$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-helmreleaseresources-customdata
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/helm-plugin
+  effort: 1
+  category: mandatory
+  description: '<HelmReleaseResources> now requires the `customData` prop (type: `HelmRelease`)'
+  message: |-
+    <HelmReleaseResources> has a new required prop `customData` (type: `HelmRelease`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <HelmReleaseResources customData={...} />
+  when:
+    frontend.referenced:
+      pattern: ^HelmReleaseResources$
+      location: JSX_COMPONENT
+      from: '@patternfly/helm-plugin'
+- ruleID: sd-required-prop-eventtype-eventtype
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<EventType> now requires the `eventType` prop (type: `K8sResourceKind`)'
+  message: |-
+    <EventType> has a new required prop `eventType` (type: `K8sResourceKind`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <EventType eventType={...} />
+  when:
+    frontend.referenced:
+      pattern: ^EventType$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-sinkresources-namespace
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<SinkResources> now requires the `namespace` prop (type: `string`)'
+  message: |-
+    <SinkResources> has a new required prop `namespace` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <SinkResources namespace={...} />
+  when:
+    frontend.referenced:
+      pattern: ^SinkResources$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-topology-application
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<Topology> now requires the `application` prop (type: `string`)'
+  message: |-
+    <Topology> has a new required prop `application` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <Topology application={...} />
+  when:
+    frontend.referenced:
+      pattern: ^Topology$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-topology-model
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<Topology> now requires the `model` prop (type: `Model`)'
+  message: |-
+    <Topology> has a new required prop `model` (type: `Model`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <Topology model={...} />
+  when:
+    frontend.referenced:
+      pattern: ^Topology$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-topology-namespace
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<Topology> now requires the `namespace` prop (type: `string`)'
+  message: |-
+    <Topology> has a new required prop `namespace` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <Topology namespace={...} />
+  when:
+    frontend.referenced:
+      pattern: ^Topology$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-topology-onselect
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<Topology> now requires the `onSelect` prop (type: `(entity?: GraphElement) => void`)'
+  message: |-
+    <Topology> has a new required prop `onSelect` (type: `(entity?: GraphElement) => void`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <Topology onSelect={...} />
+  when:
+    frontend.referenced:
+      pattern: ^Topology$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-topology-setvisualization
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<Topology> now requires the `setVisualization` prop (type: `(vis: Visualization) => void`)'
+  message: |-
+    <Topology> has a new required prop `setVisualization` (type: `(vis: Visualization) => void`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <Topology setVisualization={...} />
+  when:
+    frontend.referenced:
+      pattern: ^Topology$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-sourceresources-namespace
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<SourceResources> now requires the `namespace` prop (type: `string`)'
+  message: |-
+    <SourceResources> has a new required prop `namespace` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <SourceResources namespace={...} />
+  when:
+    frontend.referenced:
+      pattern: ^SourceResources$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-helmreleaselistviewnode-item
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/helm-plugin
+  effort: 1
+  category: mandatory
+  description: '<HelmReleaseListViewNode> now requires the `item` prop (type: `Node`)'
+  message: |-
+    <HelmReleaseListViewNode> has a new required prop `item` (type: `Node`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <HelmReleaseListViewNode item={...} />
+  when:
+    frontend.referenced:
+      pattern: ^HelmReleaseListViewNode$
+      location: JSX_COMPONENT
+      from: '@patternfly/helm-plugin'
+- ruleID: sd-required-prop-helmreleaselistviewnode-onselect
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/helm-plugin
+  effort: 1
+  category: mandatory
+  description: '<HelmReleaseListViewNode> now requires the `onSelect` prop (type: `(ids: string[]) => void`)'
+  message: |-
+    <HelmReleaseListViewNode> has a new required prop `onSelect` (type: `(ids: string[]) => void`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <HelmReleaseListViewNode onSelect={...} />
+  when:
+    frontend.referenced:
+      pattern: ^HelmReleaseListViewNode$
+      location: JSX_COMPONENT
+      from: '@patternfly/helm-plugin'
+- ruleID: sd-required-prop-helmreleaselistviewnode-selectedids
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/helm-plugin
+  effort: 1
+  category: mandatory
+  description: '<HelmReleaseListViewNode> now requires the `selectedIds` prop (type: `string[]`)'
+  message: |-
+    <HelmReleaseListViewNode> has a new required prop `selectedIds` (type: `string[]`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <HelmReleaseListViewNode selectedIds={...} />
+  when:
+    frontend.referenced:
+      pattern: ^HelmReleaseListViewNode$
+      location: JSX_COMPONENT
+      from: '@patternfly/helm-plugin'
+- ruleID: sd-required-prop-datamodelextension-datamodelfactory
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<DataModelExtension> now requires the `dataModelFactory` prop (type: `TopologyDataModelFactory[''properties'']`)'
+  message: |-
+    <DataModelExtension> has a new required prop `dataModelFactory` (type: `TopologyDataModelFactory['properties']`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <DataModelExtension dataModelFactory={...} />
+  when:
+    frontend.referenced:
+      pattern: ^DataModelExtension$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-catalogtypeselector-catalogtypecounts
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/console-shared
+  effort: 1
+  category: mandatory
+  description: '<CatalogTypeSelector> now requires the `catalogTypeCounts` prop (type: `CatalogTypeCounts`)'
+  message: |-
+    <CatalogTypeSelector> has a new required prop `catalogTypeCounts` (type: `CatalogTypeCounts`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <CatalogTypeSelector catalogTypeCounts={...} />
+  when:
+    frontend.referenced:
+      pattern: ^CatalogTypeSelector$
+      location: JSX_COMPONENT
+      from: '@patternfly/console-shared'
+- ruleID: sd-required-prop-catalogtypeselector-catalogtypes
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/console-shared
+  effort: 1
+  category: mandatory
+  description: '<CatalogTypeSelector> now requires the `catalogTypes` prop (type: `CatalogType[]`)'
+  message: |-
+    <CatalogTypeSelector> has a new required prop `catalogTypes` (type: `CatalogType[]`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <CatalogTypeSelector catalogTypes={...} />
+  when:
+    frontend.referenced:
+      pattern: ^CatalogTypeSelector$
+      location: JSX_COMPONENT
+      from: '@patternfly/console-shared'
+- ruleID: sd-required-prop-eventsourcealert-createsourceaccess
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<EventSourceAlert> now requires the `createSourceAccess` prop (type: `boolean`)'
+  message: |-
+    <EventSourceAlert> has a new required prop `createSourceAccess` (type: `boolean`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <EventSourceAlert createSourceAccess={...} />
+  when:
+    frontend.referenced:
+      pattern: ^EventSourceAlert$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-eventsourcealert-createsourceaccessloading
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<EventSourceAlert> now requires the `createSourceAccessLoading` prop (type: `boolean`)'
+  message: |-
+    <EventSourceAlert> has a new required prop `createSourceAccessLoading` (type: `boolean`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <EventSourceAlert createSourceAccessLoading={...} />
+  when:
+    frontend.referenced:
+      pattern: ^EventSourceAlert$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-eventsourcealert-isvalidsource
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<EventSourceAlert> now requires the `isValidSource` prop (type: `boolean`)'
+  message: |-
+    <EventSourceAlert> has a new required prop `isValidSource` (type: `boolean`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <EventSourceAlert isValidSource={...} />
+  when:
+    frontend.referenced:
+      pattern: ^EventSourceAlert$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-taskrundetailssection-taskrun
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<TaskRunDetailsSection> now requires the `taskRun` prop (type: `TaskRunKind`)'
+  message: |-
+    <TaskRunDetailsSection> has a new required prop `taskRun` (type: `TaskRunKind`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <TaskRunDetailsSection taskRun={...} />
+  when:
+    frontend.referenced:
+      pattern: ^TaskRunDetailsSection$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-createhelmchartrepository-existingreponame
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/helm-plugin
+  effort: 1
+  category: mandatory
+  description: '<CreateHelmChartRepository> now requires the `existingRepoName` prop (type: `string`)'
+  message: |-
+    <CreateHelmChartRepository> has a new required prop `existingRepoName` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <CreateHelmChartRepository existingRepoName={...} />
+  when:
+    frontend.referenced:
+      pattern: ^CreateHelmChartRepository$
+      location: JSX_COMPONENT
+      from: '@patternfly/helm-plugin'
+- ruleID: sd-required-prop-createhelmchartrepository-showscopetype
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/helm-plugin
+  effort: 1
+  category: mandatory
+  description: '<CreateHelmChartRepository> now requires the `showScopeType` prop (type: `boolean`)'
+  message: |-
+    <CreateHelmChartRepository> has a new required prop `showScopeType` (type: `boolean`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <CreateHelmChartRepository showScopeType={...} />
+  when:
+    frontend.referenced:
+      pattern: ^CreateHelmChartRepository$
+      location: JSX_COMPONENT
+      from: '@patternfly/helm-plugin'
+- ruleID: sd-required-prop-subscribe-source
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<Subscribe> now requires the `source` prop (type: `K8sResourceKind`)'
+  message: |-
+    <Subscribe> has a new required prop `source` (type: `K8sResourceKind`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <Subscribe source={...} />
+  when:
+    frontend.referenced:
+      pattern: ^Subscribe$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-builderimageselector-builderimages
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<BuilderImageSelector> now requires the `builderImages` prop (type: `NormalizedBuilderImages`)'
+  message: |-
+    <BuilderImageSelector> has a new required prop `builderImages` (type: `NormalizedBuilderImages`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <BuilderImageSelector builderImages={...} />
+  when:
+    frontend.referenced:
+      pattern: ^BuilderImageSelector$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-builderimageselector-loadingimagestream
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<BuilderImageSelector> now requires the `loadingImageStream` prop (type: `boolean`)'
+  message: |-
+    <BuilderImageSelector> has a new required prop `loadingImageStream` (type: `boolean`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <BuilderImageSelector loadingImageStream={...} />
+  when:
+    frontend.referenced:
+      pattern: ^BuilderImageSelector$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-sinksource-source
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<SinkSource> now requires the `source` prop (type: `K8sResourceKind`)'
+  message: |-
+    <SinkSource> has a new required prop `source` (type: `K8sResourceKind`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <SinkSource source={...} />
+  when:
+    frontend.referenced:
+      pattern: ^SinkSource$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-textfield-name
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/vsphere-plugin
+  effort: 1
+  category: mandatory
+  description: '<TextField> now requires the `name` prop (type: `string`)'
+  message: |-
+    <TextField> has a new required prop `name` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <TextField name={...} />
+  when:
+    frontend.referenced:
+      pattern: ^TextField$
+      location: JSX_COMPONENT
+      from: '@patternfly/vsphere-plugin'
+- ruleID: sd-required-prop-pipelinemetricsrefreshdropdown-interval
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<PipelineMetricsRefreshDropdown> now requires the `interval` prop (type: `number`)'
+  message: |-
+    <PipelineMetricsRefreshDropdown> has a new required prop `interval` (type: `number`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <PipelineMetricsRefreshDropdown interval={...} />
+  when:
+    frontend.referenced:
+      pattern: ^PipelineMetricsRefreshDropdown$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-pipelinemetricsrefreshdropdown-setinterval
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<PipelineMetricsRefreshDropdown> now requires the `setInterval` prop (type: `(v: number) => void`)'
+  message: |-
+    <PipelineMetricsRefreshDropdown> has a new required prop `setInterval` (type: `(v: number) => void`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <PipelineMetricsRefreshDropdown setInterval={...} />
+  when:
+    frontend.referenced:
+      pattern: ^PipelineMetricsRefreshDropdown$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-workspaceresourcelinklist-namespace
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<WorkspaceResourceLinkList> now requires the `namespace` prop (type: `string`)'
+  message: |-
+    <WorkspaceResourceLinkList> has a new required prop `namespace` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <WorkspaceResourceLinkList namespace={...} />
+  when:
+    frontend.referenced:
+      pattern: ^WorkspaceResourceLinkList$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-workspaceresourcelinklist-ownerresourcename
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<WorkspaceResourceLinkList> now requires the `ownerResourceName` prop (type: `string`)'
+  message: |-
+    <WorkspaceResourceLinkList> has a new required prop `ownerResourceName` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <WorkspaceResourceLinkList ownerResourceName={...} />
+  when:
+    frontend.referenced:
+      pattern: ^WorkspaceResourceLinkList$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-workspaceresourcelinklist-workspaces
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<WorkspaceResourceLinkList> now requires the `workspaces` prop (type: `PipelineRunWorkspace[]`)'
+  message: |-
+    <WorkspaceResourceLinkList> has a new required prop `workspaces` (type: `PipelineRunWorkspace[]`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <WorkspaceResourceLinkList workspaces={...} />
+  when:
+    frontend.referenced:
+      pattern: ^WorkspaceResourceLinkList$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-eventsinkalert-createsinkaccess
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<EventSinkAlert> now requires the `createSinkAccess` prop (type: `boolean`)'
+  message: |-
+    <EventSinkAlert> has a new required prop `createSinkAccess` (type: `boolean`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <EventSinkAlert createSinkAccess={...} />
+  when:
+    frontend.referenced:
+      pattern: ^EventSinkAlert$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-eventsinkalert-createsinkaccessloading
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<EventSinkAlert> now requires the `createSinkAccessLoading` prop (type: `boolean`)'
+  message: |-
+    <EventSinkAlert> has a new required prop `createSinkAccessLoading` (type: `boolean`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <EventSinkAlert createSinkAccessLoading={...} />
+  when:
+    frontend.referenced:
+      pattern: ^EventSinkAlert$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-eventsinkalert-isvalidsink
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<EventSinkAlert> now requires the `isValidSink` prop (type: `boolean`)'
+  message: |-
+    <EventSinkAlert> has a new required prop `isValidSink` (type: `boolean`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <EventSinkAlert isValidSink={...} />
+  when:
+    frontend.referenced:
+      pattern: ^EventSinkAlert$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-pipelinelist-namespace
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<PipelineList> now requires the `namespace` prop (type: `string`)'
+  message: |-
+    <PipelineList> has a new required prop `namespace` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <PipelineList namespace={...} />
+  when:
+    frontend.referenced:
+      pattern: ^PipelineList$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-pipelinequicksearchtaskalert-ctatype
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<PipelineQuickSearchTaskAlert> now requires the `ctaType` prop (type: `string`)'
+  message: |-
+    <PipelineQuickSearchTaskAlert> has a new required prop `ctaType` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <PipelineQuickSearchTaskAlert ctaType={...} />
+  when:
+    frontend.referenced:
+      pattern: ^PipelineQuickSearchTaskAlert$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-pipelineresourceparam-name
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<PipelineResourceParam> now requires the `name` prop (type: `string`)'
+  message: |-
+    <PipelineResourceParam> has a new required prop `name` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <PipelineResourceParam name={...} />
+  when:
+    frontend.referenced:
+      pattern: ^PipelineResourceParam$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-pipelineresourceparam-type
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<PipelineResourceParam> now requires the `type` prop (type: `string`)'
+  message: |-
+    <PipelineResourceParam> has a new required prop `type` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <PipelineResourceParam type={...} />
+  when:
+    frontend.referenced:
+      pattern: ^PipelineResourceParam$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-builderimageenvironments-imagestreamname
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<BuilderImageEnvironments> now requires the `imageStreamName` prop (type: `string`)'
+  message: |-
+    <BuilderImageEnvironments> has a new required prop `imageStreamName` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <BuilderImageEnvironments imageStreamName={...} />
+  when:
+    frontend.referenced:
+      pattern: ^BuilderImageEnvironments$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-builderimageenvironments-imagestreamtag
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<BuilderImageEnvironments> now requires the `imageStreamTag` prop (type: `string`)'
+  message: |-
+    <BuilderImageEnvironments> has a new required prop `imageStreamTag` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <BuilderImageEnvironments imageStreamTag={...} />
+  when:
+    frontend.referenced:
+      pattern: ^BuilderImageEnvironments$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-builderimageenvironments-name
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<BuilderImageEnvironments> now requires the `name` prop (type: `string`)'
+  message: |-
+    <BuilderImageEnvironments> has a new required prop `name` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <BuilderImageEnvironments name={...} />
+  when:
+    frontend.referenced:
+      pattern: ^BuilderImageEnvironments$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-topologylistview-model
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<TopologyListView> now requires the `model` prop (type: `Model`)'
+  message: |-
+    <TopologyListView> has a new required prop `model` (type: `Model`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <TopologyListView model={...} />
+  when:
+    frontend.referenced:
+      pattern: ^TopologyListView$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-topologylistview-namespace
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<TopologyListView> now requires the `namespace` prop (type: `string`)'
+  message: |-
+    <TopologyListView> has a new required prop `namespace` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <TopologyListView namespace={...} />
+  when:
+    frontend.referenced:
+      pattern: ^TopologyListView$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-topologylistview-onselect
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<TopologyListView> now requires the `onSelect` prop (type: `(entity?: GraphElement) => void`)'
+  message: |-
+    <TopologyListView> has a new required prop `onSelect` (type: `(entity?: GraphElement) => void`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <TopologyListView onSelect={...} />
+  when:
+    frontend.referenced:
+      pattern: ^TopologyListView$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-topologylistview-setvisualization
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<TopologyListView> now requires the `setVisualization` prop (type: `(vis: Visualization) => void`)'
+  message: |-
+    <TopologyListView> has a new required prop `setVisualization` (type: `(vis: Visualization) => void`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <TopologyListView setVisualization={...} />
+  when:
+    frontend.referenced:
+      pattern: ^TopologyListView$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-secretdropdown-name
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/shipwright-plugin
+  effort: 1
+  category: mandatory
+  description: '<SecretDropdown> now requires the `name` prop (type: `string`)'
+  message: |-
+    <SecretDropdown> has a new required prop `name` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <SecretDropdown name={...} />
+  when:
+    frontend.referenced:
+      pattern: ^SecretDropdown$
+      location: JSX_COMPONENT
+      from: '@patternfly/shipwright-plugin'
+- ruleID: sd-required-prop-secretdropdown-namespace
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/shipwright-plugin
+  effort: 1
+  category: mandatory
+  description: '<SecretDropdown> now requires the `namespace` prop (type: `string`)'
+  message: |-
+    <SecretDropdown> has a new required prop `namespace` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <SecretDropdown namespace={...} />
+  when:
+    frontend.referenced:
+      pattern: ^SecretDropdown$
+      location: JSX_COMPONENT
+      from: '@patternfly/shipwright-plugin'
+- ruleID: sd-required-prop-serviceaccountdropdown-name
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<ServiceAccountDropdown> now requires the `name` prop (type: `string`)'
+  message: |-
+    <ServiceAccountDropdown> has a new required prop `name` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <ServiceAccountDropdown name={...} />
+  when:
+    frontend.referenced:
+      pattern: ^ServiceAccountDropdown$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-importtoastcontent-deployedresources
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<ImportToastContent> now requires the `deployedResources` prop (type: `K8sResourceKind[]`)'
+  message: |-
+    <ImportToastContent> has a new required prop `deployedResources` (type: `K8sResourceKind[]`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <ImportToastContent deployedResources={...} />
+  when:
+    frontend.referenced:
+      pattern: ^ImportToastContent$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-resourcedropdownfield-dataselector
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/console-shared
+  effort: 1
+  category: mandatory
+  description: '<ResourceDropdownField> now requires the `dataSelector` prop (type: `string[] | number[] | symbol[]`)'
+  message: |-
+    <ResourceDropdownField> has a new required prop `dataSelector` (type: `string[] | number[] | symbol[]`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <ResourceDropdownField dataSelector={...} />
+  when:
+    frontend.referenced:
+      pattern: ^ResourceDropdownField$
+      location: JSX_COMPONENT
+      from: '@patternfly/console-shared'
+- ruleID: sd-required-prop-resourcedropdownfield-resources
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/console-shared
+  effort: 1
+  category: mandatory
+  description: '<ResourceDropdownField> now requires the `resources` prop (type: `FirehoseResource[]`)'
+  message: |-
+    <ResourceDropdownField> has a new required prop `resources` (type: `FirehoseResource[]`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <ResourceDropdownField resources={...} />
+  when:
+    frontend.referenced:
+      pattern: ^ResourceDropdownField$
+      location: JSX_COMPONENT
+      from: '@patternfly/console-shared'
+- ruleID: sd-required-prop-progressivelistfooter-footer
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/console-shared
+  effort: 1
+  category: mandatory
+  description: '<ProgressiveListFooter> now requires the `Footer` prop (type: `(children) => React.ReactElement`)'
+  message: |-
+    <ProgressiveListFooter> has a new required prop `Footer` (type: `(children) => React.ReactElement`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <ProgressiveListFooter Footer={...} />
+  when:
+    frontend.referenced:
+      pattern: ^ProgressiveListFooter$
+      location: JSX_COMPONENT
+      from: '@patternfly/console-shared'
+- ruleID: sd-required-prop-progressivelistfooter-items
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/console-shared
+  effort: 1
+  category: mandatory
+  description: '<ProgressiveListFooter> now requires the `items` prop (type: `string[]`)'
+  message: |-
+    <ProgressiveListFooter> has a new required prop `items` (type: `string[]`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <ProgressiveListFooter items={...} />
+  when:
+    frontend.referenced:
+      pattern: ^ProgressiveListFooter$
+      location: JSX_COMPONENT
+      from: '@patternfly/console-shared'
+- ruleID: sd-required-prop-progressivelistfooter-onshowitem
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/console-shared
+  effort: 1
+  category: mandatory
+  description: '<ProgressiveListFooter> now requires the `onShowItem` prop (type: `(item: string) => void`)'
+  message: |-
+    <ProgressiveListFooter> has a new required prop `onShowItem` (type: `(item: string) => void`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <ProgressiveListFooter onShowItem={...} />
+  when:
+    frontend.referenced:
+      pattern: ^ProgressiveListFooter$
+      location: JSX_COMPONENT
+      from: '@patternfly/console-shared'
+- ruleID: sd-required-prop-subscribeform-filterenabled
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<SubscribeForm> now requires the `filterEnabled` prop (type: `boolean`)'
+  message: |-
+    <SubscribeForm> has a new required prop `filterEnabled` (type: `boolean`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <SubscribeForm filterEnabled={...} />
+  when:
+    frontend.referenced:
+      pattern: ^SubscribeForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-subscribeform-source
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<SubscribeForm> now requires the `source` prop (type: `K8sResourceKind`)'
+  message: |-
+    <SubscribeForm> has a new required prop `source` (type: `K8sResourceKind`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <SubscribeForm source={...} />
+  when:
+    frontend.referenced:
+      pattern: ^SubscribeForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-healthchecks-resourcetype
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<HealthChecks> now requires the `resourceType` prop (type: `Resources`)'
+  message: |-
+    <HealthChecks> has a new required prop `resourceType` (type: `Resources`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <HealthChecks resourceType={...} />
+  when:
+    frontend.referenced:
+      pattern: ^HealthChecks$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-restoregettingstartedbutton-usersettingskey
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/console-shared
+  effort: 1
+  category: mandatory
+  description: '<RestoreGettingStartedButton> now requires the `userSettingsKey` prop (type: `string`)'
+  message: |-
+    <RestoreGettingStartedButton> has a new required prop `userSettingsKey` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <RestoreGettingStartedButton userSettingsKey={...} />
+  when:
+    frontend.referenced:
+      pattern: ^RestoreGettingStartedButton$
+      location: JSX_COMPONENT
+      from: '@patternfly/console-shared'
+- ruleID: sd-required-prop-monitoringalertsdecorator-element
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<MonitoringAlertsDecorator> now requires the `element` prop (type: `Node`)'
+  message: |-
+    <MonitoringAlertsDecorator> has a new required prop `element` (type: `Node`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <MonitoringAlertsDecorator element={...} />
+  when:
+    frontend.referenced:
+      pattern: ^MonitoringAlertsDecorator$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-monitoringalertsdecorator-radius
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<MonitoringAlertsDecorator> now requires the `radius` prop (type: `number`)'
+  message: |-
+    <MonitoringAlertsDecorator> has a new required prop `radius` (type: `number`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <MonitoringAlertsDecorator radius={...} />
+  when:
+    frontend.referenced:
+      pattern: ^MonitoringAlertsDecorator$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-monitoringalertsdecorator-x
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<MonitoringAlertsDecorator> now requires the `x` prop (type: `number`)'
+  message: |-
+    <MonitoringAlertsDecorator> has a new required prop `x` (type: `number`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <MonitoringAlertsDecorator x={...} />
+  when:
+    frontend.referenced:
+      pattern: ^MonitoringAlertsDecorator$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-monitoringalertsdecorator-y
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<MonitoringAlertsDecorator> now requires the `y` prop (type: `number`)'
+  message: |-
+    <MonitoringAlertsDecorator> has a new required prop `y` (type: `number`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <MonitoringAlertsDecorator y={...} />
+  when:
+    frontend.referenced:
+      pattern: ^MonitoringAlertsDecorator$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-execnewpodform-dataattribute
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<ExecNewPodForm> now requires the `dataAttribute` prop (type: `string`)'
+  message: |-
+    <ExecNewPodForm> has a new required prop `dataAttribute` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <ExecNewPodForm dataAttribute={...} />
+  when:
+    frontend.referenced:
+      pattern: ^ExecNewPodForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-execnewpodform-lifecyclehook
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<ExecNewPodForm> now requires the `lifecycleHook` prop (type: `string`)'
+  message: |-
+    <ExecNewPodForm> has a new required prop `lifecycleHook` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <ExecNewPodForm lifecycleHook={...} />
+  when:
+    frontend.referenced:
+      pattern: ^ExecNewPodForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-execnewpodform-resourceobj
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<ExecNewPodForm> now requires the `resourceObj` prop (type: `K8sResourceKind`)'
+  message: |-
+    <ExecNewPodForm> has a new required prop `resourceObj` (type: `K8sResourceKind`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <ExecNewPodForm resourceObj={...} />
+  when:
+    frontend.referenced:
+      pattern: ^ExecNewPodForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-probeform-onclose
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<ProbeForm> now requires the `onClose` prop (type: `() => void`)'
+  message: |-
+    <ProbeForm> has a new required prop `onClose` (type: `() => void`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <ProbeForm onClose={...} />
+  when:
+    frontend.referenced:
+      pattern: ^ProbeForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-probeform-onsubmit
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<ProbeForm> now requires the `onSubmit` prop (type: `() => void`)'
+  message: |-
+    <ProbeForm> has a new required prop `onSubmit` (type: `() => void`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <ProbeForm onSubmit={...} />
+  when:
+    frontend.referenced:
+      pattern: ^ProbeForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-probeform-probetype
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<ProbeForm> now requires the `probeType` prop (type: `string`)'
+  message: |-
+    <ProbeForm> has a new required prop `probeType` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <ProbeForm probeType={...} />
+  when:
+    frontend.referenced:
+      pattern: ^ProbeForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-taskrunslist-columnlayout
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<TaskRunsList> now requires the `columnLayout` prop (type: `ColumnLayout`)'
+  message: |-
+    <TaskRunsList> has a new required prop `columnLayout` (type: `ColumnLayout`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <TaskRunsList columnLayout={...} />
+  when:
+    frontend.referenced:
+      pattern: ^TaskRunsList$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-builderimagetagselector-selectedbuilderimage
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<BuilderImageTagSelector> now requires the `selectedBuilderImage` prop (type: `BuilderImage`)'
+  message: |-
+    <BuilderImageTagSelector> has a new required prop `selectedBuilderImage` (type: `BuilderImage`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <BuilderImageTagSelector selectedBuilderImage={...} />
+  when:
+    frontend.referenced:
+      pattern: ^BuilderImageTagSelector$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-builderimagetagselector-selectedimagetag
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<BuilderImageTagSelector> now requires the `selectedImageTag` prop (type: `string`)'
+  message: |-
+    <BuilderImageTagSelector> has a new required prop `selectedImageTag` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <BuilderImageTagSelector selectedImageTag={...} />
+  when:
+    frontend.referenced:
+      pattern: ^BuilderImageTagSelector$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-typedresourcebadgecell-kind
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<TypedResourceBadgeCell> now requires the `kind` prop (type: `string`)'
+  message: |-
+    <TypedResourceBadgeCell> has a new required prop `kind` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <TypedResourceBadgeCell kind={...} />
+  when:
+    frontend.referenced:
+      pattern: ^TypedResourceBadgeCell$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-pipelinevisualizationsteplist-isspecoverview
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<PipelineVisualizationStepList> now requires the `isSpecOverview` prop (type: `boolean`)'
+  message: |-
+    <PipelineVisualizationStepList> has a new required prop `isSpecOverview` (type: `boolean`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <PipelineVisualizationStepList isSpecOverview={...} />
+  when:
+    frontend.referenced:
+      pattern: ^PipelineVisualizationStepList$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-pipelinevisualizationsteplist-steps
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<PipelineVisualizationStepList> now requires the `steps` prop (type: `StepStatus[]`)'
+  message: |-
+    <PipelineVisualizationStepList> has a new required prop `steps` (type: `StepStatus[]`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <PipelineVisualizationStepList steps={...} />
+  when:
+    frontend.referenced:
+      pattern: ^PipelineVisualizationStepList$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-pipelinevisualizationsteplist-taskname
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<PipelineVisualizationStepList> now requires the `taskName` prop (type: `string`)'
+  message: |-
+    <PipelineVisualizationStepList> has a new required prop `taskName` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <PipelineVisualizationStepList taskName={...} />
+  when:
+    frontend.referenced:
+      pattern: ^PipelineVisualizationStepList$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-pipelineaugmentrunswrapper-namespace
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<PipelineAugmentRunsWrapper> now requires the `namespace` prop (type: `string`)'
+  message: |-
+    <PipelineAugmentRunsWrapper> has a new required prop `namespace` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <PipelineAugmentRunsWrapper namespace={...} />
+  when:
+    frontend.referenced:
+      pattern: ^PipelineAugmentRunsWrapper$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-applicationdropdown-selectedkey
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<ApplicationDropdown> now requires the `selectedKey` prop (type: `string`)'
+  message: |-
+    <ApplicationDropdown> has a new required prop `selectedKey` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <ApplicationDropdown selectedKey={...} />
+  when:
+    frontend.referenced:
+      pattern: ^ApplicationDropdown$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-vmlistviewnode-item
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<VMListViewNode> now requires the `item` prop (type: `Node`)'
+  message: |-
+    <VMListViewNode> has a new required prop `item` (type: `Node`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <VMListViewNode item={...} />
+  when:
+    frontend.referenced:
+      pattern: ^VMListViewNode$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-vmlistviewnode-onselect
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<VMListViewNode> now requires the `onSelect` prop (type: `(ids: string[]) => void`)'
+  message: |-
+    <VMListViewNode> has a new required prop `onSelect` (type: `(ids: string[]) => void`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <VMListViewNode onSelect={...} />
+  when:
+    frontend.referenced:
+      pattern: ^VMListViewNode$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-vmlistviewnode-selectedids
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<VMListViewNode> now requires the `selectedIds` prop (type: `string[]`)'
+  message: |-
+    <VMListViewNode> has a new required prop `selectedIds` (type: `string[]`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <VMListViewNode selectedIds={...} />
+  when:
+    frontend.referenced:
+      pattern: ^VMListViewNode$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-deploymentconfigsection-namespace
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<DeploymentConfigSection> now requires the `namespace` prop (type: `string`)'
+  message: |-
+    <DeploymentConfigSection> has a new required prop `namespace` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <DeploymentConfigSection namespace={...} />
+  when:
+    frontend.referenced:
+      pattern: ^DeploymentConfigSection$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-progressivelistitem-name
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/console-shared
+  effort: 1
+  category: mandatory
+  description: '<ProgressiveListItem> now requires the `name` prop (type: `string`)'
+  message: |-
+    <ProgressiveListItem> has a new required prop `name` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <ProgressiveListItem name={...} />
+  when:
+    frontend.referenced:
+      pattern: ^ProgressiveListItem$
+      location: JSX_COMPONENT
+      from: '@patternfly/console-shared'
+- ruleID: sd-required-prop-importform-importdata
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<ImportForm> now requires the `importData` prop (type: `ImportData`)'
+  message: |-
+    <ImportForm> has a new required prop `importData` (type: `ImportData`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <ImportForm importData={...} />
+  when:
+    frontend.referenced:
+      pattern: ^ImportForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-importform-namespace
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<ImportForm> now requires the `namespace` prop (type: `string`)'
+  message: |-
+    <ImportForm> has a new required prop `namespace` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <ImportForm namespace={...} />
+  when:
+    frontend.referenced:
+      pattern: ^ImportForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-pipelinerundetailssection-pipelinerun
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<PipelineRunDetailsSection> now requires the `pipelineRun` prop (type: `PipelineRunKind`)'
+  message: |-
+    <PipelineRunDetailsSection> has a new required prop `pipelineRun` (type: `PipelineRunKind`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <PipelineRunDetailsSection pipelineRun={...} />
+  when:
+    frontend.referenced:
+      pattern: ^PipelineRunDetailsSection$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-topologylistviewkindgroup-childelements
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<TopologyListViewKindGroup> now requires the `childElements` prop (type: `GraphElement[]`)'
+  message: |-
+    <TopologyListViewKindGroup> has a new required prop `childElements` (type: `GraphElement[]`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <TopologyListViewKindGroup childElements={...} />
+  when:
+    frontend.referenced:
+      pattern: ^TopologyListViewKindGroup$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-topologylistviewkindgroup-grouplabel
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<TopologyListViewKindGroup> now requires the `groupLabel` prop (type: `string`)'
+  message: |-
+    <TopologyListViewKindGroup> has a new required prop `groupLabel` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <TopologyListViewKindGroup groupLabel={...} />
+  when:
+    frontend.referenced:
+      pattern: ^TopologyListViewKindGroup$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-topologylistviewkindgroup-kind
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<TopologyListViewKindGroup> now requires the `kind` prop (type: `string`)'
+  message: |-
+    <TopologyListViewKindGroup> has a new required prop `kind` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <TopologyListViewKindGroup kind={...} />
+  when:
+    frontend.referenced:
+      pattern: ^TopologyListViewKindGroup$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-topologylistviewkindgroup-onselect
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<TopologyListViewKindGroup> now requires the `onSelect` prop (type: `(ids: string[]) => void`)'
+  message: |-
+    <TopologyListViewKindGroup> has a new required prop `onSelect` (type: `(ids: string[]) => void`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <TopologyListViewKindGroup onSelect={...} />
+  when:
+    frontend.referenced:
+      pattern: ^TopologyListViewKindGroup$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-topologylistviewkindgroup-selectedids
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<TopologyListViewKindGroup> now requires the `selectedIds` prop (type: `string[]`)'
+  message: |-
+    <TopologyListViewKindGroup> has a new required prop `selectedIds` (type: `string[]`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <TopologyListViewKindGroup selectedIds={...} />
+  when:
+    frontend.referenced:
+      pattern: ^TopologyListViewKindGroup$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-trafficsplitting-revisions
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<TrafficSplitting> now requires the `revisions` prop (type: `K8sResourceKind[]`)'
+  message: |-
+    <TrafficSplitting> has a new required prop `revisions` (type: `K8sResourceKind[]`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <TrafficSplitting revisions={...} />
+  when:
+    frontend.referenced:
+      pattern: ^TrafficSplitting$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-trafficsplitting-service
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<TrafficSplitting> now requires the `service` prop (type: `K8sResourceKind`)'
+  message: |-
+    <TrafficSplitting> has a new required prop `service` (type: `K8sResourceKind`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <TrafficSplitting service={...} />
+  when:
+    frontend.referenced:
+      pattern: ^TrafficSplitting$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-addbrokerform-namespace
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<AddBrokerForm> now requires the `namespace` prop (type: `string`)'
+  message: |-
+    <AddBrokerForm> has a new required prop `namespace` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <AddBrokerForm namespace={...} />
+  when:
+    frontend.referenced:
+      pattern: ^AddBrokerForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-helmreleasehistory-customdata
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/helm-plugin
+  effort: 1
+  category: mandatory
+  description: '<HelmReleaseHistory> now requires the `customData` prop (type: `HelmRelease`)'
+  message: |-
+    <HelmReleaseHistory> has a new required prop `customData` (type: `HelmRelease`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <HelmReleaseHistory customData={...} />
+  when:
+    frontend.referenced:
+      pattern: ^HelmReleaseHistory$
+      location: JSX_COMPONENT
+      from: '@patternfly/helm-plugin'
+- ruleID: sd-required-prop-helmreleasehistory-obj
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/helm-plugin
+  effort: 1
+  category: mandatory
+  description: '<HelmReleaseHistory> now requires the `obj` prop (type: `K8sResourceKind`)'
+  message: |-
+    <HelmReleaseHistory> has a new required prop `obj` (type: `K8sResourceKind`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <HelmReleaseHistory obj={...} />
+  when:
+    frontend.referenced:
+      pattern: ^HelmReleaseHistory$
+      location: JSX_COMPONENT
+      from: '@patternfly/helm-plugin'
+- ruleID: sd-required-prop-lifecyclehookform-dataattribute
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<LifecycleHookForm> now requires the `dataAttribute` prop (type: `string`)'
+  message: |-
+    <LifecycleHookForm> has a new required prop `dataAttribute` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <LifecycleHookForm dataAttribute={...} />
+  when:
+    frontend.referenced:
+      pattern: ^LifecycleHookForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-lifecyclehookform-lifecyclehook
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<LifecycleHookForm> now requires the `lifecycleHook` prop (type: `string`)'
+  message: |-
+    <LifecycleHookForm> has a new required prop `lifecycleHook` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <LifecycleHookForm lifecycleHook={...} />
+  when:
+    frontend.referenced:
+      pattern: ^LifecycleHookForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-lifecyclehookform-onclose
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<LifecycleHookForm> now requires the `onClose` prop (type: `() => void`)'
+  message: |-
+    <LifecycleHookForm> has a new required prop `onClose` (type: `() => void`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <LifecycleHookForm onClose={...} />
+  when:
+    frontend.referenced:
+      pattern: ^LifecycleHookForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-lifecyclehookform-onsubmit
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<LifecycleHookForm> now requires the `onSubmit` prop (type: `() => void`)'
+  message: |-
+    <LifecycleHookForm> has a new required prop `onSubmit` (type: `() => void`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <LifecycleHookForm onSubmit={...} />
+  when:
+    frontend.referenced:
+      pattern: ^LifecycleHookForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-lifecyclehookform-resourceobj
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<LifecycleHookForm> now requires the `resourceObj` prop (type: `K8sResourceKind`)'
+  message: |-
+    <LifecycleHookForm> has a new required prop `resourceObj` (type: `K8sResourceKind`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <LifecycleHookForm resourceObj={...} />
+  when:
+    frontend.referenced:
+      pattern: ^LifecycleHookForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-sinksourcemodal-namespace
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<SinkSourceModal> now requires the `namespace` prop (type: `string`)'
+  message: |-
+    <SinkSourceModal> has a new required prop `namespace` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <SinkSourceModal namespace={...} />
+  when:
+    frontend.referenced:
+      pattern: ^SinkSourceModal$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-sinksourcemodal-resourcename
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<SinkSourceModal> now requires the `resourceName` prop (type: `string`)'
+  message: |-
+    <SinkSourceModal> has a new required prop `resourceName` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <SinkSourceModal resourceName={...} />
+  when:
+    frontend.referenced:
+      pattern: ^SinkSourceModal$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-startpipelinemodal-pipeline
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<StartPipelineModal> now requires the `pipeline` prop (type: `PipelineKind`)'
+  message: |-
+    <StartPipelineModal> has a new required prop `pipeline` (type: `PipelineKind`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <StartPipelineModal pipeline={...} />
+  when:
+    frontend.referenced:
+      pattern: ^StartPipelineModal$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-gitopsrenderstatuslabel-status
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/gitops-plugin
+  effort: 1
+  category: mandatory
+  description: '<GitOpsRenderStatusLabel> now requires the `status` prop (type: `string`)'
+  message: |-
+    <GitOpsRenderStatusLabel> has a new required prop `status` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <GitOpsRenderStatusLabel status={...} />
+  when:
+    frontend.referenced:
+      pattern: ^GitOpsRenderStatusLabel$
+      location: JSX_COMPONENT
+      from: '@patternfly/gitops-plugin'
+- ruleID: sd-required-prop-testfunction-service
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<TestFunction> now requires the `service` prop (type: `ServiceKind`)'
+  message: |-
+    <TestFunction> has a new required prop `service` (type: `ServiceKind`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <TestFunction service={...} />
+  when:
+    frontend.referenced:
+      pattern: ^TestFunction$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-multipleresourcekeyselector-label
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<MultipleResourceKeySelector> now requires the `label` prop (type: `string`)'
+  message: |-
+    <MultipleResourceKeySelector> has a new required prop `label` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <MultipleResourceKeySelector label={...} />
+  when:
+    frontend.referenced:
+      pattern: ^MultipleResourceKeySelector$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-multipleresourcekeyselector-resourcekeysfield
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<MultipleResourceKeySelector> now requires the `resourceKeysField` prop (type: `string`)'
+  message: |-
+    <MultipleResourceKeySelector> has a new required prop `resourceKeysField` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <MultipleResourceKeySelector resourceKeysField={...} />
+  when:
+    frontend.referenced:
+      pattern: ^MultipleResourceKeySelector$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-multipleresourcekeyselector-resourcemodel
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<MultipleResourceKeySelector> now requires the `resourceModel` prop (type: `K8sKind`)'
+  message: |-
+    <MultipleResourceKeySelector> has a new required prop `resourceModel` (type: `K8sKind`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <MultipleResourceKeySelector resourceModel={...} />
+  when:
+    frontend.referenced:
+      pattern: ^MultipleResourceKeySelector$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-multipleresourcekeyselector-resourcenamefield
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<MultipleResourceKeySelector> now requires the `resourceNameField` prop (type: `string`)'
+  message: |-
+    <MultipleResourceKeySelector> has a new required prop `resourceNameField` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <MultipleResourceKeySelector resourceNameField={...} />
+  when:
+    frontend.referenced:
+      pattern: ^MultipleResourceKeySelector$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-appsection-project
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<AppSection> now requires the `project` prop (type: `ProjectData`)'
+  message: |-
+    <AppSection> has a new required prop `project` (type: `ProjectData`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <AppSection project={...} />
+  when:
+    frontend.referenced:
+      pattern: ^AppSection$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-sourcesecretdropdown-selectedkey
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<SourceSecretDropdown> now requires the `selectedKey` prop (type: `string`)'
+  message: |-
+    <SourceSecretDropdown> has a new required prop `selectedKey` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <SourceSecretDropdown selectedKey={...} />
+  when:
+    frontend.referenced:
+      pattern: ^SourceSecretDropdown$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-operatorgrouplistviewnode-item
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<OperatorGroupListViewNode> now requires the `item` prop (type: `Node`)'
+  message: |-
+    <OperatorGroupListViewNode> has a new required prop `item` (type: `Node`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <OperatorGroupListViewNode item={...} />
+  when:
+    frontend.referenced:
+      pattern: ^OperatorGroupListViewNode$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-operatorgrouplistviewnode-onselect
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<OperatorGroupListViewNode> now requires the `onSelect` prop (type: `(ids: string[]) => void`)'
+  message: |-
+    <OperatorGroupListViewNode> has a new required prop `onSelect` (type: `(ids: string[]) => void`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <OperatorGroupListViewNode onSelect={...} />
+  when:
+    frontend.referenced:
+      pattern: ^OperatorGroupListViewNode$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-operatorgrouplistviewnode-selectedids
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<OperatorGroupListViewNode> now requires the `selectedIds` prop (type: `string[]`)'
+  message: |-
+    <OperatorGroupListViewNode> has a new required prop `selectedIds` (type: `string[]`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <OperatorGroupListViewNode selectedIds={...} />
+  when:
+    frontend.referenced:
+      pattern: ^OperatorGroupListViewNode$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-pipelinebuilddecoratortooltip-pipelinerun
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<PipelineBuildDecoratorTooltip> now requires the `pipelineRun` prop (type: `PipelineRunKind`)'
+  message: |-
+    <PipelineBuildDecoratorTooltip> has a new required prop `pipelineRun` (type: `PipelineRunKind`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <PipelineBuildDecoratorTooltip pipelineRun={...} />
+  when:
+    frontend.referenced:
+      pattern: ^PipelineBuildDecoratorTooltip$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-pipelinebuilddecoratortooltip-status
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<PipelineBuildDecoratorTooltip> now requires the `status` prop (type: `string`)'
+  message: |-
+    <PipelineBuildDecoratorTooltip> has a new required prop `status` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <PipelineBuildDecoratorTooltip status={...} />
+  when:
+    frontend.referenced:
+      pattern: ^PipelineBuildDecoratorTooltip$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-pipelinebuilddecoratortooltip-taskruns
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: mandatory
+  description: '<PipelineBuildDecoratorTooltip> now requires the `taskRuns` prop (type: `TaskRunKind[]`)'
+  message: |-
+    <PipelineBuildDecoratorTooltip> has a new required prop `taskRuns` (type: `TaskRunKind[]`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <PipelineBuildDecoratorTooltip taskRuns={...} />
+  when:
+    frontend.referenced:
+      pattern: ^PipelineBuildDecoratorTooltip$
+      location: JSX_COMPONENT
+      from: '@patternfly/pipelines-plugin'
+- ruleID: sd-required-prop-multicolumnfieldheader-headers
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/console-shared
+  effort: 1
+  category: mandatory
+  description: '<MultiColumnFieldHeader> now requires the `headers` prop (type: `({ name: string; required: boolean } | string)[]`)'
+  message: |-
+    <MultiColumnFieldHeader> has a new required prop `headers` (type: `({ name: string; required: boolean } | string)[]`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <MultiColumnFieldHeader headers={...} />
+  when:
+    frontend.referenced:
+      pattern: ^MultiColumnFieldHeader$
+      location: JSX_COMPONENT
+      from: '@patternfly/console-shared'
+- ruleID: sd-required-prop-multicolumnfieldheader-spans
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/console-shared
+  effort: 1
+  category: mandatory
+  description: '<MultiColumnFieldHeader> now requires the `spans` prop (type: `gridItemSpanValueShape[]`)'
+  message: |-
+    <MultiColumnFieldHeader> has a new required prop `spans` (type: `gridItemSpanValueShape[]`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <MultiColumnFieldHeader spans={...} />
+  when:
+    frontend.referenced:
+      pattern: ^MultiColumnFieldHeader$
+      location: JSX_COMPONENT
+      from: '@patternfly/console-shared'
+- ruleID: sd-required-prop-exportviewlogbutton-name
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<ExportViewLogButton> now requires the `name` prop (type: `string`)'
+  message: |-
+    <ExportViewLogButton> has a new required prop `name` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <ExportViewLogButton name={...} />
+  when:
+    frontend.referenced:
+      pattern: ^ExportViewLogButton$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-exportviewlogbutton-namespace
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<ExportViewLogButton> now requires the `namespace` prop (type: `string`)'
+  message: |-
+    <ExportViewLogButton> has a new required prop `namespace` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <ExportViewLogButton namespace={...} />
+  when:
+    frontend.referenced:
+      pattern: ^ExportViewLogButton$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-groupresourcescell-group
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<GroupResourcesCell> now requires the `group` prop (type: `Node`)'
+  message: |-
+    <GroupResourcesCell> has a new required prop `group` (type: `Node`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <GroupResourcesCell group={...} />
+  when:
+    frontend.referenced:
+      pattern: ^GroupResourcesCell$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-trafficsplittingmodal-revisionitems
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<TrafficSplittingModal> now requires the `revisionItems` prop (type: `RevisionItems`)'
+  message: |-
+    <TrafficSplittingModal> has a new required prop `revisionItems` (type: `RevisionItems`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <TrafficSplittingModal revisionItems={...} />
+  when:
+    frontend.referenced:
+      pattern: ^TrafficSplittingModal$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-topologylistviewunassignedgroup-items
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<TopologyListViewUnassignedGroup> now requires the `items` prop (type: `Node[]`)'
+  message: |-
+    <TopologyListViewUnassignedGroup> has a new required prop `items` (type: `Node[]`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <TopologyListViewUnassignedGroup items={...} />
+  when:
+    frontend.referenced:
+      pattern: ^TopologyListViewUnassignedGroup$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-topologylistviewunassignedgroup-onselect
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<TopologyListViewUnassignedGroup> now requires the `onSelect` prop (type: `(ids: string[]) => void`)'
+  message: |-
+    <TopologyListViewUnassignedGroup> has a new required prop `onSelect` (type: `(ids: string[]) => void`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <TopologyListViewUnassignedGroup onSelect={...} />
+  when:
+    frontend.referenced:
+      pattern: ^TopologyListViewUnassignedGroup$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-topologylistviewunassignedgroup-selectedids
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<TopologyListViewUnassignedGroup> now requires the `selectedIds` prop (type: `string[]`)'
+  message: |-
+    <TopologyListViewUnassignedGroup> has a new required prop `selectedIds` (type: `string[]`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <TopologyListViewUnassignedGroup selectedIds={...} />
+  when:
+    frontend.referenced:
+      pattern: ^TopologyListViewUnassignedGroup$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-topologylistviewunassignedgroup-showcategory
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<TopologyListViewUnassignedGroup> now requires the `showCategory` prop (type: `boolean`)'
+  message: |-
+    <TopologyListViewUnassignedGroup> has a new required prop `showCategory` (type: `boolean`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <TopologyListViewUnassignedGroup showCategory={...} />
+  when:
+    frontend.referenced:
+      pattern: ^TopologyListViewUnassignedGroup$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-routesection-resources
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<RouteSection> now requires the `resources` prop (type: `Resources`)'
+  message: |-
+    <RouteSection> has a new required prop `resources` (type: `Resources`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <RouteSection resources={...} />
+  when:
+    frontend.referenced:
+      pattern: ^RouteSection$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-routesection-route
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/dev-console
+  effort: 1
+  category: mandatory
+  description: '<RouteSection> now requires the `route` prop (type: `RouteData`)'
+  message: |-
+    <RouteSection> has a new required prop `route` (type: `RouteData`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <RouteSection route={...} />
+  when:
+    frontend.referenced:
+      pattern: ^RouteSection$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-required-prop-addbroker-namespace
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<AddBroker> now requires the `namespace` prop (type: `string`)'
+  message: |-
+    <AddBroker> has a new required prop `namespace` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <AddBroker namespace={...} />
+  when:
+    frontend.referenced:
+      pattern: ^AddBroker$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-addbroker-selectedapplication
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<AddBroker> now requires the `selectedApplication` prop (type: `string`)'
+  message: |-
+    <AddBroker> has a new required prop `selectedApplication` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <AddBroker selectedApplication={...} />
+  when:
+    frontend.referenced:
+      pattern: ^AddBroker$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-secretkeyselector-label
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<SecretKeySelector> now requires the `label` prop (type: `string`)'
+  message: |-
+    <SecretKeySelector> has a new required prop `label` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <SecretKeySelector label={...} />
+  when:
+    frontend.referenced:
+      pattern: ^SecretKeySelector$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-secretkeyselector-name
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: mandatory
+  description: '<SecretKeySelector> now requires the `name` prop (type: `string`)'
+  message: |-
+    <SecretKeySelector> has a new required prop `name` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <SecretKeySelector name={...} />
+  when:
+    frontend.referenced:
+      pattern: ^SecretKeySelector$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-required-prop-listelementwrapper-item
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<ListElementWrapper> now requires the `item` prop (type: `Node`)'
+  message: |-
+    <ListElementWrapper> has a new required prop `item` (type: `Node`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <ListElementWrapper item={...} />
+  when:
+    frontend.referenced:
+      pattern: ^ListElementWrapper$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-listelementwrapper-onselect
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<ListElementWrapper> now requires the `onSelect` prop (type: `(ids: string[]) => void`)'
+  message: |-
+    <ListElementWrapper> has a new required prop `onSelect` (type: `(ids: string[]) => void`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <ListElementWrapper onSelect={...} />
+  when:
+    frontend.referenced:
+      pattern: ^ListElementWrapper$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-listelementwrapper-selectedids
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<ListElementWrapper> now requires the `selectedIds` prop (type: `string[]`)'
+  message: |-
+    <ListElementWrapper> has a new required prop `selectedIds` (type: `string[]`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <ListElementWrapper selectedIds={...} />
+  when:
+    frontend.referenced:
+      pattern: ^ListElementWrapper$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-timestampwrapper-resmodels
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/gitops-plugin
+  effort: 1
+  category: mandatory
+  description: '<TimestampWrapper> now requires the `resModels` prop (type: `GitOpsResource[]`)'
+  message: |-
+    <TimestampWrapper> has a new required prop `resModels` (type: `GitOpsResource[]`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <TimestampWrapper resModels={...} />
+  when:
+    frontend.referenced:
+      pattern: ^TimestampWrapper$
+      location: JSX_COMPONENT
+      from: '@patternfly/gitops-plugin'
+- ruleID: sd-required-prop-builddecorator-element
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<BuildDecorator> now requires the `element` prop (type: `Node`)'
+  message: |-
+    <BuildDecorator> has a new required prop `element` (type: `Node`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <BuildDecorator element={...} />
+  when:
+    frontend.referenced:
+      pattern: ^BuildDecorator$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-builddecorator-radius
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<BuildDecorator> now requires the `radius` prop (type: `number`)'
+  message: |-
+    <BuildDecorator> has a new required prop `radius` (type: `number`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <BuildDecorator radius={...} />
+  when:
+    frontend.referenced:
+      pattern: ^BuildDecorator$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-builddecorator-x
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<BuildDecorator> now requires the `x` prop (type: `number`)'
+  message: |-
+    <BuildDecorator> has a new required prop `x` (type: `number`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <BuildDecorator x={...} />
+  when:
+    frontend.referenced:
+      pattern: ^BuildDecorator$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-builddecorator-y
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<BuildDecorator> now requires the `y` prop (type: `number`)'
+  message: |-
+    <BuildDecorator> has a new required prop `y` (type: `number`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <BuildDecorator y={...} />
+  when:
+    frontend.referenced:
+      pattern: ^BuildDecorator$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-required-prop-helminstallupgradeform-charterror
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/helm-plugin
+  effort: 1
+  category: mandatory
+  description: '<HelmInstallUpgradeForm> now requires the `chartError` prop (type: `Error`)'
+  message: |-
+    <HelmInstallUpgradeForm> has a new required prop `chartError` (type: `Error`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <HelmInstallUpgradeForm chartError={...} />
+  when:
+    frontend.referenced:
+      pattern: ^HelmInstallUpgradeForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/helm-plugin'
+- ruleID: sd-required-prop-helminstallupgradeform-charthasvalues
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/helm-plugin
+  effort: 1
+  category: mandatory
+  description: '<HelmInstallUpgradeForm> now requires the `chartHasValues` prop (type: `boolean`)'
+  message: |-
+    <HelmInstallUpgradeForm> has a new required prop `chartHasValues` (type: `boolean`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <HelmInstallUpgradeForm chartHasValues={...} />
+  when:
+    frontend.referenced:
+      pattern: ^HelmInstallUpgradeForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/helm-plugin'
+- ruleID: sd-required-prop-helminstallupgradeform-chartmetadescription
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/helm-plugin
+  effort: 1
+  category: mandatory
+  description: '<HelmInstallUpgradeForm> now requires the `chartMetaDescription` prop (type: `React.ReactNode`)'
+  message: |-
+    <HelmInstallUpgradeForm> has a new required prop `chartMetaDescription` (type: `React.ReactNode`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <HelmInstallUpgradeForm chartMetaDescription={...} />
+  when:
+    frontend.referenced:
+      pattern: ^HelmInstallUpgradeForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/helm-plugin'
+- ruleID: sd-required-prop-helminstallupgradeform-helmactionconfig
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/helm-plugin
+  effort: 1
+  category: mandatory
+  description: '<HelmInstallUpgradeForm> now requires the `helmActionConfig` prop (type: `HelmActionConfigType`)'
+  message: |-
+    <HelmInstallUpgradeForm> has a new required prop `helmActionConfig` (type: `HelmActionConfigType`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <HelmInstallUpgradeForm helmActionConfig={...} />
+  when:
+    frontend.referenced:
+      pattern: ^HelmInstallUpgradeForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/helm-plugin'
+- ruleID: sd-required-prop-helminstallupgradeform-namespace
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/helm-plugin
+  effort: 1
+  category: mandatory
+  description: '<HelmInstallUpgradeForm> now requires the `namespace` prop (type: `string`)'
+  message: |-
+    <HelmInstallUpgradeForm> has a new required prop `namespace` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <HelmInstallUpgradeForm namespace={...} />
+  when:
+    frontend.referenced:
+      pattern: ^HelmInstallUpgradeForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/helm-plugin'
+- ruleID: sd-required-prop-helminstallupgradeform-onversionchange
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/helm-plugin
+  effort: 1
+  category: mandatory
+  description: '<HelmInstallUpgradeForm> now requires the `onVersionChange` prop (type: `(chart: HelmChart) => void`)'
+  message: |-
+    <HelmInstallUpgradeForm> has a new required prop `onVersionChange` (type: `(chart: HelmChart) => void`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <HelmInstallUpgradeForm onVersionChange={...} />
+  when:
+    frontend.referenced:
+      pattern: ^HelmInstallUpgradeForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/helm-plugin'
+- ruleID: sd-required-prop-datamodelprovider-namespace
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/topology
+  effort: 1
+  category: mandatory
+  description: '<DataModelProvider> now requires the `namespace` prop (type: `string`)'
+  message: |-
+    <DataModelProvider> has a new required prop `namespace` (type: `string`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <DataModelProvider namespace={...} />
+  when:
+    frontend.referenced:
+      pattern: ^DataModelProvider$
+      location: JSX_COMPONENT
+      from: '@patternfly/topology'
+- ruleID: sd-test-gettingstartedexpandablegrid-attr-conditionality-aria-label-span
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - change-type=attribute-conditionality
+  - impact=frontend-testing
+  - package=@patternfly/console-shared
+  effort: 1
+  category: optional
+  description: 'Test impact: GettingStartedExpandableGrid `aria-label` now conditionally rendered'
+  message: |-
+    GettingStartedExpandableGrid no longer always renders `aria-label` on `<span>`.
+
+    Previously, `getAttribute('aria-label')` returned a string value (e.g., `"false"`) even when the attribute was semantically "off". Now the attribute is omitted entirely when not active, so `getAttribute('aria-label')` returns `null`.
+
+    Update test assertions:
+      `.getAttribute('aria-label').toBe('false')` → `.not.toHaveAttribute('aria-label')`
+      or: `.getAttribute('aria-label').toBeNull()`
+      or: `expect(element).not.toHaveAttribute('aria-label')`
+  when:
+    builtin.filecontent:
+      pattern: (getAttribute|toHaveAttribute|\.not\.toHaveAttribute)\(\s*['"]aria-label['"]\s*[,)]
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-gettingstartedexpandablegrid-attr-conditionality-role-span
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - change-type=attribute-conditionality
+  - impact=frontend-testing
+  - package=@patternfly/console-shared
+  effort: 1
+  category: optional
+  description: 'Test impact: GettingStartedExpandableGrid `role` now conditionally rendered'
+  message: |-
+    GettingStartedExpandableGrid no longer always renders `role` on `<span>`.
+
+    Previously, `getAttribute('role')` returned a string value (e.g., `"false"`) even when the attribute was semantically "off". Now the attribute is omitted entirely when not active, so `getAttribute('role')` returns `null`.
+
+    Update test assertions:
+      `.getAttribute('role').toBe('false')` → `.not.toHaveAttribute('role')`
+      or: `.getAttribute('role').toBeNull()`
+      or: `expect(element).not.toHaveAttribute('role')`
+  when:
+    builtin.filecontent:
+      pattern: (getAttribute|toHaveAttribute|\.not\.toHaveAttribute)\(\s*['"]role['"]\s*[,)]
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-guidedtourtext-dom-a-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/console-app
+  effort: 1
+  category: optional
+  description: 'Test impact: GuidedTourText no longer renders <a>'
+  message: |-
+    GuidedTourText no longer renders a <a> element (implicit role='link').
+
+    Tests using getByRole('link') inside GuidedTourText may fail.
+
+    GuidedTourText no longer renders <a> element
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+      location: FUNCTION_CALL
+      value: ^link$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-webhooktoastcontent-dom-a-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/dev-console
+  effort: 1
+  category: optional
+  description: 'Test impact: WebhookToastContent no longer renders <a>'
+  message: |-
+    WebhookToastContent no longer renders a <a> element (implicit role='link').
+
+    Tests using getByRole('link') inside WebhookToastContent may fail.
+
+    WebhookToastContent no longer renders <a> element
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+      location: FUNCTION_CALL
+      value: ^link$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-helmreleaselist-dom-img-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/helm-plugin
+  effort: 1
+  category: optional
+  description: 'Test impact: HelmReleaseList no longer renders <img>'
+  message: |-
+    HelmReleaseList no longer renders a <img> element (implicit role='img').
+
+    Tests using getByRole('img') inside HelmReleaseList may fail.
+
+    HelmReleaseList no longer renders <img> element
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+      location: FUNCTION_CALL
+      value: ^img$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-functionslist-dom-img-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: optional
+  description: 'Test impact: FunctionsList no longer renders <img>'
+  message: |-
+    FunctionsList no longer renders a <img> element (implicit role='img').
+
+    Tests using getByRole('img') inside FunctionsList may fail.
+
+    FunctionsList no longer renders <img> element
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+      location: FUNCTION_CALL
+      value: ^img$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-filtertable-aria-label-attributes-table-tabledeprecated-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: optional
+  description: 'Test impact: FilterTable aria-label ''Attributes Table'' removed'
+  message: |-
+    FilterTable no longer has aria-label='Attributes Table'.
+
+    Tests using getByLabelText('Attributes Table') to find this component will fail.
+
+    aria-label attribute removed from <TableDeprecated> in FilterTable
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByLabelText|queryByLabelText|findByLabelText|getAllByLabelText|queryAllByLabelText|findAllByLabelText)$
+      location: FUNCTION_CALL
+      value: ^Attributes Table$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-pacoverview-dom-a-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: optional
+  description: 'Test impact: PacOverview no longer renders <a>'
+  message: |-
+    PacOverview no longer renders a <a> element (implicit role='link').
+
+    Tests using getByRole('link') inside PacOverview may fail.
+
+    PacOverview no longer renders <a> element
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+      location: FUNCTION_CALL
+      value: ^link$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-githubsection-dom-a-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: optional
+  description: 'Test impact: GithubSection no longer renders <a>'
+  message: |-
+    GithubSection no longer renders a <a> element (implicit role='link').
+
+    Tests using getByRole('link') inside GithubSection may fail.
+
+    GithubSection no longer renders <a> element
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+      location: FUNCTION_CALL
+      value: ^link$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-topologyedgepanel-dom-button-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/topology
+  effort: 1
+  category: optional
+  description: 'Test impact: TopologyEdgePanel no longer renders <button>'
+  message: |-
+    TopologyEdgePanel no longer renders a <button> element (implicit role='button').
+
+    Tests using getByRole('button') inside TopologyEdgePanel may fail.
+
+    TopologyEdgePanel no longer renders <button> element
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+      location: FUNCTION_CALL
+      value: ^button$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-topologyedgepanel-dom-li-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/topology
+  effort: 1
+  category: optional
+  description: 'Test impact: TopologyEdgePanel no longer renders <li>'
+  message: |-
+    TopologyEdgePanel no longer renders a <li> element (implicit role='listitem').
+
+    Tests using getByRole('listitem') inside TopologyEdgePanel may fail.
+
+    TopologyEdgePanel no longer renders <li> element
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+      location: FUNCTION_CALL
+      value: ^listitem$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-topologyedgepanel-dom-ul-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/topology
+  effort: 1
+  category: optional
+  description: 'Test impact: TopologyEdgePanel no longer renders <ul>'
+  message: |-
+    TopologyEdgePanel no longer renders a <ul> element (implicit role='list').
+
+    Tests using getByRole('list') inside TopologyEdgePanel may fail.
+
+    TopologyEdgePanel no longer renders <ul> element
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+      location: FUNCTION_CALL
+      value: ^list$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-virtualizedtable-dom-td-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/react-core
+  effort: 1
+  category: optional
+  description: 'Test impact: VirtualizedTable no longer renders <td>'
+  message: |-
+    VirtualizedTable no longer renders a <td> element (implicit role='cell').
+
+    Tests using getByRole('cell') inside VirtualizedTable may fail.
+
+    VirtualizedTable no longer renders <td> element
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+      location: FUNCTION_CALL
+      value: ^cell$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-virtualizedtable-aria-aria-rowcount-div-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/react-core
+  effort: 1
+  category: optional
+  description: 'Test impact: VirtualizedTable `aria-rowcount` removed'
+  message: |-
+    VirtualizedTable no longer renders `aria-rowcount` on `<div>`.
+
+    Tests using `getAttribute('aria-rowcount')` will now get `null`.
+
+    Update test assertions:
+      `.getAttribute('aria-rowcount')` → check the native HTML attribute instead (e.g., `.toBeDisabled()` or `.toHaveAttribute('disabled')`)
+      `.getAttribute('aria-rowcount').toBe('false')` → `.not.toHaveAttribute('aria-rowcount')`
+  when:
+    builtin.filecontent:
+      pattern: (getAttribute|toHaveAttribute|\.not\.toHaveAttribute)\(\s*['"]aria-rowcount['"]\s*[,)]
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-virtualizedtable-role-presentation-pftable-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/react-core
+  effort: 1
+  category: optional
+  description: 'Test impact: VirtualizedTable role ''presentation'' removed'
+  message: |-
+    VirtualizedTable no longer has role='presentation'.
+
+    Tests using getByRole('presentation') to find this component will fail.
+
+    role='presentation' removed from <PfTable> in VirtualizedTable
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+      location: FUNCTION_CALL
+      value: ^presentation$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-virtualizedtable-role-grid-div-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/react-core
+  effort: 1
+  category: optional
+  description: 'Test impact: VirtualizedTable role ''grid'' removed'
+  message: |-
+    VirtualizedTable no longer has role='grid'.
+
+    Tests using getByRole('grid') to find this component will fail.
+
+    role='grid' removed from <div> in VirtualizedTable
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+      location: FUNCTION_CALL
+      value: ^grid$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-virtualizedtable-role-gridcell-td-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/react-core
+  effort: 1
+  category: optional
+  description: 'Test impact: VirtualizedTable role ''gridcell'' removed'
+  message: |-
+    VirtualizedTable no longer has role='gridcell'.
+
+    Tests using getByRole('gridcell') to find this component will fail.
+
+    role='gridcell' removed from <td> in VirtualizedTable
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+      location: FUNCTION_CALL
+      value: ^gridcell$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-configtypesection-transitive-behavioral-changes
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: potential
+  description: 'Test impact: ConfigTypeSection has transitive behavioral changes'
+  message: |-
+    ConfigTypeSection is affected by behavioral changes in rendered sub-components:
+    - ConfigTypeSection renders FormSection which has a behavioral change: FormSection no longer renders <h2> element
+    - ConfigTypeSection renders GithubSection which has a behavioral change: GithubSection no longer renders <a> element
+
+    Tests for ConfigTypeSection may need updating. Fix options depend on the specific change:
+    - For portal changes: use waitFor(), popperProps={{ appendTo: 'inline' }}, or within(document.body)
+    - For role/DOM changes: update getByRole() queries to match new roles
+    - For attribute changes: update querySelector/getAttribute calls
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+      location: FUNCTION_CALL
+      value: ^link$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-pacpage-transitive-behavioral-changes
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/pipelines-plugin
+  effort: 1
+  category: potential
+  description: 'Test impact: PacPage has transitive behavioral changes'
+  message: |-
+    PacPage is affected by behavioral changes in rendered sub-components:
+    - PacPage renders PacForm which has a behavioral change: PacForm no longer renders <title> element
+    - PacPage renders PacOverview which has a behavioral change: PacOverview no longer renders <a> element
+    - PacPage renders PacOverview which has a behavioral change: PacOverview no longer renders <div> element
+
+    Tests for PacPage may need updating. Fix options depend on the specific change:
+    - For portal changes: use waitFor(), popperProps={{ appendTo: 'inline' }}, or within(document.body)
+    - For role/DOM changes: update getByRole() queries to match new roles
+    - For attribute changes: update querySelector/getAttribute calls
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+      location: FUNCTION_CALL
+      value: ^link$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-adminhelmreleaselistpage-transitive-behavioral-changes
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/helm-plugin
+  effort: 1
+  category: potential
+  description: 'Test impact: AdminHelmReleaseListPage has transitive behavioral changes'
+  message: |-
+    AdminHelmReleaseListPage is affected by behavioral changes in rendered sub-components:
+    - AdminHelmReleaseListPage renders HelmReleaseList which has a behavioral change: HelmReleaseList no longer renders <img> element
+    - AdminHelmReleaseListPage renders HelmReleaseList which has a behavioral change: HelmReleaseList no longer renders <title> element
+
+    Tests for AdminHelmReleaseListPage may need updating. Fix options depend on the specific change:
+    - For portal changes: use waitFor(), popperProps={{ appendTo: 'inline' }}, or within(document.body)
+    - For role/DOM changes: update getByRole() queries to match new roles
+    - For attribute changes: update querySelector/getAttribute calls
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+      location: FUNCTION_CALL
+      value: ^img$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-pdblist-transitive-behavioral-changes
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/console-app
+  effort: 1
+  category: potential
+  description: 'Test impact: PDBList has transitive behavioral changes'
+  message: |-
+    PDBList is affected by behavioral changes in rendered sub-components:
+    - PDBList renders VirtualizedTable which has a behavioral change: VirtualizedTable no longer renders <td> element
+    - PDBList renders VirtualizedTable which has a behavioral change: aria-rowcount attribute removed from <div> in VirtualizedTable
+    - PDBList renders VirtualizedTable which has a behavioral change: role='gridcell' added to <Td> in VirtualizedTable
+    - PDBList renders VirtualizedTable which has a behavioral change: role='presentation' removed from <PfTable> in VirtualizedTable
+    - PDBList renders VirtualizedTable which has a behavioral change: role='grid' removed from <div> in VirtualizedTable
+    - PDBList renders VirtualizedTable which has a behavioral change: role='gridcell' removed from <td> in VirtualizedTable
+
+    Tests for PDBList may need updating. Fix options depend on the specific change:
+    - For portal changes: use waitFor(), popperProps={{ appendTo: 'inline' }}, or within(document.body)
+    - For role/DOM changes: update getByRole() queries to match new roles
+    - For attribute changes: update querySelector/getAttribute calls
+  when:
+    or:
+    - frontend.referenced:
+        pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+        location: FUNCTION_CALL
+        value: ^cell$
+        filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+    - frontend.referenced:
+        pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+        location: FUNCTION_CALL
+        value: ^presentation$
+        filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+    - frontend.referenced:
+        pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+        location: FUNCTION_CALL
+        value: ^grid$
+        filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+    - frontend.referenced:
+        pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+        location: FUNCTION_CALL
+        value: ^gridcell$
+        filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-nodespage-transitive-behavioral-changes
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/console-app
+  effort: 1
+  category: potential
+  description: 'Test impact: NodesPage has transitive behavioral changes'
+  message: |-
+    NodesPage is affected by behavioral changes in rendered sub-components:
+    - NodesPage renders ListPageBody which has a behavioral change: ListPageBody no longer renders <div> element
+    - NodesPage renders ListPageHeader which has a behavioral change: ListPageHeader no longer renders <p> element
+    - NodesPage renders VirtualizedTable which has a behavioral change: VirtualizedTable no longer renders <td> element
+    - NodesPage renders VirtualizedTable which has a behavioral change: aria-rowcount attribute removed from <div> in VirtualizedTable
+    - NodesPage renders VirtualizedTable which has a behavioral change: role='gridcell' added to <Td> in VirtualizedTable
+    - NodesPage renders VirtualizedTable which has a behavioral change: role='presentation' removed from <PfTable> in VirtualizedTable
+    - NodesPage renders VirtualizedTable which has a behavioral change: role='grid' removed from <div> in VirtualizedTable
+    - NodesPage renders VirtualizedTable which has a behavioral change: role='gridcell' removed from <td> in VirtualizedTable
+
+    Tests for NodesPage may need updating. Fix options depend on the specific change:
+    - For portal changes: use waitFor(), popperProps={{ appendTo: 'inline' }}, or within(document.body)
+    - For role/DOM changes: update getByRole() queries to match new roles
+    - For attribute changes: update querySelector/getAttribute calls
+  when:
+    or:
+    - frontend.referenced:
+        pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+        location: FUNCTION_CALL
+        value: ^cell$
+        filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+    - frontend.referenced:
+        pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+        location: FUNCTION_CALL
+        value: ^presentation$
+        filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+    - frontend.referenced:
+        pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+        location: FUNCTION_CALL
+        value: ^grid$
+        filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+    - frontend.referenced:
+        pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+        location: FUNCTION_CALL
+        value: ^gridcell$
+        filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-eventtriggerfilterlist-transitive-behavioral-changes
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: potential
+  description: 'Test impact: EventTriggerFilterList has transitive behavioral changes'
+  message: |-
+    EventTriggerFilterList is affected by behavioral changes in rendered sub-components:
+    - EventTriggerFilterList renders FilterTable which has a behavioral change: aria-label attribute added to <Table> in FilterTable
+    - EventTriggerFilterList renders FilterTable which has a behavioral change: aria-label attribute removed from <TableDeprecated> in FilterTable
+
+    Tests for EventTriggerFilterList may need updating. Fix options depend on the specific change:
+    - For portal changes: use waitFor(), popperProps={{ appendTo: 'inline' }}, or within(document.body)
+    - For role/DOM changes: update getByRole() queries to match new roles
+    - For attribute changes: update querySelector/getAttribute calls
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByLabelText|queryByLabelText|findByLabelText|getAllByLabelText|queryAllByLabelText|findAllByLabelText)$
+      location: FUNCTION_CALL
+      value: ^Attributes Table$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-eventpubsubsubscribers-transitive-behavioral-changes
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: potential
+  description: 'Test impact: EventPubSubSubscribers has transitive behavioral changes'
+  message: |-
+    EventPubSubSubscribers is affected by behavioral changes in rendered sub-components:
+    - EventPubSubSubscribers renders FilterTable which has a behavioral change: aria-label attribute added to <Table> in FilterTable
+    - EventPubSubSubscribers renders FilterTable which has a behavioral change: aria-label attribute removed from <TableDeprecated> in FilterTable
+
+    Tests for EventPubSubSubscribers may need updating. Fix options depend on the specific change:
+    - For portal changes: use waitFor(), popperProps={{ appendTo: 'inline' }}, or within(document.body)
+    - For role/DOM changes: update getByRole() queries to match new roles
+    - For attribute changes: update querySelector/getAttribute calls
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByLabelText|queryByLabelText|findByLabelText|getAllByLabelText|queryAllByLabelText|findAllByLabelText)$
+      location: FUNCTION_CALL
+      value: ^Attributes Table$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-triggerdetails-transitive-behavioral-changes
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/knative-plugin
+  effort: 1
+  category: potential
+  description: 'Test impact: TriggerDetails has transitive behavioral changes'
+  message: |-
+    TriggerDetails is affected by behavioral changes in rendered sub-components:
+    - TriggerDetails renders FilterTable which has a behavioral change: aria-label attribute added to <Table> in FilterTable
+    - TriggerDetails renders FilterTable which has a behavioral change: aria-label attribute removed from <TableDeprecated> in FilterTable
+    - TriggerDetails renders DynamicResourceLink which has a behavioral change: DynamicResourceLink no longer renders <dd> element
+    - TriggerDetails renders DynamicResourceLink which has a behavioral change: DynamicResourceLink no longer renders <dl> element
+    - TriggerDetails renders DynamicResourceLink which has a behavioral change: DynamicResourceLink no longer renders <dt> element
+
+    Tests for TriggerDetails may need updating. Fix options depend on the specific change:
+    - For portal changes: use waitFor(), popperProps={{ appendTo: 'inline' }}, or within(document.body)
+    - For role/DOM changes: update getByRole() queries to match new roles
+    - For attribute changes: update querySelector/getAttribute calls
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByLabelText|queryByLabelText|findByLabelText|getAllByLabelText|queryAllByLabelText|findAllByLabelText)$
+      location: FUNCTION_CALL
+      value: ^Attributes Table$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-helmreleaselistpage-transitive-behavioral-changes
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/helm-plugin
+  effort: 1
+  category: potential
+  description: 'Test impact: HelmReleaseListPage has transitive behavioral changes'
+  message: |-
+    HelmReleaseListPage is affected by behavioral changes in rendered sub-components:
+    - HelmReleaseListPage renders HelmReleaseList which has a behavioral change: HelmReleaseList no longer renders <img> element
+    - HelmReleaseListPage renders HelmReleaseList which has a behavioral change: HelmReleaseList no longer renders <title> element
+
+    Tests for HelmReleaseListPage may need updating. Fix options depend on the specific change:
+    - For portal changes: use waitFor(), popperProps={{ appendTo: 'inline' }}, or within(document.body)
+    - For role/DOM changes: update getByRole() queries to match new roles
+    - For attribute changes: update querySelector/getAttribute calls
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByRole|queryByRole|findByRole|getAllByRole|queryAllByRole|findAllByRole)$
+      location: FUNCTION_CALL
+      value: ^img$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-new-absorbing-prop-gettingstartedexpandablegrid-footercontent
+  labels:
+  - source=semver-analyzer
+  - change-type=new-absorbing-prop
+  - package=@patternfly/console-shared
+  effort: 3
+  category: potential
+  description: New `footerContent` prop on <GettingStartedExpandableGrid> may absorb children content
+  message: |-
+    Component <GettingStartedExpandableGrid> has a new prop `footerContent` (type: `React.ReactNode`) added in v6 that accepts JSX content.
+
+    This prop may be intended to receive content that was previously passed as children. Review the JSX children of <GettingStartedExpandableGrid> and determine if any should be moved to the `footerContent` prop.
+
+    Example migration:
+      Before: <GettingStartedExpandableGrid>{content} other children</GettingStartedExpandableGrid>
+      After:  <GettingStartedExpandableGrid footerContent={{content}}>other children</GettingStartedExpandableGrid>
+  when:
+    frontend.referenced:
+      pattern: ^GettingStartedExpandableGrid$
+      location: JSX_COMPONENT
+      from: '@patternfly/console-shared'
+- ruleID: sd-new-absorbing-prop-gettingstartedexpandablegrid-headercontent
+  labels:
+  - source=semver-analyzer
+  - change-type=new-absorbing-prop
+  - package=@patternfly/console-shared
+  effort: 3
+  category: potential
+  description: New `headerContent` prop on <GettingStartedExpandableGrid> may absorb children content
+  message: |-
+    Component <GettingStartedExpandableGrid> has a new prop `headerContent` (type: `React.ReactNode`) added in v6 that accepts JSX content.
+
+    This prop may be intended to receive content that was previously passed as children. Review the JSX children of <GettingStartedExpandableGrid> and determine if any should be moved to the `headerContent` prop.
+
+    Example migration:
+      Before: <GettingStartedExpandableGrid>{content} other children</GettingStartedExpandableGrid>
+      After:  <GettingStartedExpandableGrid headerContent={{content}}>other children</GettingStartedExpandableGrid>
+  when:
+    frontend.referenced:
+      pattern: ^GettingStartedExpandableGrid$
+      location: JSX_COMPONENT
+      from: '@patternfly/console-shared'
+- ruleID: sd-new-absorbing-prop-gettingstartedexpandablegrid-title
+  labels:
+  - source=semver-analyzer
+  - change-type=new-absorbing-prop
+  - package=@patternfly/console-shared
+  effort: 3
+  category: potential
+  description: New `title` prop on <GettingStartedExpandableGrid> may absorb children content
+  message: |-
+    Component <GettingStartedExpandableGrid> has a new prop `title` (type: `React.ReactNode`) added in v6 that accepts JSX content.
+
+    This prop may be intended to receive content that was previously passed as children. Review the JSX children of <GettingStartedExpandableGrid> and determine if any should be moved to the `title` prop.
+
+    Example migration:
+      Before: <GettingStartedExpandableGrid>{content} other children</GettingStartedExpandableGrid>
+      After:  <GettingStartedExpandableGrid title={{content}}>other children</GettingStartedExpandableGrid>
+  when:
+    frontend.referenced:
+      pattern: ^GettingStartedExpandableGrid$
+      location: JSX_COMPONENT
+      from: '@patternfly/console-shared'
+- ruleID: sd-new-absorbing-prop-gettingstartedexpandablegrid-titletooltip
+  labels:
+  - source=semver-analyzer
+  - change-type=new-absorbing-prop
+  - package=@patternfly/console-shared
+  effort: 3
+  category: potential
+  description: New `titleTooltip` prop on <GettingStartedExpandableGrid> may absorb children content
+  message: |-
+    Component <GettingStartedExpandableGrid> has a new prop `titleTooltip` (type: `React.ReactNode | false`) added in v6 that accepts JSX content.
+
+    This prop may be intended to receive content that was previously passed as children. Review the JSX children of <GettingStartedExpandableGrid> and determine if any should be moved to the `titleTooltip` prop.
+
+    Example migration:
+      Before: <GettingStartedExpandableGrid>{content} other children</GettingStartedExpandableGrid>
+      After:  <GettingStartedExpandableGrid titleTooltip={{content}}>other children</GettingStartedExpandableGrid>
+  when:
+    frontend.referenced:
+      pattern: ^GettingStartedExpandableGrid$
+      location: JSX_COMPONENT
+      from: '@patternfly/console-shared'

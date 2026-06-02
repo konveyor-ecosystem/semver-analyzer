@@ -1,0 +1,496 @@
+{
+  "semver-packages-module-src-bulkselect-bulkselect-d-ts-bulkselectvalue-type-changed-2": {
+    "strategy": "PropTypeChange",
+    "from": "typeof BulkSelectValue[keyof typeof BulkSelectValue]",
+    "to": "(typeof BulkSelectValue)[keyof typeof BulkSelectValue]",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-manifest-peerdependencies-react-dom-peer-dependency-range-changed": {
+    "strategy": "EnsureDependency",
+    "package": "react-dom",
+    "new_version": "^17 || ^18 || ^19"
+  },
+  "semver-manifest-peerdependencies-patternfly-react-drag-drop-peer-dependency-added": {
+    "strategy": "EnsureDependency",
+    "package": "@patternfly/react-drag-drop",
+    "new_version": "^6.0.0"
+  },
+  "semver-packages-module-src-bulkselect-bulkselect-d-ts-bulkselectvalue-type-changed": {
+    "strategy": "PropTypeChange",
+    "from": "{ readonly all: \"all\"; readonly none: \"none\"; readonly page: \"page\"; readonly nonePage: \"nonePage\" }",
+    "to": "(typeof BulkSelectValue)[keyof typeof BulkSelectValue]",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "sd-required-prop-staledatawarning-currdate": {
+    "strategy": "LlmAssisted",
+    "component": "StaleDataWarning",
+    "prop": "currDate",
+    "source_package": "@patternfly/module"
+  },
+  "semver-packages-module-src-multicontentcard-multicontentcard-multicontentcardprops-d-ts-multicontentcard-leftbordervariant-removed": {
+    "strategy": "RemoveProp",
+    "component": "MultiContentCard",
+    "prop": "leftBorderVariant",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-packages-module-src-actionmenu-actionmenu-d-ts-actionmenu-removed": {
+    "strategy": "Manual",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-packages-module-src-unavailablecontent-unavailablecontent-unavailablecontentprops-d-ts-unavailablecontent-statuspagelinktext-type-changed": {
+    "strategy": "PropTypeChange",
+    "from": "string",
+    "to": "ReactNode",
+    "component": "UnavailableContent",
+    "prop": "statusPageLinkText",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-packages-module-src-status-status-d-ts-iconstatus-type-changed-2-group-2": {
+    "strategy": "PropTypeChange",
+    "from": "typeof IconStatus[keyof typeof IconStatus]",
+    "to": "(typeof IconStatus)[keyof typeof IconStatus]",
+    "mappings": [
+      {
+        "from": "typeof IconStatus[keyof typeof IconStatus]",
+        "to": "(typeof IconStatus)[keyof typeof IconStatus]"
+      },
+      {
+        "from": "typeof StatusVariant[keyof typeof StatusVariant]",
+        "to": "(typeof StatusVariant)[keyof typeof StatusVariant]"
+      }
+    ],
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-packages-module-src-unavailablecontent-unavailablecontent-d-ts-unavailablecontentprops-signature-changed": {
+    "strategy": "PropTypeChange",
+    "to": "Omit<EmptyStateProps, 'children' | 'titleText' | 'bodyText'>",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-packages-module-src-errorstate-errorstate-errorstateprops-d-ts-errorstate-defaulterrordescription-renamed": {
+    "strategy": "Rename",
+    "from": "defaultErrorDescription",
+    "to": "defaultBodyText",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "sd-required-prop-staledatawarning-stalewarning": {
+    "strategy": "LlmAssisted",
+    "component": "StaleDataWarning",
+    "prop": "staleWarning",
+    "source_package": "@patternfly/module"
+  },
+  "semver-manifest-peerdependencies-react-peer-dependency-range-changed": {
+    "strategy": "EnsureDependency",
+    "package": "react",
+    "new_version": "^17 || ^18 || ^19"
+  },
+  "semver-packages-module-src-actionmenu-actionmenu-d-ts-actionmenuprops-removed-group-3": {
+    "strategy": "Manual",
+    "mappings": [
+      {},
+      {},
+      {}
+    ],
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-packages-module-src-errorboundary-errorboundary-errorboundaryprops-d-ts-errorboundary-errortitle-type-changed-group-2": {
+    "strategy": "PropTypeChange",
+    "from": "string",
+    "to": "ReactNode",
+    "component": "ErrorBoundary",
+    "prop": "errorTitle",
+    "mappings": [
+      {
+        "from": "string",
+        "to": "ReactNode",
+        "component": "ErrorBoundary",
+        "prop": "errorTitle"
+      },
+      {
+        "from": "string",
+        "to": "ReactNode",
+        "component": "ErrorBoundary",
+        "prop": "headerTitle"
+      }
+    ],
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "sd-required-prop-listmanager-columns": {
+    "strategy": "LlmAssisted",
+    "component": "ListManager",
+    "prop": "columns",
+    "source_package": "@patternfly/module"
+  },
+  "semver-packages-module-src-battery-battery-d-ts-batteryseverity-removed": {
+    "strategy": "Manual",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-packages-module-src-errorstate-errorstate-d-ts-errorstateprops-signature-changed": {
+    "strategy": "PropTypeChange",
+    "from": "Omit<EmptyStateProps, 'children'>",
+    "to": "Omit<EmptyStateProps, 'children' | 'titleText' | 'status'>",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-packages-module-src-detailspageheader-detailspageheader-d-ts-pageheadinglabelprops-removed": {
+    "strategy": "Manual",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "sd-required-prop-severity-label": {
+    "strategy": "LlmAssisted",
+    "component": "Severity",
+    "prop": "label",
+    "source_package": "@patternfly/module"
+  },
+  "sd-test-ansible-attr-conditionality-data-ouia-component-id-i": {
+    "strategy": "Manual",
+    "source_package": "@patternfly/module"
+  },
+  "semver-dep-update-patternfly-react-component-groups": {
+    "strategy": "EnsureDependency",
+    "package": "@patternfly/react-component-groups",
+    "new_version": "^5.0.0-prerelease.0"
+  },
+  "semver-horizontalnav-component-import-deprecated": {
+    "strategy": "LlmAssisted"
+  },
+  "sd-required-prop-fieldbuilder-firstcolumnlabel": {
+    "strategy": "LlmAssisted",
+    "component": "FieldBuilder",
+    "prop": "firstColumnLabel",
+    "source_package": "@patternfly/module"
+  },
+  "semver-detailspage-component-import-deprecated": {
+    "strategy": "LlmAssisted"
+  },
+  "sd-prop-default-missingpage-ouiaid": {
+    "strategy": "Manual",
+    "component": "MissingPage",
+    "prop": "ouiaId",
+    "source_package": "@patternfly/module"
+  },
+  "semver-actionbutton-component-import-deprecated": {
+    "strategy": "LlmAssisted"
+  },
+  "semver-packages-module-src-multicontentcard-multicontentcard-d-ts-multicontentcarddividervariant-type-changed": {
+    "strategy": "PropTypeChange",
+    "from": "{ readonly left: \"left\"; readonly right: \"right\" }",
+    "to": "typeof MultiContentCardDividerVariant[keyof typeof MultiContentCardDividerVariant]",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-detailspageheader-component-import-deprecated": {
+    "strategy": "LlmAssisted"
+  },
+  "semver-packages-module-src-status-status-statusprops-d-ts-status-description-type-changed": {
+    "strategy": "PropTypeChange",
+    "from": "string",
+    "to": "ReactNode",
+    "component": "Status",
+    "prop": "description",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-groupedactions-component-import-deprecated": {
+    "strategy": "LlmAssisted"
+  },
+  "semver-actionmenuoptions-component-import-deprecated": {
+    "strategy": "LlmAssisted"
+  },
+  "semver-packages-module-src-unavailablecontent-unavailablecontent-unavailablecontentprops-d-ts-unavailablecontent-unavailablebodypoststatuslinktext-removed": {
+    "strategy": "RemoveProp",
+    "component": "UnavailableContent",
+    "prop": "unavailableBodyPostStatusLinkText",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-pageheading-component-import-deprecated": {
+    "strategy": "LlmAssisted"
+  },
+  "semver-packages-module-src-servicecard-servicecard-servicecardprops-d-ts-servicecard-description-type-changed-group-3": {
+    "strategy": "PropTypeChange",
+    "from": "string",
+    "to": "ReactNode",
+    "component": "ServiceCard",
+    "prop": "description",
+    "mappings": [
+      {
+        "from": "string",
+        "to": "ReactNode",
+        "component": "ServiceCard",
+        "prop": "description"
+      },
+      {
+        "from": "string",
+        "to": "ReactNode",
+        "component": "ServiceCard",
+        "prop": "helperText"
+      },
+      {
+        "from": "string",
+        "to": "ReactNode",
+        "component": "ServiceCard",
+        "prop": "subtitle"
+      }
+    ],
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-packages-module-src-logsnippet-logsnippet-logsnippetprops-d-ts-logsnippet-leftbordervariant-renamed": {
+    "strategy": "Rename",
+    "from": "leftBorderVariant",
+    "to": "variant",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-packages-module-src-logsnippet-logsnippet-logsnippetprops-d-ts-logsnippet-logsnippet-type-changed": {
+    "strategy": "PropTypeChange",
+    "from": "string",
+    "to": "ReactNode",
+    "component": "LogSnippet",
+    "prop": "logSnippet",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-packages-module-src-multicontentcard-multicontentcard-multicontentcardprops-d-ts-multicontentcard-toggletext-type-changed": {
+    "strategy": "PropTypeChange",
+    "from": "string",
+    "to": "ReactNode",
+    "component": "MultiContentCard",
+    "prop": "toggleText",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "sd-required-prop-staledatawarning-culled": {
+    "strategy": "LlmAssisted",
+    "component": "StaleDataWarning",
+    "prop": "culled",
+    "source_package": "@patternfly/module"
+  },
+  "semver-packages-module-src-warningmodal-warningmodal-warningmodalprops-d-ts-warningmodal-cancelbuttonlabel-type-changed-group-3": {
+    "strategy": "PropTypeChange",
+    "from": "string",
+    "to": "ReactNode",
+    "component": "WarningModal",
+    "prop": "cancelButtonLabel",
+    "mappings": [
+      {
+        "from": "string",
+        "to": "ReactNode",
+        "component": "WarningModal",
+        "prop": "cancelButtonLabel"
+      },
+      {
+        "from": "string",
+        "to": "ReactNode",
+        "component": "WarningModal",
+        "prop": "checkboxLabel"
+      },
+      {
+        "from": "string",
+        "to": "ReactNode",
+        "component": "WarningModal",
+        "prop": "confirmButtonLabel"
+      }
+    ],
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "sd-required-prop-fieldbuilder-onaddrow": {
+    "strategy": "LlmAssisted",
+    "component": "FieldBuilder",
+    "prop": "onAddRow",
+    "source_package": "@patternfly/module"
+  },
+  "sd-required-prop-fieldbuilder-onremoverow": {
+    "strategy": "LlmAssisted",
+    "component": "FieldBuilder",
+    "prop": "onRemoveRow",
+    "source_package": "@patternfly/module"
+  },
+  "semver-packages-module-src-errorstate-errorstate-errorstateprops-d-ts-errorstate-errortitle-signature-changed": {
+    "strategy": "PropTypeChange",
+    "from": "property: errorTitle: string",
+    "to": "property: titleText: ReactNode",
+    "component": "ErrorState",
+    "prop": "errorTitle",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-packages-module-src-multicontentcard-multicontentcard-d-ts-multicontentcardbordervariant-removed": {
+    "strategy": "Manual",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-packages-module-src-bulkselect-bulkselect-bulkselectprops-d-ts-bulkselect-dropdownlistprops-signature-changed": {
+    "strategy": "PropTypeChange",
+    "to": "property: dropdownListProps: Omit<DropdownListProps, 'children'>",
+    "component": "BulkSelect",
+    "prop": "dropdownListProps",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-invalidobject-component-import-deprecated": {
+    "strategy": "LlmAssisted"
+  },
+  "semver-packages-module-src-errorstate-errorstate-errorstateprops-d-ts-errorstate-status-signature-changed": {
+    "strategy": "PropTypeChange",
+    "to": "property: status: 'custom' | 'danger' | 'info' | 'none' | 'success' | 'warning'",
+    "component": "ErrorState",
+    "prop": "status",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "sd-required-prop-fieldbuilder-rowcount": {
+    "strategy": "LlmAssisted",
+    "component": "FieldBuilder",
+    "prop": "rowCount",
+    "source_package": "@patternfly/module"
+  },
+  "sd-required-prop-severity-severity": {
+    "strategy": "LlmAssisted",
+    "component": "Severity",
+    "prop": "severity",
+    "source_package": "@patternfly/module"
+  },
+  "sd-prop-default-unavailablecontent-statuspagelinktext": {
+    "strategy": "Manual",
+    "component": "UnavailableContent",
+    "prop": "statusPageLinkText",
+    "source_package": "@patternfly/module"
+  },
+  "semver-packages-module-src-ansible-ansible-ansibleprops-d-ts-ansible-unsupported-signature-changed": {
+    "strategy": "PropTypeChange",
+    "from": "property: unsupported: boolean | number",
+    "to": "property: isSupported: boolean",
+    "component": "Ansible",
+    "prop": "unsupported",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-notauthorized-component-import-deprecated": {
+    "strategy": "LlmAssisted"
+  },
+  "semver-packages-module-src-ansible-ansible-ansibleprops-d-ts-ansible-isrhaap-signature-changed": {
+    "strategy": "PropTypeChange",
+    "to": "property: isRHAAP: boolean",
+    "component": "Ansible",
+    "prop": "isRHAAP",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-packages-module-src-multicontentcard-multicontentcard-multicontentcardprops-d-ts-multicontentcard-withheaderborder-removed": {
+    "strategy": "RemoveProp",
+    "component": "MultiContentCard",
+    "prop": "withHeaderBorder",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-packages-module-src-unavailablecontent-unavailablecontent-unavailablecontentprops-d-ts-unavailablecontent-unavailablebodyprestatuslinktext-signature-changed-group-2": {
+    "strategy": "PropTypeChange",
+    "from": "property: unavailableBodyPreStatusLinkText: string",
+    "to": "property: bodyText: ReactNode",
+    "component": "UnavailableContent",
+    "prop": "unavailableBodyPreStatusLinkText",
+    "mappings": [
+      {
+        "from": "property: unavailableBodyPreStatusLinkText: string",
+        "to": "property: bodyText: ReactNode",
+        "component": "UnavailableContent",
+        "prop": "unavailableBodyPreStatusLinkText"
+      },
+      {
+        "from": "property: unavailableTitleText: string",
+        "to": "property: titleText: ReactNode",
+        "component": "UnavailableContent",
+        "prop": "unavailableTitleText"
+      }
+    ],
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-pageheaderlink-component-import-deprecated": {
+    "strategy": "LlmAssisted"
+  },
+  "semver-packages-module-src-columnmanagementmodal-columnmanagementmodal-columnmanagementmodalprops-d-ts-columnmanagementmodal-enabledragdrop-signature-changed": {
+    "strategy": "PropTypeChange",
+    "to": "property: enableDragDrop: boolean",
+    "component": "ColumnManagementModal",
+    "prop": "enableDragDrop",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "sd-required-prop-staledatawarning-stale": {
+    "strategy": "LlmAssisted",
+    "component": "StaleDataWarning",
+    "prop": "stale",
+    "source_package": "@patternfly/module"
+  },
+  "sd-new-absorbing-prop-warningmodal-confirmationinputlabel": {
+    "strategy": "LlmAssisted",
+    "to": "React.ReactNode",
+    "component": "WarningModal",
+    "prop": "confirmationInputLabel",
+    "source_package": "@patternfly/module"
+  },
+  "semver-contentheader-component-import-deprecated": {
+    "strategy": "LlmAssisted"
+  },
+  "semver-battery-component-import-deprecated": {
+    "strategy": "LlmAssisted"
+  },
+  "semver-packages-module-src-logsnippet-logsnippet-d-ts-logsnippetbordervariant-removed": {
+    "strategy": "Manual",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-packages-module-src-status-status-d-ts-iconstatus-type-changed-group-2": {
+    "strategy": "PropTypeChange",
+    "from": "{ readonly custom: \"custom\"; readonly info: \"info\"; readonly success: \"success\"; readonly warning: \"warning\"; readonly danger: \"danger\" }",
+    "to": "(typeof IconStatus)[keyof typeof IconStatus]",
+    "mappings": [
+      {
+        "from": "{ readonly custom: \"custom\"; readonly info: \"info\"; readonly success: \"success\"; readonly warning: \"warning\"; readonly danger: \"danger\" }",
+        "to": "(typeof IconStatus)[keyof typeof IconStatus]"
+      },
+      {
+        "from": "{ readonly link: \"link\"; readonly popover: \"popover\"; readonly plain: \"plain\" }",
+        "to": "(typeof StatusVariant)[keyof typeof StatusVariant]"
+      }
+    ],
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-packages-module-src-warningmodal-warningmodal-warningmodalprops-d-ts-warningmodal-confirmationinputlabel-signature-changed-group-3": {
+    "strategy": "PropTypeChange",
+    "to": "property: confirmationInputLabel: ReactNode",
+    "component": "WarningModal",
+    "prop": "confirmationInputLabel",
+    "mappings": [
+      {
+        "to": "property: confirmationInputLabel: ReactNode",
+        "component": "WarningModal",
+        "prop": "confirmationInputLabel"
+      },
+      {
+        "to": "property: confirmationInputProps: TextInputProps",
+        "component": "WarningModal",
+        "prop": "confirmationInputProps"
+      },
+      {
+        "to": "property: confirmationText: string",
+        "component": "WarningModal",
+        "prop": "confirmationText"
+      }
+    ],
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-patternfly-react-component-groups-constant-removed-llmassisted-combined": {
+    "strategy": "LlmAssisted",
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-packages-module-src-errorboundary-errorboundary-errorboundaryprops-d-ts-errorboundary-errortitleheadinglevel-signature-changed-group-2": {
+    "strategy": "PropTypeChange",
+    "to": "property: errorTitleHeadingLevel: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'",
+    "component": "ErrorBoundary",
+    "prop": "errorTitleHeadingLevel",
+    "mappings": [
+      {
+        "to": "property: errorTitleHeadingLevel: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'",
+        "component": "ErrorBoundary",
+        "prop": "errorTitleHeadingLevel"
+      },
+      {
+        "to": "property: headerTitleHeadingLevel: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'",
+        "component": "ErrorBoundary",
+        "prop": "headerTitleHeadingLevel"
+      }
+    ],
+    "source_package": "@patternfly/react-component-groups"
+  },
+  "semver-packages-module-src-errorstate-errorstate-errorstateprops-d-ts-errorstate-errordescription-renamed": {
+    "strategy": "Rename",
+    "from": "errorDescription",
+    "to": "bodyText",
+    "source_package": "@patternfly/react-component-groups"
+  }
+}

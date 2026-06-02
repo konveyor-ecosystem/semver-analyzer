@@ -1,0 +1,5384 @@
+- ruleID: sd-composition-dragdrop-removed-member-draggable
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/react-drag-drop
+  - family=DragDrop
+  effort: 3
+  category: mandatory
+  description: Draggable was removed from the DragDrop family
+  message: |-
+    <Draggable> has been removed from the DragDrop family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^Draggable$
+      location: JSX_COMPONENT
+      from: '@patternfly/react-drag-drop'
+- ruleID: sd-composition-dragdrop-removed-member-draggabledatalistitem
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/react-drag-drop
+  - family=DragDrop
+  effort: 3
+  category: mandatory
+  description: DraggableDataListItem was removed from the DragDrop family
+  message: |-
+    <DraggableDataListItem> has been removed from the DragDrop family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^DraggableDataListItem$
+      location: JSX_COMPONENT
+      from: '@patternfly/react-drag-drop'
+- ruleID: sd-composition-dragdrop-removed-member-dragbutton
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/react-drag-drop/next
+  - family=DragDrop
+  effort: 3
+  category: mandatory
+  description: DragButton was removed from the DragDrop family
+  message: |-
+    <DragButton> has been removed from the DragDrop family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^DragButton$
+      location: JSX_COMPONENT
+      from: '@patternfly/react-drag-drop/next'
+- ruleID: sd-composition-dragdrop-removed-member-draggableduallistselectorlistitem
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/react-drag-drop
+  - family=DragDrop
+  effort: 3
+  category: mandatory
+  description: DraggableDualListSelectorListItem was removed from the DragDrop family
+  message: |-
+    <DraggableDualListSelectorListItem> has been removed from the DragDrop family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^DraggableDualListSelectorListItem$
+      location: JSX_COMPONENT
+      from: '@patternfly/react-drag-drop'
+- ruleID: sd-composition-duallistselector-removed-member-duallistselectorcontext
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/react-core
+  - family=DualListSelector
+  effort: 3
+  category: mandatory
+  description: DualListSelectorContext was removed from the DualListSelector family
+  message: |-
+    <DualListSelectorContext> has been removed from the DualListSelector family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^DualListSelectorContext$
+      location: JSX_COMPONENT
+      from: '@patternfly/react-core'
+- ruleID: sd-composition-emptystate-removed-member-emptystateheader
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/react-core
+  - family=EmptyState
+  effort: 3
+  category: mandatory
+  description: EmptyStateHeader was removed from the EmptyState family
+  message: |-
+    <EmptyStateHeader> has been removed from the EmptyState family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^EmptyStateHeader$
+      location: JSX_COMPONENT
+      from: '@patternfly/react-core'
+- ruleID: sd-composition-emptystate-removed-member-emptystateicon
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/react-core
+  - family=EmptyState
+  effort: 3
+  category: mandatory
+  description: EmptyStateIcon was removed from the EmptyState family
+  message: |-
+    <EmptyStateIcon> has been removed from the EmptyState family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^EmptyStateIcon$
+      location: JSX_COMPONENT
+      from: '@patternfly/react-core'
+- ruleID: sd-composition-modal-removed-member-modalboxbody
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/react-core/deprecated
+  - family=Modal
+  effort: 3
+  category: mandatory
+  description: ModalBoxBody was removed from the Modal family
+  message: |-
+    <ModalBoxBody> has been removed from the Modal family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^ModalBoxBody$
+      location: JSX_COMPONENT
+      from: '@patternfly/react-core/deprecated'
+- ruleID: sd-composition-modal-removed-member-modalbox
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/react-core
+  - family=Modal
+  effort: 3
+  category: mandatory
+  description: ModalBox was removed from the Modal family
+  message: |-
+    <ModalBox> has been removed from the Modal family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^ModalBox$
+      location: JSX_COMPONENT
+      from: '@patternfly/react-core'
+- ruleID: sd-composition-modal-removed-member-modalboxclosebutton
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/react-core
+  - family=Modal
+  effort: 3
+  category: mandatory
+  description: ModalBoxCloseButton was removed from the Modal family
+  message: |-
+    <ModalBoxCloseButton> has been removed from the Modal family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^ModalBoxCloseButton$
+      location: JSX_COMPONENT
+      from: '@patternfly/react-core'
+- ruleID: sd-composition-modal-removed-member-modalcontent
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/react-core
+  - family=Modal
+  effort: 3
+  category: mandatory
+  description: ModalContent was removed from the Modal family
+  message: |-
+    <ModalContent> has been removed from the Modal family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^ModalContent$
+      location: JSX_COMPONENT
+      from: '@patternfly/react-core'
+- ruleID: sd-composition-modal-removed-member-modalboxheader
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/react-core/deprecated
+  - family=Modal
+  effort: 3
+  category: mandatory
+  description: ModalBoxHeader was removed from the Modal family
+  message: |-
+    <ModalBoxHeader> has been removed from the Modal family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^ModalBoxHeader$
+      location: JSX_COMPONENT
+      from: '@patternfly/react-core/deprecated'
+- ruleID: sd-composition-modal-removed-member-modalboxfooter
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/react-core/deprecated
+  - family=Modal
+  effort: 3
+  category: mandatory
+  description: ModalBoxFooter was removed from the Modal family
+  message: |-
+    <ModalBoxFooter> has been removed from the Modal family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^ModalBoxFooter$
+      location: JSX_COMPONENT
+      from: '@patternfly/react-core/deprecated'
+- ruleID: sd-composition-deprecated-duallistselector-removed-member-duallistselectorlistwrapper
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/react-core
+  - family=deprecated/DualListSelector
+  effort: 3
+  category: mandatory
+  description: DualListSelectorListWrapper was removed from the deprecated/DualListSelector family
+  message: |-
+    <DualListSelectorListWrapper> has been removed from the deprecated/DualListSelector family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^DualListSelectorListWrapper$
+      location: JSX_COMPONENT
+      from: '@patternfly/react-core'
+- ruleID: sd-composition-deprecated-duallistselector-removed-member-duallistselectortreeitem
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/react-core
+  - family=deprecated/DualListSelector
+  effort: 3
+  category: mandatory
+  description: DualListSelectorTreeItem was removed from the deprecated/DualListSelector family
+  message: |-
+    <DualListSelectorTreeItem> has been removed from the deprecated/DualListSelector family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^DualListSelectorTreeItem$
+      location: JSX_COMPONENT
+      from: '@patternfly/react-core'
+- ruleID: sd-composition-deprecated-modal-removed-member-modalboxdescription
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/react-core
+  - family=deprecated/Modal
+  effort: 3
+  category: mandatory
+  description: ModalBoxDescription was removed from the deprecated/Modal family
+  message: |-
+    <ModalBoxDescription> has been removed from the deprecated/Modal family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^ModalBoxDescription$
+      location: JSX_COMPONENT
+      from: '@patternfly/react-core'
+- ruleID: sd-composition-deprecated-modal-removed-member-modalboxtitle
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/react-core
+  - family=deprecated/Modal
+  effort: 3
+  category: mandatory
+  description: ModalBoxTitle was removed from the deprecated/Modal family
+  message: |-
+    <ModalBoxTitle> has been removed from the deprecated/Modal family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^ModalBoxTitle$
+      location: JSX_COMPONENT
+      from: '@patternfly/react-core'
+- ruleID: sd-composition-page-removed-member-pagenavigation
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/react-core
+  - family=Page
+  effort: 3
+  category: mandatory
+  description: PageNavigation was removed from the Page family
+  message: |-
+    <PageNavigation> has been removed from the Page family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^PageNavigation$
+      location: JSX_COMPONENT
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-accordion-content-in-accordion-or-item
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Accordion
+  effort: 1
+  category: mandatory
+  description: <AccordionContent> must be a child of Accordion or AccordionItem
+  message: |-
+    <AccordionContent> must be used inside Accordion or AccordionItem.
+
+    Correct usage (either):
+      <Accordion>
+        <AccordionContent />
+      </Accordion>
+      or
+      <AccordionItem>
+        <AccordionContent />
+      </AccordionItem>
+  when:
+    frontend.referenced:
+      pattern: ^AccordionContent$
+      location: JSX_COMPONENT
+      notParent: ^(Accordion|AccordionItem)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-accordion-toggle-in-accordion-or-item
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Accordion
+  effort: 1
+  category: mandatory
+  description: <AccordionToggle> must be a child of Accordion or AccordionItem
+  message: |-
+    <AccordionToggle> must be used inside Accordion or AccordionItem.
+
+    Correct usage (either):
+      <Accordion>
+        <AccordionToggle />
+      </Accordion>
+      or
+      <AccordionItem>
+        <AccordionToggle />
+      </AccordionItem>
+  when:
+    frontend.referenced:
+      pattern: ^AccordionToggle$
+      location: JSX_COMPONENT
+      notParent: ^(Accordion|AccordionItem)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-breadcrumb-heading-in-breadcrumb
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Breadcrumb
+  effort: 1
+  category: mandatory
+  description: <BreadcrumbHeading> must be a child of Breadcrumb
+  message: |-
+    <BreadcrumbHeading> must be used inside <Breadcrumb>.
+
+    Correct usage:
+      <Breadcrumb>
+        <BreadcrumbHeading />
+      </Breadcrumb>
+  when:
+    frontend.referenced:
+      pattern: ^BreadcrumbHeading$
+      location: JSX_COMPONENT
+      notParent: ^Breadcrumb$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-breadcrumb-item-in-breadcrumb
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Breadcrumb
+  effort: 1
+  category: mandatory
+  description: <BreadcrumbItem> must be a child of Breadcrumb
+  message: |-
+    <BreadcrumbItem> must be used inside <Breadcrumb>.
+
+    Correct usage:
+      <Breadcrumb>
+        <BreadcrumbItem />
+      </Breadcrumb>
+  when:
+    frontend.referenced:
+      pattern: ^BreadcrumbItem$
+      location: JSX_COMPONENT
+      notParent: ^Breadcrumb$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-card-expandablecontent-in-card
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Card
+  effort: 1
+  category: mandatory
+  description: <CardExpandableContent> must be a child of Card
+  message: |-
+    <CardExpandableContent> must be used inside <Card>.
+
+    Correct usage:
+      <Card>
+        <CardExpandableContent />
+      </Card>
+  when:
+    frontend.referenced:
+      pattern: ^CardExpandableContent$
+      location: JSX_COMPONENT
+      notParent: ^Card$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-card-footer-in-card-or-header
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Card
+  effort: 1
+  category: mandatory
+  description: <CardFooter> must be a child of Card or CardHeader
+  message: |-
+    <CardFooter> must be used inside Card or CardHeader.
+
+    Correct usage (either):
+      <Card>
+        <CardFooter />
+      </Card>
+      or
+      <CardHeader>
+        <CardFooter />
+      </CardHeader>
+  when:
+    frontend.referenced:
+      pattern: ^CardFooter$
+      location: JSX_COMPONENT
+      notParent: ^(Card|CardHeader)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-card-title-in-card-or-header
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Card
+  effort: 1
+  category: mandatory
+  description: <CardTitle> must be a child of Card or CardHeader
+  message: |-
+    <CardTitle> must be used inside Card or CardHeader.
+
+    Correct usage (either):
+      <Card>
+        <CardTitle />
+      </Card>
+      or
+      <CardHeader>
+        <CardTitle />
+      </CardHeader>
+  when:
+    frontend.referenced:
+      pattern: ^CardTitle$
+      location: JSX_COMPONENT
+      notParent: ^(Card|CardHeader)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-card-body-in-card-or-header
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Card
+  effort: 1
+  category: mandatory
+  description: <CardBody> must be a child of Card or CardHeader
+  message: |-
+    <CardBody> must be used inside Card or CardHeader.
+
+    Correct usage (either):
+      <Card>
+        <CardBody />
+      </Card>
+      or
+      <CardHeader>
+        <CardBody />
+      </CardHeader>
+  when:
+    frontend.referenced:
+      pattern: ^CardBody$
+      location: JSX_COMPONENT
+      notParent: ^(Card|CardHeader)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-card-header-in-card
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Card
+  effort: 1
+  category: mandatory
+  description: <CardHeader> must be a child of Card
+  message: |-
+    <CardHeader> must be used inside <Card>.
+
+    Correct usage:
+      <Card>
+        <CardHeader />
+      </Card>
+  when:
+    frontend.referenced:
+      pattern: ^CardHeader$
+      location: JSX_COMPONENT
+      notParent: ^Card$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-descriptionlist-group-in-descriptionlist
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=DescriptionList
+  effort: 1
+  category: mandatory
+  description: <DescriptionListGroup> must be a child of DescriptionList
+  message: |-
+    <DescriptionListGroup> must be used inside <DescriptionList>.
+
+    Correct usage:
+      <DescriptionList>
+        <DescriptionListGroup />
+      </DescriptionList>
+  when:
+    frontend.referenced:
+      pattern: ^DescriptionListGroup$
+      location: JSX_COMPONENT
+      notParent: ^DescriptionList$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-descriptionlist-description-in-group-or-term-or-termhelptext
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=DescriptionList
+  effort: 1
+  category: mandatory
+  description: <DescriptionListDescription> must be a child of DescriptionListGroup or DescriptionListTerm or DescriptionListTermHelpText
+  message: |-
+    <DescriptionListDescription> must be used inside DescriptionListGroup or DescriptionListTerm or DescriptionListTermHelpText.
+
+    Correct usage (either):
+      <DescriptionListGroup>
+        <DescriptionListDescription />
+      </DescriptionListGroup>
+      or
+      <DescriptionListTerm>
+        <DescriptionListDescription />
+      </DescriptionListTerm>
+      or
+      <DescriptionListTermHelpText>
+        <DescriptionListDescription />
+      </DescriptionListTermHelpText>
+  when:
+    frontend.referenced:
+      pattern: ^DescriptionListDescription$
+      location: JSX_COMPONENT
+      notParent: ^(DescriptionListGroup|DescriptionListTerm|DescriptionListTermHelpText)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-descriptionlist-description-not-in-descriptionlist-use-group
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=DescriptionList
+  effort: 3
+  category: mandatory
+  description: <DescriptionListDescription> must be inside DescriptionListGroup, not directly in <DescriptionList>
+  message: |-
+    <DescriptionListDescription> should be wrapped in <DescriptionListGroup> inside <DescriptionList>.
+
+    Replace:
+      <DescriptionList>
+        <DescriptionListDescription />
+      </DescriptionList>
+
+    With:
+      <DescriptionList>
+        <DescriptionListGroup>
+          <DescriptionListDescription />
+        </DescriptionListGroup>
+      </DescriptionList>
+  when:
+    frontend.referenced:
+      pattern: ^DescriptionListDescription$
+      location: JSX_COMPONENT
+      parent: ^DescriptionList$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-descriptionlist-descriptionlist-req-group
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=DescriptionList
+  effort: 1
+  category: mandatory
+  description: <DescriptionList> must contain DescriptionListGroup children
+  message: |-
+    <DescriptionList> must contain at least one DescriptionListGroup child component.
+
+    Correct usage:
+      <DescriptionList>
+        <DescriptionListGroup />
+      </DescriptionList>
+  when:
+    frontend.referenced:
+      pattern: ^DescriptionList$
+      location: JSX_COMPONENT
+      requiresChild: ^(DescriptionListGroup)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-drawer-panelcontent-in-drawer-or-content
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Drawer
+  effort: 1
+  category: mandatory
+  description: <DrawerPanelContent> must be a child of Drawer or DrawerContent
+  message: |-
+    <DrawerPanelContent> must be used inside Drawer or DrawerContent.
+
+    Correct usage (either):
+      <Drawer>
+        <DrawerPanelContent />
+      </Drawer>
+      or
+      <DrawerContent>
+        <DrawerPanelContent />
+      </DrawerContent>
+  when:
+    frontend.referenced:
+      pattern: ^DrawerPanelContent$
+      location: JSX_COMPONENT
+      notParent: ^(Drawer|DrawerContent)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-drawer-content-in-drawer
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Drawer
+  effort: 1
+  category: mandatory
+  description: <DrawerContent> must be a child of Drawer
+  message: |-
+    <DrawerContent> must be used inside <Drawer>.
+
+    Correct usage:
+      <Drawer>
+        <DrawerContent />
+      </Drawer>
+  when:
+    frontend.referenced:
+      pattern: ^DrawerContent$
+      location: JSX_COMPONENT
+      notParent: ^Drawer$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-drawer-actions-in-head
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Drawer
+  effort: 1
+  category: mandatory
+  description: <DrawerActions> must be a child of DrawerHead
+  message: |-
+    <DrawerActions> must be used inside <DrawerHead>.
+
+    Correct usage:
+      <DrawerHead>
+        <DrawerActions />
+      </DrawerHead>
+  when:
+    frontend.referenced:
+      pattern: ^DrawerActions$
+      location: JSX_COMPONENT
+      notParent: ^DrawerHead$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-drawer-actions-not-in-contentbody-use-head
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Drawer
+  effort: 3
+  category: mandatory
+  description: <DrawerActions> must be inside DrawerHead, not directly in <DrawerContentBody>
+  message: |-
+    <DrawerActions> should be wrapped in <DrawerHead> inside <DrawerContentBody>.
+
+    Replace:
+      <DrawerContentBody>
+        <DrawerActions />
+      </DrawerContentBody>
+
+    With:
+      <DrawerContentBody>
+        <DrawerHead>
+          <DrawerActions />
+        </DrawerHead>
+      </DrawerContentBody>
+  when:
+    frontend.referenced:
+      pattern: ^DrawerActions$
+      location: JSX_COMPONENT
+      parent: ^DrawerContentBody$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-drawer-actions-not-in-panelbody-use-head
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Drawer
+  effort: 3
+  category: mandatory
+  description: <DrawerActions> must be inside DrawerHead, not directly in <DrawerPanelBody>
+  message: |-
+    <DrawerActions> should be wrapped in <DrawerHead> inside <DrawerPanelBody>.
+
+    Replace:
+      <DrawerPanelBody>
+        <DrawerActions />
+      </DrawerPanelBody>
+
+    With:
+      <DrawerPanelBody>
+        <DrawerHead>
+          <DrawerActions />
+        </DrawerHead>
+      </DrawerPanelBody>
+  when:
+    frontend.referenced:
+      pattern: ^DrawerActions$
+      location: JSX_COMPONENT
+      parent: ^DrawerPanelBody$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-duallistselector-tree-in-duallistselector-or-list-or-listitem-or-pane
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=DualListSelector
+  effort: 1
+  category: mandatory
+  description: <DualListSelectorTree> must be a child of DualListSelector or DualListSelectorList or DualListSelectorListItem or DualListSelectorPane
+  message: |-
+    <DualListSelectorTree> must be used inside DualListSelector or DualListSelectorList or DualListSelectorListItem or DualListSelectorPane.
+
+    Correct usage (either):
+      <DualListSelector>
+        <DualListSelectorTree />
+      </DualListSelector>
+      or
+      <DualListSelectorList>
+        <DualListSelectorTree />
+      </DualListSelectorList>
+      or
+      <DualListSelectorListItem>
+        <DualListSelectorTree />
+      </DualListSelectorListItem>
+      or
+      <DualListSelectorPane>
+        <DualListSelectorTree />
+      </DualListSelectorPane>
+  when:
+    frontend.referenced:
+      pattern: ^DualListSelectorTree$
+      location: JSX_COMPONENT
+      notParent: ^(DualListSelector|DualListSelectorList|DualListSelectorListItem|DualListSelectorPane)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-duallistselector-listitem-in-duallistselector-or-pane-or-tree
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=DualListSelector
+  effort: 1
+  category: mandatory
+  description: <DualListSelectorListItem> must be a child of DualListSelector or DualListSelectorPane or DualListSelectorTree
+  message: |-
+    <DualListSelectorListItem> must be used inside DualListSelector or DualListSelectorPane or DualListSelectorTree.
+
+    Correct usage (either):
+      <DualListSelector>
+        <DualListSelectorListItem />
+      </DualListSelector>
+      or
+      <DualListSelectorPane>
+        <DualListSelectorListItem />
+      </DualListSelectorPane>
+      or
+      <DualListSelectorTree>
+        <DualListSelectorListItem />
+      </DualListSelectorTree>
+  when:
+    frontend.referenced:
+      pattern: ^DualListSelectorListItem$
+      location: JSX_COMPONENT
+      notParent: ^(DualListSelector|DualListSelectorPane|DualListSelectorTree)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-duallistselector-listitem-not-in-listitem-use-pane
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=DualListSelector
+  effort: 3
+  category: mandatory
+  description: <DualListSelectorListItem> must be inside DualListSelectorPane, not directly in <DualListSelectorListItem>
+  message: |-
+    <DualListSelectorListItem> should be wrapped in <DualListSelectorPane> inside <DualListSelectorListItem>.
+
+    Replace:
+      <DualListSelectorListItem>
+        <DualListSelectorListItem />
+      </DualListSelectorListItem>
+
+    With:
+      <DualListSelectorListItem>
+        <DualListSelectorPane>
+          <DualListSelectorListItem />
+        </DualListSelectorPane>
+      </DualListSelectorListItem>
+  when:
+    frontend.referenced:
+      pattern: ^DualListSelectorListItem$
+      location: JSX_COMPONENT
+      parent: ^DualListSelectorListItem$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-duallistselector-listitem-not-in-list-use-pane
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=DualListSelector
+  effort: 3
+  category: mandatory
+  description: <DualListSelectorListItem> must be inside DualListSelectorPane, not directly in <DualListSelectorList>
+  message: |-
+    <DualListSelectorListItem> should be wrapped in <DualListSelectorPane> inside <DualListSelectorList>.
+
+    Replace:
+      <DualListSelectorList>
+        <DualListSelectorListItem />
+      </DualListSelectorList>
+
+    With:
+      <DualListSelectorList>
+        <DualListSelectorPane>
+          <DualListSelectorListItem />
+        </DualListSelectorPane>
+      </DualListSelectorList>
+  when:
+    frontend.referenced:
+      pattern: ^DualListSelectorListItem$
+      location: JSX_COMPONENT
+      parent: ^DualListSelectorList$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-formselect-option-in-formselect-or-optiongroup
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=FormSelect
+  effort: 1
+  category: mandatory
+  description: <FormSelectOption> must be a child of FormSelect or FormSelectOptionGroup
+  message: |-
+    <FormSelectOption> must be used inside FormSelect or FormSelectOptionGroup.
+
+    Correct usage (either):
+      <FormSelect>
+        <FormSelectOption />
+      </FormSelect>
+      or
+      <FormSelectOptionGroup>
+        <FormSelectOption />
+      </FormSelectOptionGroup>
+  when:
+    frontend.referenced:
+      pattern: ^FormSelectOption$
+      location: JSX_COMPONENT
+      notParent: ^(FormSelect|FormSelectOptionGroup)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-formselect-optiongroup-in-formselect
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=FormSelect
+  effort: 1
+  category: mandatory
+  description: <FormSelectOptionGroup> must be a child of FormSelect
+  message: |-
+    <FormSelectOptionGroup> must be used inside <FormSelect>.
+
+    Correct usage:
+      <FormSelect>
+        <FormSelectOptionGroup />
+      </FormSelect>
+  when:
+    frontend.referenced:
+      pattern: ^FormSelectOptionGroup$
+      location: JSX_COMPONENT
+      notParent: ^FormSelect$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-formselect-optiongroup-req-option
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=FormSelect
+  effort: 1
+  category: mandatory
+  description: <FormSelectOptionGroup> must contain FormSelectOption children
+  message: |-
+    <FormSelectOptionGroup> must contain at least one FormSelectOption child component.
+
+    Correct usage:
+      <FormSelectOptionGroup>
+        <FormSelectOption />
+      </FormSelectOptionGroup>
+  when:
+    frontend.referenced:
+      pattern: ^FormSelectOptionGroup$
+      location: JSX_COMPONENT
+      requiresChild: ^(FormSelectOption)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-hint-footer-in-hint
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Hint
+  effort: 1
+  category: mandatory
+  description: <HintFooter> must be a child of Hint
+  message: |-
+    <HintFooter> must be used inside <Hint>.
+
+    Correct usage:
+      <Hint>
+        <HintFooter />
+      </Hint>
+  when:
+    frontend.referenced:
+      pattern: ^HintFooter$
+      location: JSX_COMPONENT
+      notParent: ^Hint$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-hint-body-in-hint
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Hint
+  effort: 1
+  category: mandatory
+  description: <HintBody> must be a child of Hint
+  message: |-
+    <HintBody> must be used inside <Hint>.
+
+    Correct usage:
+      <Hint>
+        <HintBody />
+      </Hint>
+  when:
+    frontend.referenced:
+      pattern: ^HintBody$
+      location: JSX_COMPONENT
+      notParent: ^Hint$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-hint-hint-req-body-and-footer-and-title
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Hint
+  effort: 1
+  category: mandatory
+  description: <Hint> must contain HintBody or HintFooter or HintTitle children
+  message: |-
+    <Hint> must contain at least one HintBody or HintFooter or HintTitle child component.
+
+    Correct usage:
+      <Hint>
+        <HintBody />
+      </Hint>
+  when:
+    frontend.referenced:
+      pattern: ^Hint$
+      location: JSX_COMPONENT
+      requiresChild: ^(HintBody|HintFooter|HintTitle)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-jumplinks-item-in-jumplinks-or-list
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=JumpLinks
+  effort: 1
+  category: mandatory
+  description: <JumpLinksItem> must be a child of JumpLinks or JumpLinksList
+  message: |-
+    <JumpLinksItem> must be used inside JumpLinks or JumpLinksList.
+
+    Correct usage (either):
+      <JumpLinks>
+        <JumpLinksItem />
+      </JumpLinks>
+      or
+      <JumpLinksList>
+        <JumpLinksItem />
+      </JumpLinksList>
+  when:
+    frontend.referenced:
+      pattern: ^JumpLinksItem$
+      location: JSX_COMPONENT
+      notParent: ^(JumpLinks|JumpLinksList)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-jumplinks-list-req-jumplinks-and-item
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=JumpLinks
+  effort: 1
+  category: mandatory
+  description: <JumpLinksList> must contain JumpLinks or JumpLinksItem children
+  message: |-
+    <JumpLinksList> must contain at least one JumpLinks or JumpLinksItem child component.
+
+    Correct usage:
+      <JumpLinksList>
+        <JumpLinks />
+      </JumpLinksList>
+  when:
+    frontend.referenced:
+      pattern: ^JumpLinksList$
+      location: JSX_COMPONENT
+      requiresChild: ^(JumpLinks|JumpLinksItem)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-list-item-in-list
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=List
+  effort: 1
+  category: mandatory
+  description: <ListItem> must be a child of List
+  message: |-
+    <ListItem> must be used inside <List>.
+
+    Correct usage:
+      <List>
+        <ListItem />
+      </List>
+  when:
+    frontend.referenced:
+      pattern: ^ListItem$
+      location: JSX_COMPONENT
+      notParent: ^List$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-list-list-req-item
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=List
+  effort: 1
+  category: mandatory
+  description: <List> must contain ListItem children
+  message: |-
+    <List> must contain at least one ListItem child component.
+
+    Correct usage:
+      <List>
+        <ListItem />
+      </List>
+  when:
+    frontend.referenced:
+      pattern: ^List$
+      location: JSX_COMPONENT
+      requiresChild: ^(ListItem)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-masthead-main-in-masthead
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Masthead
+  effort: 1
+  category: mandatory
+  description: <MastheadMain> must be a child of Masthead
+  message: |-
+    <MastheadMain> must be used inside <Masthead>.
+
+    Correct usage:
+      <Masthead>
+        <MastheadMain />
+      </Masthead>
+  when:
+    frontend.referenced:
+      pattern: ^MastheadMain$
+      location: JSX_COMPONENT
+      notParent: ^Masthead$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-masthead-content-in-masthead
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Masthead
+  effort: 1
+  category: mandatory
+  description: <MastheadContent> must be a child of Masthead
+  message: |-
+    <MastheadContent> must be used inside <Masthead>.
+
+    Correct usage:
+      <Masthead>
+        <MastheadContent />
+      </Masthead>
+  when:
+    frontend.referenced:
+      pattern: ^MastheadContent$
+      location: JSX_COMPONENT
+      notParent: ^Masthead$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-masthead-brand-in-main
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Masthead
+  effort: 1
+  category: mandatory
+  description: <MastheadBrand> must be a child of MastheadMain
+  message: |-
+    <MastheadBrand> must be used inside <MastheadMain>.
+
+    Correct usage:
+      <MastheadMain>
+        <MastheadBrand />
+      </MastheadMain>
+  when:
+    frontend.referenced:
+      pattern: ^MastheadBrand$
+      location: JSX_COMPONENT
+      notParent: ^MastheadMain$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-masthead-brand-not-in-masthead-use-main
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Masthead
+  effort: 3
+  category: mandatory
+  description: <MastheadBrand> must be inside MastheadMain, not directly in <Masthead>
+  message: |-
+    <MastheadBrand> should be wrapped in <MastheadMain> inside <Masthead>.
+
+    Replace:
+      <Masthead>
+        <MastheadBrand />
+      </Masthead>
+
+    With:
+      <Masthead>
+        <MastheadMain>
+          <MastheadBrand />
+        </MastheadMain>
+      </Masthead>
+  when:
+    frontend.referenced:
+      pattern: ^MastheadBrand$
+      location: JSX_COMPONENT
+      parent: ^Masthead$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-masthead-masthead-req-content-and-main
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Masthead
+  effort: 1
+  category: mandatory
+  description: <Masthead> must contain MastheadContent or MastheadMain children
+  message: |-
+    <Masthead> must contain at least one MastheadContent or MastheadMain child component.
+
+    Correct usage:
+      <Masthead>
+        <MastheadContent />
+      </Masthead>
+  when:
+    frontend.referenced:
+      pattern: ^Masthead$
+      location: JSX_COMPONENT
+      requiresChild: ^(MastheadContent|MastheadMain)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-menu-item-in-breadcrumb-or-content-or-itemaction-or-list
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Menu
+  effort: 1
+  category: mandatory
+  description: <MenuItem> must be a child of MenuBreadcrumb or MenuContent or MenuItemAction or MenuList
+  message: |-
+    <MenuItem> must be used inside MenuBreadcrumb or MenuContent or MenuItemAction or MenuList.
+
+    Correct usage (either):
+      <MenuBreadcrumb>
+        <MenuItem />
+      </MenuBreadcrumb>
+      or
+      <MenuContent>
+        <MenuItem />
+      </MenuContent>
+      or
+      <MenuItemAction>
+        <MenuItem />
+      </MenuItemAction>
+      or
+      <MenuList>
+        <MenuItem />
+      </MenuList>
+  when:
+    frontend.referenced:
+      pattern: ^MenuItem$
+      location: JSX_COMPONENT
+      notParent: ^(MenuBreadcrumb|MenuContent|MenuItemAction|MenuList)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-menu-item-not-in-item-use-list
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Menu
+  effort: 3
+  category: mandatory
+  description: <MenuItem> must be inside MenuList, not directly in <MenuItem>
+  message: |-
+    <MenuItem> should be wrapped in <MenuList> inside <MenuItem>.
+
+    Replace:
+      <MenuItem>
+        <MenuItem />
+      </MenuItem>
+
+    With:
+      <MenuItem>
+        <MenuList>
+          <MenuItem />
+        </MenuList>
+      </MenuItem>
+  when:
+    frontend.referenced:
+      pattern: ^MenuItem$
+      location: JSX_COMPONENT
+      parent: ^MenuItem$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-menu-item-not-in-menu-use-list
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Menu
+  effort: 3
+  category: mandatory
+  description: <MenuItem> must be inside MenuList, not directly in <Menu>
+  message: |-
+    <MenuItem> should be wrapped in <MenuList> inside <Menu>.
+
+    Replace:
+      <Menu>
+        <MenuItem />
+      </Menu>
+
+    With:
+      <Menu>
+        <MenuList>
+          <MenuItem />
+        </MenuList>
+      </Menu>
+  when:
+    frontend.referenced:
+      pattern: ^MenuItem$
+      location: JSX_COMPONENT
+      parent: ^Menu$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-menu-drilldownmenu-in-menu
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Menu
+  effort: 1
+  category: mandatory
+  description: <DrilldownMenu> must be a child of Menu
+  message: |-
+    <DrilldownMenu> must be used inside <Menu>.
+
+    Correct usage:
+      <Menu>
+        <DrilldownMenu />
+      </Menu>
+  when:
+    frontend.referenced:
+      pattern: ^DrilldownMenu$
+      location: JSX_COMPONENT
+      notParent: ^Menu$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-menu-drilldownmenu-not-in-item-use-menu
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Menu
+  effort: 3
+  category: mandatory
+  description: <DrilldownMenu> must be inside Menu, not directly in <MenuItem>
+  message: |-
+    <DrilldownMenu> should be wrapped in <Menu> inside <MenuItem>.
+
+    Replace:
+      <MenuItem>
+        <DrilldownMenu />
+      </MenuItem>
+
+    With:
+      <MenuItem>
+        <Menu>
+          <DrilldownMenu />
+        </Menu>
+      </MenuItem>
+  when:
+    frontend.referenced:
+      pattern: ^DrilldownMenu$
+      location: JSX_COMPONENT
+      parent: ^MenuItem$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-menu-drilldownmenu-not-in-content-use-menu
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Menu
+  effort: 3
+  category: mandatory
+  description: <DrilldownMenu> must be inside Menu, not directly in <MenuContent>
+  message: |-
+    <DrilldownMenu> should be wrapped in <Menu> inside <MenuContent>.
+
+    Replace:
+      <MenuContent>
+        <DrilldownMenu />
+      </MenuContent>
+
+    With:
+      <MenuContent>
+        <Menu>
+          <DrilldownMenu />
+        </Menu>
+      </MenuContent>
+  when:
+    frontend.referenced:
+      pattern: ^DrilldownMenu$
+      location: JSX_COMPONENT
+      parent: ^MenuContent$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-menu-drilldownmenu-not-in-breadcrumb-use-menu
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Menu
+  effort: 3
+  category: mandatory
+  description: <DrilldownMenu> must be inside Menu, not directly in <MenuBreadcrumb>
+  message: |-
+    <DrilldownMenu> should be wrapped in <Menu> inside <MenuBreadcrumb>.
+
+    Replace:
+      <MenuBreadcrumb>
+        <DrilldownMenu />
+      </MenuBreadcrumb>
+
+    With:
+      <MenuBreadcrumb>
+        <Menu>
+          <DrilldownMenu />
+        </Menu>
+      </MenuBreadcrumb>
+  when:
+    frontend.referenced:
+      pattern: ^DrilldownMenu$
+      location: JSX_COMPONENT
+      parent: ^MenuBreadcrumb$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-menu-list-in-menu-or-content-or-item
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Menu
+  effort: 1
+  category: mandatory
+  description: <MenuList> must be a child of Menu or MenuContent or MenuItem
+  message: |-
+    <MenuList> must be used inside Menu or MenuContent or MenuItem.
+
+    Correct usage (either):
+      <Menu>
+        <MenuList />
+      </Menu>
+      or
+      <MenuContent>
+        <MenuList />
+      </MenuContent>
+      or
+      <MenuItem>
+        <MenuList />
+      </MenuItem>
+  when:
+    frontend.referenced:
+      pattern: ^MenuList$
+      location: JSX_COMPONENT
+      notParent: ^(Menu|MenuContent|MenuItem)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-menu-list-not-in-breadcrumb-use-menu
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Menu
+  effort: 3
+  category: mandatory
+  description: <MenuList> must be inside Menu, not directly in <MenuBreadcrumb>
+  message: |-
+    <MenuList> should be wrapped in <Menu> inside <MenuBreadcrumb>.
+
+    Replace:
+      <MenuBreadcrumb>
+        <MenuList />
+      </MenuBreadcrumb>
+
+    With:
+      <MenuBreadcrumb>
+        <Menu>
+          <MenuList />
+        </Menu>
+      </MenuBreadcrumb>
+  when:
+    frontend.referenced:
+      pattern: ^MenuList$
+      location: JSX_COMPONENT
+      parent: ^MenuBreadcrumb$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-menu-itemaction-in-item
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Menu
+  effort: 1
+  category: mandatory
+  description: <MenuItemAction> must be a child of MenuItem
+  message: |-
+    <MenuItemAction> must be used inside <MenuItem>.
+
+    Correct usage:
+      <MenuItem>
+        <MenuItemAction />
+      </MenuItem>
+  when:
+    frontend.referenced:
+      pattern: ^MenuItemAction$
+      location: JSX_COMPONENT
+      notParent: ^MenuItem$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-menu-itemaction-not-in-content-use-item
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Menu
+  effort: 3
+  category: mandatory
+  description: <MenuItemAction> must be inside MenuItem, not directly in <MenuContent>
+  message: |-
+    <MenuItemAction> should be wrapped in <MenuItem> inside <MenuContent>.
+
+    Replace:
+      <MenuContent>
+        <MenuItemAction />
+      </MenuContent>
+
+    With:
+      <MenuContent>
+        <MenuItem>
+          <MenuItemAction />
+        </MenuItem>
+      </MenuContent>
+  when:
+    frontend.referenced:
+      pattern: ^MenuItemAction$
+      location: JSX_COMPONENT
+      parent: ^MenuContent$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-menu-itemaction-not-in-breadcrumb-use-item
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Menu
+  effort: 3
+  category: mandatory
+  description: <MenuItemAction> must be inside MenuItem, not directly in <MenuBreadcrumb>
+  message: |-
+    <MenuItemAction> should be wrapped in <MenuItem> inside <MenuBreadcrumb>.
+
+    Replace:
+      <MenuBreadcrumb>
+        <MenuItemAction />
+      </MenuBreadcrumb>
+
+    With:
+      <MenuBreadcrumb>
+        <MenuItem>
+          <MenuItemAction />
+        </MenuItem>
+      </MenuBreadcrumb>
+  when:
+    frontend.referenced:
+      pattern: ^MenuItemAction$
+      location: JSX_COMPONENT
+      parent: ^MenuBreadcrumb$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-menu-itemaction-not-in-itemaction-use-item
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Menu
+  effort: 3
+  category: mandatory
+  description: <MenuItemAction> must be inside MenuItem, not directly in <MenuItemAction>
+  message: |-
+    <MenuItemAction> should be wrapped in <MenuItem> inside <MenuItemAction>.
+
+    Replace:
+      <MenuItemAction>
+        <MenuItemAction />
+      </MenuItemAction>
+
+    With:
+      <MenuItemAction>
+        <MenuItem>
+          <MenuItemAction />
+        </MenuItem>
+      </MenuItemAction>
+  when:
+    frontend.referenced:
+      pattern: ^MenuItemAction$
+      location: JSX_COMPONENT
+      parent: ^MenuItemAction$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-menu-itemaction-not-in-list-use-item
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Menu
+  effort: 3
+  category: mandatory
+  description: <MenuItemAction> must be inside MenuItem, not directly in <MenuList>
+  message: |-
+    <MenuItemAction> should be wrapped in <MenuItem> inside <MenuList>.
+
+    Replace:
+      <MenuList>
+        <MenuItemAction />
+      </MenuList>
+
+    With:
+      <MenuList>
+        <MenuItem>
+          <MenuItemAction />
+        </MenuItem>
+      </MenuList>
+  when:
+    frontend.referenced:
+      pattern: ^MenuItemAction$
+      location: JSX_COMPONENT
+      parent: ^MenuList$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-menu-content-in-menu-or-breadcrumb-or-item-or-list
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Menu
+  effort: 1
+  category: mandatory
+  description: <MenuContent> must be a child of Menu or MenuBreadcrumb or MenuItem or MenuList
+  message: |-
+    <MenuContent> must be used inside Menu or MenuBreadcrumb or MenuItem or MenuList.
+
+    Correct usage (either):
+      <Menu>
+        <MenuContent />
+      </Menu>
+      or
+      <MenuBreadcrumb>
+        <MenuContent />
+      </MenuBreadcrumb>
+      or
+      <MenuItem>
+        <MenuContent />
+      </MenuItem>
+      or
+      <MenuList>
+        <MenuContent />
+      </MenuList>
+  when:
+    frontend.referenced:
+      pattern: ^MenuContent$
+      location: JSX_COMPONENT
+      notParent: ^(Menu|MenuBreadcrumb|MenuItem|MenuList)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-menu-content-not-in-content-use-menu
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Menu
+  effort: 3
+  category: mandatory
+  description: <MenuContent> must be inside Menu, not directly in <MenuContent>
+  message: |-
+    <MenuContent> should be wrapped in <Menu> inside <MenuContent>.
+
+    Replace:
+      <MenuContent>
+        <MenuContent />
+      </MenuContent>
+
+    With:
+      <MenuContent>
+        <Menu>
+          <MenuContent />
+        </Menu>
+      </MenuContent>
+  when:
+    frontend.referenced:
+      pattern: ^MenuContent$
+      location: JSX_COMPONENT
+      parent: ^MenuContent$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-menu-list-req-content-and-item
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Menu
+  effort: 1
+  category: mandatory
+  description: <MenuList> must contain MenuContent or MenuItem children
+  message: |-
+    <MenuList> must contain at least one MenuContent or MenuItem child component.
+
+    Correct usage:
+      <MenuList>
+        <MenuContent />
+      </MenuList>
+  when:
+    frontend.referenced:
+      pattern: ^MenuList$
+      location: JSX_COMPONENT
+      requiresChild: ^(MenuContent|MenuItem)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-modal-body-in-modal
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Modal
+  effort: 1
+  category: mandatory
+  description: <ModalBody> must be a child of Modal
+  message: |-
+    <ModalBody> must be used inside <Modal>.
+
+    Correct usage:
+      <Modal>
+        <ModalBody />
+      </Modal>
+  when:
+    frontend.referenced:
+      pattern: ^ModalBody$
+      location: JSX_COMPONENT
+      notParent: ^Modal$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-modal-header-in-modal
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Modal
+  effort: 1
+  category: mandatory
+  description: <ModalHeader> must be a child of Modal
+  message: |-
+    <ModalHeader> must be used inside <Modal>.
+
+    Correct usage:
+      <Modal>
+        <ModalHeader />
+      </Modal>
+  when:
+    frontend.referenced:
+      pattern: ^ModalHeader$
+      location: JSX_COMPONENT
+      notParent: ^Modal$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-modal-footer-in-modal
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Modal
+  effort: 1
+  category: mandatory
+  description: <ModalFooter> must be a child of Modal
+  message: |-
+    <ModalFooter> must be used inside <Modal>.
+
+    Correct usage:
+      <Modal>
+        <ModalFooter />
+      </Modal>
+  when:
+    frontend.referenced:
+      pattern: ^ModalFooter$
+      location: JSX_COMPONENT
+      notParent: ^Modal$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-multiplefileupload-statusitem-in-status
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=MultipleFileUpload
+  effort: 1
+  category: mandatory
+  description: <MultipleFileUploadStatusItem> must be a child of MultipleFileUploadStatus
+  message: |-
+    <MultipleFileUploadStatusItem> must be used inside <MultipleFileUploadStatus>.
+
+    Correct usage:
+      <MultipleFileUploadStatus>
+        <MultipleFileUploadStatusItem />
+      </MultipleFileUploadStatus>
+  when:
+    frontend.referenced:
+      pattern: ^MultipleFileUploadStatusItem$
+      location: JSX_COMPONENT
+      notParent: ^MultipleFileUploadStatus$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-multiplefileupload-statusitem-not-in-multiplefileupload-use-status
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=MultipleFileUpload
+  effort: 3
+  category: mandatory
+  description: <MultipleFileUploadStatusItem> must be inside MultipleFileUploadStatus, not directly in <MultipleFileUpload>
+  message: |-
+    <MultipleFileUploadStatusItem> should be wrapped in <MultipleFileUploadStatus> inside <MultipleFileUpload>.
+
+    Replace:
+      <MultipleFileUpload>
+        <MultipleFileUploadStatusItem />
+      </MultipleFileUpload>
+
+    With:
+      <MultipleFileUpload>
+        <MultipleFileUploadStatus>
+          <MultipleFileUploadStatusItem />
+        </MultipleFileUploadStatus>
+      </MultipleFileUpload>
+  when:
+    frontend.referenced:
+      pattern: ^MultipleFileUploadStatusItem$
+      location: JSX_COMPONENT
+      parent: ^MultipleFileUpload$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-multiplefileupload-status-req-statusitem
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=MultipleFileUpload
+  effort: 1
+  category: mandatory
+  description: <MultipleFileUploadStatus> must contain MultipleFileUploadStatusItem children
+  message: |-
+    <MultipleFileUploadStatus> must contain at least one MultipleFileUploadStatusItem child component.
+
+    Correct usage:
+      <MultipleFileUploadStatus>
+        <MultipleFileUploadStatusItem />
+      </MultipleFileUploadStatus>
+  when:
+    frontend.referenced:
+      pattern: ^MultipleFileUploadStatus$
+      location: JSX_COMPONENT
+      requiresChild: ^(MultipleFileUploadStatusItem)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-nav-expandable-in-group-or-item-or-list
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Nav
+  effort: 1
+  category: mandatory
+  description: <NavExpandable> must be a child of NavGroup or NavItem or NavList
+  message: |-
+    <NavExpandable> must be used inside NavGroup or NavItem or NavList.
+
+    Correct usage (either):
+      <NavGroup>
+        <NavExpandable />
+      </NavGroup>
+      or
+      <NavItem>
+        <NavExpandable />
+      </NavItem>
+      or
+      <NavList>
+        <NavExpandable />
+      </NavList>
+  when:
+    frontend.referenced:
+      pattern: ^NavExpandable$
+      location: JSX_COMPONENT
+      notParent: ^(NavGroup|NavItem|NavList)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-nav-expandable-not-in-nav-use-group-or-list
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Nav
+  effort: 3
+  category: mandatory
+  description: <NavExpandable> must be inside NavGroup or NavList, not directly in <Nav>
+  message: |-
+    <NavExpandable> should be wrapped in NavGroup or NavList inside <Nav>.
+
+    Replace:
+      <Nav>
+        <NavExpandable />
+      </Nav>
+
+    With (either):
+      <Nav>
+        <NavGroup>
+          <NavExpandable />
+        </NavGroup>
+      </Nav>
+      or
+      <Nav>
+        <NavList>
+          <NavExpandable />
+        </NavList>
+      </Nav>
+  when:
+    frontend.referenced:
+      pattern: ^NavExpandable$
+      location: JSX_COMPONENT
+      parent: ^Nav$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-nav-item-in-expandable-or-group-or-list
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Nav
+  effort: 1
+  category: mandatory
+  description: <NavItem> must be a child of NavExpandable or NavGroup or NavList
+  message: |-
+    <NavItem> must be used inside NavExpandable or NavGroup or NavList.
+
+    Correct usage (either):
+      <NavExpandable>
+        <NavItem />
+      </NavExpandable>
+      or
+      <NavGroup>
+        <NavItem />
+      </NavGroup>
+      or
+      <NavList>
+        <NavItem />
+      </NavList>
+  when:
+    frontend.referenced:
+      pattern: ^NavItem$
+      location: JSX_COMPONENT
+      notParent: ^(NavExpandable|NavGroup|NavList)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-nav-item-not-in-nav-use-group-or-list
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Nav
+  effort: 3
+  category: mandatory
+  description: <NavItem> must be inside NavGroup or NavList, not directly in <Nav>
+  message: |-
+    <NavItem> should be wrapped in NavGroup or NavList inside <Nav>.
+
+    Replace:
+      <Nav>
+        <NavItem />
+      </Nav>
+
+    With (either):
+      <Nav>
+        <NavGroup>
+          <NavItem />
+        </NavGroup>
+      </Nav>
+      or
+      <Nav>
+        <NavList>
+          <NavItem />
+        </NavList>
+      </Nav>
+  when:
+    frontend.referenced:
+      pattern: ^NavItem$
+      location: JSX_COMPONENT
+      parent: ^Nav$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-nav-item-not-in-item-use-expandable
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Nav
+  effort: 3
+  category: mandatory
+  description: <NavItem> must be inside NavExpandable, not directly in <NavItem>
+  message: |-
+    <NavItem> should be wrapped in <NavExpandable> inside <NavItem>.
+
+    Replace:
+      <NavItem>
+        <NavItem />
+      </NavItem>
+
+    With:
+      <NavItem>
+        <NavExpandable>
+          <NavItem />
+        </NavExpandable>
+      </NavItem>
+  when:
+    frontend.referenced:
+      pattern: ^NavItem$
+      location: JSX_COMPONENT
+      parent: ^NavItem$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-nav-list-in-nav
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Nav
+  effort: 1
+  category: mandatory
+  description: <NavList> must be a child of Nav
+  message: |-
+    <NavList> must be used inside <Nav>.
+
+    Correct usage:
+      <Nav>
+        <NavList />
+      </Nav>
+  when:
+    frontend.referenced:
+      pattern: ^NavList$
+      location: JSX_COMPONENT
+      notParent: ^Nav$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-nav-itemseparator-in-expandable-or-group-or-list
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Nav
+  effort: 1
+  category: mandatory
+  description: <NavItemSeparator> must be a child of NavExpandable or NavGroup or NavList
+  message: |-
+    <NavItemSeparator> must be used inside NavExpandable or NavGroup or NavList.
+
+    Correct usage (either):
+      <NavExpandable>
+        <NavItemSeparator />
+      </NavExpandable>
+      or
+      <NavGroup>
+        <NavItemSeparator />
+      </NavGroup>
+      or
+      <NavList>
+        <NavItemSeparator />
+      </NavList>
+  when:
+    frontend.referenced:
+      pattern: ^NavItemSeparator$
+      location: JSX_COMPONENT
+      notParent: ^(NavExpandable|NavGroup|NavList)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-nav-itemseparator-not-in-item-use-expandable
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Nav
+  effort: 3
+  category: mandatory
+  description: <NavItemSeparator> must be inside NavExpandable, not directly in <NavItem>
+  message: |-
+    <NavItemSeparator> should be wrapped in <NavExpandable> inside <NavItem>.
+
+    Replace:
+      <NavItem>
+        <NavItemSeparator />
+      </NavItem>
+
+    With:
+      <NavItem>
+        <NavExpandable>
+          <NavItemSeparator />
+        </NavExpandable>
+      </NavItem>
+  when:
+    frontend.referenced:
+      pattern: ^NavItemSeparator$
+      location: JSX_COMPONENT
+      parent: ^NavItem$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-nav-itemseparator-not-in-nav-use-group-or-list
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Nav
+  effort: 3
+  category: mandatory
+  description: <NavItemSeparator> must be inside NavGroup or NavList, not directly in <Nav>
+  message: |-
+    <NavItemSeparator> should be wrapped in NavGroup or NavList inside <Nav>.
+
+    Replace:
+      <Nav>
+        <NavItemSeparator />
+      </Nav>
+
+    With (either):
+      <Nav>
+        <NavGroup>
+          <NavItemSeparator />
+        </NavGroup>
+      </Nav>
+      or
+      <Nav>
+        <NavList>
+          <NavItemSeparator />
+        </NavList>
+      </Nav>
+  when:
+    frontend.referenced:
+      pattern: ^NavItemSeparator$
+      location: JSX_COMPONENT
+      parent: ^Nav$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-nav-list-req-expandable-and-item-and-itemseparator
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Nav
+  effort: 1
+  category: mandatory
+  description: <NavList> must contain NavExpandable or NavItem or NavItemSeparator children
+  message: |-
+    <NavList> must contain at least one NavExpandable or NavItem or NavItemSeparator child component.
+
+    Correct usage:
+      <NavList>
+        <NavExpandable />
+      </NavList>
+  when:
+    frontend.referenced:
+      pattern: ^NavList$
+      location: JSX_COMPONENT
+      requiresChild: ^(NavExpandable|NavItem|NavItemSeparator)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-nav-group-req-expandable-and-item-and-itemseparator
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Nav
+  effort: 1
+  category: mandatory
+  description: <NavGroup> must contain NavExpandable or NavItem or NavItemSeparator children
+  message: |-
+    <NavGroup> must contain at least one NavExpandable or NavItem or NavItemSeparator child component.
+
+    Correct usage:
+      <NavGroup>
+        <NavExpandable />
+      </NavGroup>
+  when:
+    frontend.referenced:
+      pattern: ^NavGroup$
+      location: JSX_COMPONENT
+      requiresChild: ^(NavExpandable|NavItem|NavItemSeparator)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-nav-expandable-req-item-and-itemseparator
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Nav
+  effort: 1
+  category: mandatory
+  description: <NavExpandable> must contain NavItem or NavItemSeparator children
+  message: |-
+    <NavExpandable> must contain at least one NavItem or NavItemSeparator child component.
+
+    Correct usage:
+      <NavExpandable>
+        <NavItem />
+      </NavExpandable>
+  when:
+    frontend.referenced:
+      pattern: ^NavExpandable$
+      location: JSX_COMPONENT
+      requiresChild: ^(NavItem|NavItemSeparator)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-notificationdrawer-listitem-in-list
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=NotificationDrawer
+  effort: 1
+  category: mandatory
+  description: <NotificationDrawerListItem> must be a child of NotificationDrawerList
+  message: |-
+    <NotificationDrawerListItem> must be used inside <NotificationDrawerList>.
+
+    Correct usage:
+      <NotificationDrawerList>
+        <NotificationDrawerListItem />
+      </NotificationDrawerList>
+  when:
+    frontend.referenced:
+      pattern: ^NotificationDrawerListItem$
+      location: JSX_COMPONENT
+      notParent: ^NotificationDrawerList$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-notificationdrawer-listitem-not-in-notificationdrawer-use-list
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=NotificationDrawer
+  effort: 3
+  category: mandatory
+  description: <NotificationDrawerListItem> must be inside NotificationDrawerList, not directly in <NotificationDrawer>
+  message: |-
+    <NotificationDrawerListItem> should be wrapped in <NotificationDrawerList> inside <NotificationDrawer>.
+
+    Replace:
+      <NotificationDrawer>
+        <NotificationDrawerListItem />
+      </NotificationDrawer>
+
+    With:
+      <NotificationDrawer>
+        <NotificationDrawerList>
+          <NotificationDrawerListItem />
+        </NotificationDrawerList>
+      </NotificationDrawer>
+  when:
+    frontend.referenced:
+      pattern: ^NotificationDrawerListItem$
+      location: JSX_COMPONENT
+      parent: ^NotificationDrawer$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-notificationdrawer-listitemheader-in-listitem
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=NotificationDrawer
+  effort: 1
+  category: mandatory
+  description: <NotificationDrawerListItemHeader> must be a child of NotificationDrawerListItem
+  message: |-
+    <NotificationDrawerListItemHeader> must be used inside <NotificationDrawerListItem>.
+
+    Correct usage:
+      <NotificationDrawerListItem>
+        <NotificationDrawerListItemHeader />
+      </NotificationDrawerListItem>
+  when:
+    frontend.referenced:
+      pattern: ^NotificationDrawerListItemHeader$
+      location: JSX_COMPONENT
+      notParent: ^NotificationDrawerListItem$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-notificationdrawer-listitemheader-not-in-list-use-listitem
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=NotificationDrawer
+  effort: 3
+  category: mandatory
+  description: <NotificationDrawerListItemHeader> must be inside NotificationDrawerListItem, not directly in <NotificationDrawerList>
+  message: |-
+    <NotificationDrawerListItemHeader> should be wrapped in <NotificationDrawerListItem> inside <NotificationDrawerList>.
+
+    Replace:
+      <NotificationDrawerList>
+        <NotificationDrawerListItemHeader />
+      </NotificationDrawerList>
+
+    With:
+      <NotificationDrawerList>
+        <NotificationDrawerListItem>
+          <NotificationDrawerListItemHeader />
+        </NotificationDrawerListItem>
+      </NotificationDrawerList>
+  when:
+    frontend.referenced:
+      pattern: ^NotificationDrawerListItemHeader$
+      location: JSX_COMPONENT
+      parent: ^NotificationDrawerList$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-notificationdrawer-listitembody-in-listitem
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=NotificationDrawer
+  effort: 1
+  category: mandatory
+  description: <NotificationDrawerListItemBody> must be a child of NotificationDrawerListItem
+  message: |-
+    <NotificationDrawerListItemBody> must be used inside <NotificationDrawerListItem>.
+
+    Correct usage:
+      <NotificationDrawerListItem>
+        <NotificationDrawerListItemBody />
+      </NotificationDrawerListItem>
+  when:
+    frontend.referenced:
+      pattern: ^NotificationDrawerListItemBody$
+      location: JSX_COMPONENT
+      notParent: ^NotificationDrawerListItem$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-notificationdrawer-listitembody-not-in-list-use-listitem
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=NotificationDrawer
+  effort: 3
+  category: mandatory
+  description: <NotificationDrawerListItemBody> must be inside NotificationDrawerListItem, not directly in <NotificationDrawerList>
+  message: |-
+    <NotificationDrawerListItemBody> should be wrapped in <NotificationDrawerListItem> inside <NotificationDrawerList>.
+
+    Replace:
+      <NotificationDrawerList>
+        <NotificationDrawerListItemBody />
+      </NotificationDrawerList>
+
+    With:
+      <NotificationDrawerList>
+        <NotificationDrawerListItem>
+          <NotificationDrawerListItemBody />
+        </NotificationDrawerListItem>
+      </NotificationDrawerList>
+  when:
+    frontend.referenced:
+      pattern: ^NotificationDrawerListItemBody$
+      location: JSX_COMPONENT
+      parent: ^NotificationDrawerList$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-notificationdrawer-listitem-req-listitembody-and-listitemheader
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=NotificationDrawer
+  effort: 1
+  category: mandatory
+  description: <NotificationDrawerListItem> must contain NotificationDrawerListItemBody or NotificationDrawerListItemHeader children
+  message: |-
+    <NotificationDrawerListItem> must contain at least one NotificationDrawerListItemBody or NotificationDrawerListItemHeader child component.
+
+    Correct usage:
+      <NotificationDrawerListItem>
+        <NotificationDrawerListItemBody />
+      </NotificationDrawerListItem>
+  when:
+    frontend.referenced:
+      pattern: ^NotificationDrawerListItem$
+      location: JSX_COMPONENT
+      requiresChild: ^(NotificationDrawerListItemBody|NotificationDrawerListItemHeader)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-notificationdrawer-list-req-listitem
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=NotificationDrawer
+  effort: 1
+  category: mandatory
+  description: <NotificationDrawerList> must contain NotificationDrawerListItem children
+  message: |-
+    <NotificationDrawerList> must contain at least one NotificationDrawerListItem child component.
+
+    Correct usage:
+      <NotificationDrawerList>
+        <NotificationDrawerListItem />
+      </NotificationDrawerList>
+  when:
+    frontend.referenced:
+      pattern: ^NotificationDrawerList$
+      location: JSX_COMPONENT
+      requiresChild: ^(NotificationDrawerListItem)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-progress-bar-in-progress
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Progress
+  effort: 1
+  category: mandatory
+  description: <ProgressBar> must be a child of Progress
+  message: |-
+    <ProgressBar> must be used inside <Progress>.
+
+    Correct usage:
+      <Progress>
+        <ProgressBar />
+      </Progress>
+  when:
+    frontend.referenced:
+      pattern: ^ProgressBar$
+      location: JSX_COMPONENT
+      notParent: ^Progress$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-progressstepper-progressstep-in-progressstepper
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=ProgressStepper
+  effort: 1
+  category: mandatory
+  description: <ProgressStep> must be a child of ProgressStepper
+  message: |-
+    <ProgressStep> must be used inside <ProgressStepper>.
+
+    Correct usage:
+      <ProgressStepper>
+        <ProgressStep />
+      </ProgressStepper>
+  when:
+    frontend.referenced:
+      pattern: ^ProgressStep$
+      location: JSX_COMPONENT
+      notParent: ^ProgressStepper$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-progressstepper-progressstepper-req-progressstep
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=ProgressStepper
+  effort: 1
+  category: mandatory
+  description: <ProgressStepper> must contain ProgressStep children
+  message: |-
+    <ProgressStepper> must contain at least one ProgressStep child component.
+
+    Correct usage:
+      <ProgressStepper>
+        <ProgressStep />
+      </ProgressStepper>
+  when:
+    frontend.referenced:
+      pattern: ^ProgressStepper$
+      location: JSX_COMPONENT
+      requiresChild: ^(ProgressStep)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-simplelist-item-in-simplelist-or-group
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=SimpleList
+  effort: 1
+  category: mandatory
+  description: <SimpleListItem> must be a child of SimpleList or SimpleListGroup
+  message: |-
+    <SimpleListItem> must be used inside SimpleList or SimpleListGroup.
+
+    Correct usage (either):
+      <SimpleList>
+        <SimpleListItem />
+      </SimpleList>
+      or
+      <SimpleListGroup>
+        <SimpleListItem />
+      </SimpleListGroup>
+  when:
+    frontend.referenced:
+      pattern: ^SimpleListItem$
+      location: JSX_COMPONENT
+      notParent: ^(SimpleList|SimpleListGroup)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-simplelist-group-req-item
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=SimpleList
+  effort: 1
+  category: mandatory
+  description: <SimpleListGroup> must contain SimpleListItem children
+  message: |-
+    <SimpleListGroup> must contain at least one SimpleListItem child component.
+
+    Correct usage:
+      <SimpleListGroup>
+        <SimpleListItem />
+      </SimpleListGroup>
+  when:
+    frontend.referenced:
+      pattern: ^SimpleListGroup$
+      location: JSX_COMPONENT
+      requiresChild: ^(SimpleListItem)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-table-thead-in-table
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-table
+  - family=Table
+  effort: 1
+  category: mandatory
+  description: <Thead> must be a child of Table
+  message: |-
+    <Thead> must be used inside <Table>.
+
+    Correct usage:
+      <Table>
+        <Thead />
+      </Table>
+  when:
+    frontend.referenced:
+      pattern: ^Thead$
+      location: JSX_COMPONENT
+      notParent: ^Table$
+      from: '@patternfly/react-table'
+- ruleID: sd-cf-table-td-in-tbody-or-thead-or-tr
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-table
+  - family=Table
+  effort: 1
+  category: mandatory
+  description: <Td> must be a child of Tbody or Thead or Tr
+  message: |-
+    <Td> must be used inside Tbody or Thead or Tr.
+
+    Correct usage (either):
+      <Tbody>
+        <Td />
+      </Tbody>
+      or
+      <Thead>
+        <Td />
+      </Thead>
+      or
+      <Tr>
+        <Td />
+      </Tr>
+  when:
+    frontend.referenced:
+      pattern: ^Td$
+      location: JSX_COMPONENT
+      notParent: ^(Tbody|Thead|Tr)$
+      from: '@patternfly/react-table'
+- ruleID: sd-cf-table-caption-in-table
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-table
+  - family=Table
+  effort: 1
+  category: mandatory
+  description: <Caption> must be a child of Table
+  message: |-
+    <Caption> must be used inside <Table>.
+
+    Correct usage:
+      <Table>
+        <Caption />
+      </Table>
+  when:
+    frontend.referenced:
+      pattern: ^Caption$
+      location: JSX_COMPONENT
+      notParent: ^Table$
+      from: '@patternfly/react-table'
+- ruleID: sd-cf-table-tr-in-tbody-or-thead
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-table
+  - family=Table
+  effort: 1
+  category: mandatory
+  description: <Tr> must be a child of Tbody or Thead
+  message: |-
+    <Tr> must be used inside Tbody or Thead.
+
+    Correct usage (either):
+      <Tbody>
+        <Tr />
+      </Tbody>
+      or
+      <Thead>
+        <Tr />
+      </Thead>
+  when:
+    frontend.referenced:
+      pattern: ^Tr$
+      location: JSX_COMPONENT
+      notParent: ^(Tbody|Thead)$
+      from: '@patternfly/react-table'
+- ruleID: sd-cf-table-tr-not-in-table-use-tbody-or-thead
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-table
+  - family=Table
+  effort: 3
+  category: mandatory
+  description: <Tr> must be inside Tbody or Thead, not directly in <Table>
+  message: |-
+    <Tr> should be wrapped in Tbody or Thead inside <Table>.
+
+    Replace:
+      <Table>
+        <Tr />
+      </Table>
+
+    With (either):
+      <Table>
+        <Tbody>
+          <Tr />
+        </Tbody>
+      </Table>
+      or
+      <Table>
+        <Thead>
+          <Tr />
+        </Thead>
+      </Table>
+  when:
+    frontend.referenced:
+      pattern: ^Tr$
+      location: JSX_COMPONENT
+      parent: ^Table$
+      parentFrom: '@patternfly/react-table'
+      from: '@patternfly/react-table'
+- ruleID: sd-cf-table-tbody-in-table
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-table
+  - family=Table
+  effort: 1
+  category: mandatory
+  description: <Tbody> must be a child of Table
+  message: |-
+    <Tbody> must be used inside <Table>.
+
+    Correct usage:
+      <Table>
+        <Tbody />
+      </Table>
+  when:
+    frontend.referenced:
+      pattern: ^Tbody$
+      location: JSX_COMPONENT
+      notParent: ^Table$
+      from: '@patternfly/react-table'
+- ruleID: sd-cf-table-expandablerowcontent-in-td-or-tr
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-table
+  - family=Table
+  effort: 1
+  category: mandatory
+  description: <ExpandableRowContent> must be a child of Td or Tr
+  message: |-
+    <ExpandableRowContent> must be used inside Td or Tr.
+
+    Correct usage (either):
+      <Td>
+        <ExpandableRowContent />
+      </Td>
+      or
+      <Tr>
+        <ExpandableRowContent />
+      </Tr>
+  when:
+    frontend.referenced:
+      pattern: ^ExpandableRowContent$
+      location: JSX_COMPONENT
+      notParent: ^(Td|Tr)$
+      from: '@patternfly/react-table'
+- ruleID: sd-cf-table-expandablerowcontent-not-in-tbody-use-td-or-tr
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-table
+  - family=Table
+  effort: 3
+  category: mandatory
+  description: <ExpandableRowContent> must be inside Td or Tr, not directly in <Tbody>
+  message: |-
+    <ExpandableRowContent> should be wrapped in Td or Tr inside <Tbody>.
+
+    Replace:
+      <Tbody>
+        <ExpandableRowContent />
+      </Tbody>
+
+    With (either):
+      <Tbody>
+        <Td>
+          <ExpandableRowContent />
+        </Td>
+      </Tbody>
+      or
+      <Tbody>
+        <Tr>
+          <ExpandableRowContent />
+        </Tr>
+      </Tbody>
+  when:
+    frontend.referenced:
+      pattern: ^ExpandableRowContent$
+      location: JSX_COMPONENT
+      parent: ^Tbody$
+      parentFrom: '@patternfly/react-table'
+      from: '@patternfly/react-table'
+- ruleID: sd-cf-table-expandablerowcontent-not-in-thead-use-td-or-tr
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-table
+  - family=Table
+  effort: 3
+  category: mandatory
+  description: <ExpandableRowContent> must be inside Td or Tr, not directly in <Thead>
+  message: |-
+    <ExpandableRowContent> should be wrapped in Td or Tr inside <Thead>.
+
+    Replace:
+      <Thead>
+        <ExpandableRowContent />
+      </Thead>
+
+    With (either):
+      <Thead>
+        <Td>
+          <ExpandableRowContent />
+        </Td>
+      </Thead>
+      or
+      <Thead>
+        <Tr>
+          <ExpandableRowContent />
+        </Tr>
+      </Thead>
+  when:
+    frontend.referenced:
+      pattern: ^ExpandableRowContent$
+      location: JSX_COMPONENT
+      parent: ^Thead$
+      parentFrom: '@patternfly/react-table'
+      from: '@patternfly/react-table'
+- ruleID: sd-cf-table-th-in-tr
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-table
+  - family=Table
+  effort: 1
+  category: mandatory
+  description: <Th> must be a child of Tr
+  message: |-
+    <Th> must be used inside <Tr>.
+
+    Correct usage:
+      <Tr>
+        <Th />
+      </Tr>
+  when:
+    frontend.referenced:
+      pattern: ^Th$
+      location: JSX_COMPONENT
+      notParent: ^Tr$
+      from: '@patternfly/react-table'
+- ruleID: sd-cf-table-th-not-in-thead-use-tr
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-table
+  - family=Table
+  effort: 3
+  category: mandatory
+  description: <Th> must be inside Tr, not directly in <Thead>
+  message: |-
+    <Th> should be wrapped in <Tr> inside <Thead>.
+
+    Replace:
+      <Thead>
+        <Th />
+      </Thead>
+
+    With:
+      <Thead>
+        <Tr>
+          <Th />
+        </Tr>
+      </Thead>
+  when:
+    frontend.referenced:
+      pattern: ^Th$
+      location: JSX_COMPONENT
+      parent: ^Thead$
+      parentFrom: '@patternfly/react-table'
+      from: '@patternfly/react-table'
+- ruleID: sd-cf-table-th-not-in-tbody-use-tr
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-table
+  - family=Table
+  effort: 3
+  category: mandatory
+  description: <Th> must be inside Tr, not directly in <Tbody>
+  message: |-
+    <Th> should be wrapped in <Tr> inside <Tbody>.
+
+    Replace:
+      <Tbody>
+        <Th />
+      </Tbody>
+
+    With:
+      <Tbody>
+        <Tr>
+          <Th />
+        </Tr>
+      </Tbody>
+  when:
+    frontend.referenced:
+      pattern: ^Th$
+      location: JSX_COMPONENT
+      parent: ^Tbody$
+      parentFrom: '@patternfly/react-table'
+      from: '@patternfly/react-table'
+- ruleID: sd-cf-table-tr-req-expandablerowcontent-and-td-and-th
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-table
+  - family=Table
+  effort: 1
+  category: mandatory
+  description: <Tr> must contain ExpandableRowContent or Td or Th children
+  message: |-
+    <Tr> must contain at least one ExpandableRowContent or Td or Th child component.
+
+    Correct usage:
+      <Tr>
+        <ExpandableRowContent />
+      </Tr>
+  when:
+    frontend.referenced:
+      pattern: ^Tr$
+      location: JSX_COMPONENT
+      requiresChild: ^(ExpandableRowContent|Td|Th)$
+      from: '@patternfly/react-table'
+- ruleID: sd-cf-table-tbody-req-td-and-tr
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-table
+  - family=Table
+  effort: 1
+  category: mandatory
+  description: <Tbody> must contain Td or Tr children
+  message: |-
+    <Tbody> must contain at least one Td or Tr child component.
+
+    Correct usage:
+      <Tbody>
+        <Td />
+      </Tbody>
+  when:
+    frontend.referenced:
+      pattern: ^Tbody$
+      location: JSX_COMPONENT
+      requiresChild: ^(Td|Tr)$
+      from: '@patternfly/react-table'
+- ruleID: sd-cf-table-table-req-caption-and-collapsecolumn-and-headercellinfowrapper-and-text-and-tbody-and-thead
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-table
+  - family=Table
+  effort: 1
+  category: mandatory
+  description: <Table> must contain Caption or CollapseColumn or HeaderCellInfoWrapper or TableText or Tbody or Thead children
+  message: |-
+    <Table> must contain at least one Caption or CollapseColumn or HeaderCellInfoWrapper or TableText or Tbody or Thead child component.
+
+    Correct usage:
+      <Table>
+        <Caption />
+      </Table>
+  when:
+    frontend.referenced:
+      pattern: ^Table$
+      location: JSX_COMPONENT
+      requiresChild: ^(Caption|CollapseColumn|HeaderCellInfoWrapper|TableText|Tbody|Thead)$
+      from: '@patternfly/react-table'
+- ruleID: sd-cf-table-thead-req-sortcolumn-and-td-and-tr
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-table
+  - family=Table
+  effort: 1
+  category: mandatory
+  description: <Thead> must contain SortColumn or Td or Tr children
+  message: |-
+    <Thead> must contain at least one SortColumn or Td or Tr child component.
+
+    Correct usage:
+      <Thead>
+        <SortColumn />
+      </Thead>
+  when:
+    frontend.referenced:
+      pattern: ^Thead$
+      location: JSX_COMPONENT
+      requiresChild: ^(SortColumn|Td|Tr)$
+      from: '@patternfly/react-table'
+- ruleID: sd-cf-tabs-tabcontentbody-in-tabcontent
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Tabs
+  effort: 1
+  category: mandatory
+  description: <TabContentBody> must be a child of TabContent
+  message: |-
+    <TabContentBody> must be used inside <TabContent>.
+
+    Correct usage:
+      <TabContent>
+        <TabContentBody />
+      </TabContent>
+  when:
+    frontend.referenced:
+      pattern: ^TabContentBody$
+      location: JSX_COMPONENT
+      notParent: ^TabContent$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-tabs-tab-in-tabs
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Tabs
+  effort: 1
+  category: mandatory
+  description: <Tab> must be a child of Tabs
+  message: |-
+    <Tab> must be used inside <Tabs>.
+
+    Correct usage:
+      <Tabs>
+        <Tab />
+      </Tabs>
+  when:
+    frontend.referenced:
+      pattern: ^Tab$
+      location: JSX_COMPONENT
+      notParent: ^Tabs$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-textinputgroup-main-in-textinputgroup
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=TextInputGroup
+  effort: 1
+  category: mandatory
+  description: <TextInputGroupMain> must be a child of TextInputGroup
+  message: |-
+    <TextInputGroupMain> must be used inside <TextInputGroup>.
+
+    Correct usage:
+      <TextInputGroup>
+        <TextInputGroupMain />
+      </TextInputGroup>
+  when:
+    frontend.referenced:
+      pattern: ^TextInputGroupMain$
+      location: JSX_COMPONENT
+      notParent: ^TextInputGroup$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-togglegroup-item-in-togglegroup
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=ToggleGroup
+  effort: 1
+  category: mandatory
+  description: <ToggleGroupItem> must be a child of ToggleGroup
+  message: |-
+    <ToggleGroupItem> must be used inside <ToggleGroup>.
+
+    Correct usage:
+      <ToggleGroup>
+        <ToggleGroupItem />
+      </ToggleGroup>
+  when:
+    frontend.referenced:
+      pattern: ^ToggleGroupItem$
+      location: JSX_COMPONENT
+      notParent: ^ToggleGroup$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-toolbar-content-in-toolbar
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Toolbar
+  effort: 1
+  category: mandatory
+  description: <ToolbarContent> must be a child of Toolbar
+  message: |-
+    <ToolbarContent> must be used inside <Toolbar>.
+
+    Correct usage:
+      <Toolbar>
+        <ToolbarContent />
+      </Toolbar>
+  when:
+    frontend.referenced:
+      pattern: ^ToolbarContent$
+      location: JSX_COMPONENT
+      notParent: ^Toolbar$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-toolbar-filter-in-content
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Toolbar
+  effort: 1
+  category: mandatory
+  description: <ToolbarFilter> must be a child of ToolbarContent
+  message: |-
+    <ToolbarFilter> must be used inside <ToolbarContent>.
+
+    Correct usage:
+      <ToolbarContent>
+        <ToolbarFilter />
+      </ToolbarContent>
+  when:
+    frontend.referenced:
+      pattern: ^ToolbarFilter$
+      location: JSX_COMPONENT
+      notParent: ^ToolbarContent$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-toolbar-filter-not-in-toolbar-use-content
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Toolbar
+  effort: 3
+  category: mandatory
+  description: <ToolbarFilter> must be inside ToolbarContent, not directly in <Toolbar>
+  message: |-
+    <ToolbarFilter> should be wrapped in <ToolbarContent> inside <Toolbar>.
+
+    Replace:
+      <Toolbar>
+        <ToolbarFilter />
+      </Toolbar>
+
+    With:
+      <Toolbar>
+        <ToolbarContent>
+          <ToolbarFilter />
+        </ToolbarContent>
+      </Toolbar>
+  when:
+    frontend.referenced:
+      pattern: ^ToolbarFilter$
+      location: JSX_COMPONENT
+      parent: ^Toolbar$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-toolbar-togglegroup-in-content-or-expandablecontent-or-group
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Toolbar
+  effort: 1
+  category: mandatory
+  description: <ToolbarToggleGroup> must be a child of ToolbarContent or ToolbarExpandableContent or ToolbarGroup
+  message: |-
+    <ToolbarToggleGroup> must be used inside ToolbarContent or ToolbarExpandableContent or ToolbarGroup.
+
+    Correct usage (either):
+      <ToolbarContent>
+        <ToolbarToggleGroup />
+      </ToolbarContent>
+      or
+      <ToolbarExpandableContent>
+        <ToolbarToggleGroup />
+      </ToolbarExpandableContent>
+      or
+      <ToolbarGroup>
+        <ToolbarToggleGroup />
+      </ToolbarGroup>
+  when:
+    frontend.referenced:
+      pattern: ^ToolbarToggleGroup$
+      location: JSX_COMPONENT
+      notParent: ^(ToolbarContent|ToolbarExpandableContent|ToolbarGroup)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-toolbar-togglegroup-not-in-toolbar-use-content
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Toolbar
+  effort: 3
+  category: mandatory
+  description: <ToolbarToggleGroup> must be inside ToolbarContent, not directly in <Toolbar>
+  message: |-
+    <ToolbarToggleGroup> should be wrapped in <ToolbarContent> inside <Toolbar>.
+
+    Replace:
+      <Toolbar>
+        <ToolbarToggleGroup />
+      </Toolbar>
+
+    With:
+      <Toolbar>
+        <ToolbarContent>
+          <ToolbarToggleGroup />
+        </ToolbarContent>
+      </Toolbar>
+  when:
+    frontend.referenced:
+      pattern: ^ToolbarToggleGroup$
+      location: JSX_COMPONENT
+      parent: ^Toolbar$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-deprecated-dragdrop-draggable-in-dragdrop-or-droppable
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-drag-drop/deprecated
+  - family=deprecated/DragDrop
+  effort: 1
+  category: mandatory
+  description: <Draggable> must be a child of DragDrop or Droppable
+  message: |-
+    <Draggable> must be used inside DragDrop or Droppable.
+
+    Correct usage (either):
+      <DragDrop>
+        <Draggable />
+      </DragDrop>
+      or
+      <Droppable>
+        <Draggable />
+      </Droppable>
+  when:
+    frontend.referenced:
+      pattern: ^Draggable$
+      location: JSX_COMPONENT
+      notParent: ^(DragDrop|Droppable)$
+      from: '@patternfly/react-drag-drop/deprecated'
+- ruleID: sd-cf-deprecated-table-body-in-table
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-table/deprecated
+  - family=deprecated/Table
+  effort: 1
+  category: mandatory
+  description: <Body> must be a child of Table
+  message: |-
+    <Body> must be used inside <Table>.
+
+    Correct usage:
+      <Table>
+        <Body />
+      </Table>
+  when:
+    frontend.referenced:
+      pattern: ^Body$
+      location: JSX_COMPONENT
+      notParent: ^Table$
+      from: '@patternfly/react-table/deprecated'
+- ruleID: sd-cf-deprecated-table-header-in-table
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-table/deprecated
+  - family=deprecated/Table
+  effort: 1
+  category: mandatory
+  description: <Header> must be a child of Table
+  message: |-
+    <Header> must be used inside <Table>.
+
+    Correct usage:
+      <Table>
+        <Header />
+      </Table>
+  when:
+    frontend.referenced:
+      pattern: ^Header$
+      location: JSX_COMPONENT
+      notParent: ^Table$
+      from: '@patternfly/react-table/deprecated'
+- ruleID: sd-cf-deprecated-wizard-navitem-in-nav
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core/deprecated
+  - family=deprecated/Wizard
+  effort: 1
+  category: mandatory
+  description: <WizardNavItem> must be a child of WizardNav
+  message: |-
+    <WizardNavItem> must be used inside <WizardNav>.
+
+    Correct usage:
+      <WizardNav>
+        <WizardNavItem />
+      </WizardNav>
+  when:
+    frontend.referenced:
+      pattern: ^WizardNavItem$
+      location: JSX_COMPONENT
+      notParent: ^WizardNav$
+      from: '@patternfly/react-core/deprecated'
+- ruleID: sd-cf-deprecated-wizard-navitem-not-in-navitem-use-nav
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core/deprecated
+  - family=deprecated/Wizard
+  effort: 3
+  category: mandatory
+  description: <WizardNavItem> must be inside WizardNav, not directly in <WizardNavItem>
+  message: |-
+    <WizardNavItem> should be wrapped in <WizardNav> inside <WizardNavItem>.
+
+    Replace:
+      <WizardNavItem>
+        <WizardNavItem />
+      </WizardNavItem>
+
+    With:
+      <WizardNavItem>
+        <WizardNav>
+          <WizardNavItem />
+        </WizardNav>
+      </WizardNavItem>
+  when:
+    frontend.referenced:
+      pattern: ^WizardNavItem$
+      location: JSX_COMPONENT
+      parent: ^WizardNavItem$
+      parentFrom: '@patternfly/react-core/deprecated'
+      from: '@patternfly/react-core/deprecated'
+- ruleID: sd-cf-deprecated-wizard-nav-req-navitem
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core/deprecated
+  - family=deprecated/Wizard
+  effort: 1
+  category: mandatory
+  description: <WizardNav> must contain WizardNavItem children
+  message: |-
+    <WizardNav> must contain at least one WizardNavItem child component.
+
+    Correct usage:
+      <WizardNav>
+        <WizardNavItem />
+      </WizardNav>
+  when:
+    frontend.referenced:
+      pattern: ^WizardNav$
+      location: JSX_COMPONENT
+      requiresChild: ^(WizardNavItem)$
+      from: '@patternfly/react-core/deprecated'
+- ruleID: sd-cf-alert-actionclosebutton-in-alert
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Alert
+  effort: 1
+  category: mandatory
+  description: <AlertActionCloseButton> must be a child of Alert
+  message: |-
+    <AlertActionCloseButton> must be used inside <Alert>.
+
+    Correct usage:
+      <Alert>
+        <AlertActionCloseButton />
+      </Alert>
+  when:
+    frontend.referenced:
+      pattern: ^AlertActionCloseButton$
+      location: JSX_COMPONENT
+      notParent: ^Alert$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-alert-actionclosebutton-not-in-group-use-alert
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Alert
+  effort: 3
+  category: mandatory
+  description: <AlertActionCloseButton> must be inside Alert, not directly in <AlertGroup>
+  message: |-
+    <AlertActionCloseButton> should be wrapped in <Alert> inside <AlertGroup>.
+
+    Replace:
+      <AlertGroup>
+        <AlertActionCloseButton />
+      </AlertGroup>
+
+    With:
+      <AlertGroup>
+        <Alert>
+          <AlertActionCloseButton />
+        </Alert>
+      </AlertGroup>
+  when:
+    frontend.referenced:
+      pattern: ^AlertActionCloseButton$
+      location: JSX_COMPONENT
+      parent: ^AlertGroup$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-chartdonututilization-chartdonutthreshold-req-chartdonututilization
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-charts
+  - family=ChartDonutUtilization
+  effort: 1
+  category: mandatory
+  description: <ChartDonutThreshold> must contain ChartDonutUtilization children
+  message: |-
+    <ChartDonutThreshold> must contain at least one ChartDonutUtilization child component.
+
+    Correct usage:
+      <ChartDonutThreshold>
+        <ChartDonutUtilization />
+      </ChartDonutThreshold>
+  when:
+    frontend.referenced:
+      pattern: ^ChartDonutThreshold$
+      location: JSX_COMPONENT
+      requiresChild: ^(ChartDonutUtilization)$
+      from: '@patternfly/react-charts'
+- ruleID: sd-cf-datalist-itemcells-in-item-or-itemrow
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=DataList
+  effort: 1
+  category: mandatory
+  description: <DataListItemCells> must be a child of DataListItem or DataListItemRow
+  message: |-
+    <DataListItemCells> must be used inside DataListItem or DataListItemRow.
+
+    Correct usage (either):
+      <DataListItem>
+        <DataListItemCells />
+      </DataListItem>
+      or
+      <DataListItemRow>
+        <DataListItemCells />
+      </DataListItemRow>
+  when:
+    frontend.referenced:
+      pattern: ^DataListItemCells$
+      location: JSX_COMPONENT
+      notParent: ^(DataListItem|DataListItemRow)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-datalist-itemcells-not-in-content-use-item-or-itemrow
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=DataList
+  effort: 3
+  category: mandatory
+  description: <DataListItemCells> must be inside DataListItem or DataListItemRow, not directly in <DataListContent>
+  message: |-
+    <DataListItemCells> should be wrapped in DataListItem or DataListItemRow inside <DataListContent>.
+
+    Replace:
+      <DataListContent>
+        <DataListItemCells />
+      </DataListContent>
+
+    With (either):
+      <DataListContent>
+        <DataListItem>
+          <DataListItemCells />
+        </DataListItem>
+      </DataListContent>
+      or
+      <DataListContent>
+        <DataListItemRow>
+          <DataListItemCells />
+        </DataListItemRow>
+      </DataListContent>
+  when:
+    frontend.referenced:
+      pattern: ^DataListItemCells$
+      location: JSX_COMPONENT
+      parent: ^DataListContent$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-datalist-itemcells-not-in-datalist-use-item
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=DataList
+  effort: 3
+  category: mandatory
+  description: <DataListItemCells> must be inside DataListItem, not directly in <DataList>
+  message: |-
+    <DataListItemCells> should be wrapped in <DataListItem> inside <DataList>.
+
+    Replace:
+      <DataList>
+        <DataListItemCells />
+      </DataList>
+
+    With:
+      <DataList>
+        <DataListItem>
+          <DataListItemCells />
+        </DataListItem>
+      </DataList>
+  when:
+    frontend.referenced:
+      pattern: ^DataListItemCells$
+      location: JSX_COMPONENT
+      parent: ^DataList$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-datalist-itemrow-in-content-or-item
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=DataList
+  effort: 1
+  category: mandatory
+  description: <DataListItemRow> must be a child of DataListContent or DataListItem
+  message: |-
+    <DataListItemRow> must be used inside DataListContent or DataListItem.
+
+    Correct usage (either):
+      <DataListContent>
+        <DataListItemRow />
+      </DataListContent>
+      or
+      <DataListItem>
+        <DataListItemRow />
+      </DataListItem>
+  when:
+    frontend.referenced:
+      pattern: ^DataListItemRow$
+      location: JSX_COMPONENT
+      notParent: ^(DataListContent|DataListItem)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-datalist-itemrow-not-in-datalist-use-item
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=DataList
+  effort: 3
+  category: mandatory
+  description: <DataListItemRow> must be inside DataListItem, not directly in <DataList>
+  message: |-
+    <DataListItemRow> should be wrapped in <DataListItem> inside <DataList>.
+
+    Replace:
+      <DataList>
+        <DataListItemRow />
+      </DataList>
+
+    With:
+      <DataList>
+        <DataListItem>
+          <DataListItemRow />
+        </DataListItem>
+      </DataList>
+  when:
+    frontend.referenced:
+      pattern: ^DataListItemRow$
+      location: JSX_COMPONENT
+      parent: ^DataList$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-datalist-item-in-datalist-or-content
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=DataList
+  effort: 1
+  category: mandatory
+  description: <DataListItem> must be a child of DataList or DataListContent
+  message: |-
+    <DataListItem> must be used inside DataList or DataListContent.
+
+    Correct usage (either):
+      <DataList>
+        <DataListItem />
+      </DataList>
+      or
+      <DataListContent>
+        <DataListItem />
+      </DataListContent>
+  when:
+    frontend.referenced:
+      pattern: ^DataListItem$
+      location: JSX_COMPONENT
+      notParent: ^(DataList|DataListContent)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-datalist-toggle-in-item-or-itemrow
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=DataList
+  effort: 1
+  category: mandatory
+  description: <DataListToggle> must be a child of DataListItem or DataListItemRow
+  message: |-
+    <DataListToggle> must be used inside DataListItem or DataListItemRow.
+
+    Correct usage (either):
+      <DataListItem>
+        <DataListToggle />
+      </DataListItem>
+      or
+      <DataListItemRow>
+        <DataListToggle />
+      </DataListItemRow>
+  when:
+    frontend.referenced:
+      pattern: ^DataListToggle$
+      location: JSX_COMPONENT
+      notParent: ^(DataListItem|DataListItemRow)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-datalist-toggle-not-in-datalist-use-item
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=DataList
+  effort: 3
+  category: mandatory
+  description: <DataListToggle> must be inside DataListItem, not directly in <DataList>
+  message: |-
+    <DataListToggle> should be wrapped in <DataListItem> inside <DataList>.
+
+    Replace:
+      <DataList>
+        <DataListToggle />
+      </DataList>
+
+    With:
+      <DataList>
+        <DataListItem>
+          <DataListToggle />
+        </DataListItem>
+      </DataList>
+  when:
+    frontend.referenced:
+      pattern: ^DataListToggle$
+      location: JSX_COMPONENT
+      parent: ^DataList$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-datalist-toggle-not-in-content-use-item-or-itemrow
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=DataList
+  effort: 3
+  category: mandatory
+  description: <DataListToggle> must be inside DataListItem or DataListItemRow, not directly in <DataListContent>
+  message: |-
+    <DataListToggle> should be wrapped in DataListItem or DataListItemRow inside <DataListContent>.
+
+    Replace:
+      <DataListContent>
+        <DataListToggle />
+      </DataListContent>
+
+    With (either):
+      <DataListContent>
+        <DataListItem>
+          <DataListToggle />
+        </DataListItem>
+      </DataListContent>
+      or
+      <DataListContent>
+        <DataListItemRow>
+          <DataListToggle />
+        </DataListItemRow>
+      </DataListContent>
+  when:
+    frontend.referenced:
+      pattern: ^DataListToggle$
+      location: JSX_COMPONENT
+      parent: ^DataListContent$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-datalist-cell-in-datalist-or-itemcells
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=DataList
+  effort: 1
+  category: mandatory
+  description: <DataListCell> must be a child of DataList or DataListItemCells
+  message: |-
+    <DataListCell> must be used inside DataList or DataListItemCells.
+
+    Correct usage (either):
+      <DataList>
+        <DataListCell />
+      </DataList>
+      or
+      <DataListItemCells>
+        <DataListCell />
+      </DataListItemCells>
+  when:
+    frontend.referenced:
+      pattern: ^DataListCell$
+      location: JSX_COMPONENT
+      notParent: ^(DataList|DataListItemCells)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-datalist-cell-not-in-item-use-itemcells
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=DataList
+  effort: 3
+  category: mandatory
+  description: <DataListCell> must be inside DataListItemCells, not directly in <DataListItem>
+  message: |-
+    <DataListCell> should be wrapped in <DataListItemCells> inside <DataListItem>.
+
+    Replace:
+      <DataListItem>
+        <DataListCell />
+      </DataListItem>
+
+    With:
+      <DataListItem>
+        <DataListItemCells>
+          <DataListCell />
+        </DataListItemCells>
+      </DataListItem>
+  when:
+    frontend.referenced:
+      pattern: ^DataListCell$
+      location: JSX_COMPONENT
+      parent: ^DataListItem$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-datalist-cell-not-in-itemrow-use-itemcells
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=DataList
+  effort: 3
+  category: mandatory
+  description: <DataListCell> must be inside DataListItemCells, not directly in <DataListItemRow>
+  message: |-
+    <DataListCell> should be wrapped in <DataListItemCells> inside <DataListItemRow>.
+
+    Replace:
+      <DataListItemRow>
+        <DataListCell />
+      </DataListItemRow>
+
+    With:
+      <DataListItemRow>
+        <DataListItemCells>
+          <DataListCell />
+        </DataListItemCells>
+      </DataListItemRow>
+  when:
+    frontend.referenced:
+      pattern: ^DataListCell$
+      location: JSX_COMPONENT
+      parent: ^DataListItemRow$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-datalist-datalist-req-action-and-cell-and-check-and-content-and-control-and-dragbutton-and-item-and-text
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=DataList
+  effort: 1
+  category: mandatory
+  description: <DataList> must contain DataListAction or DataListCell or DataListCheck or DataListContent or DataListControl or DataListDragButton or DataListItem or DataListText children
+  message: |-
+    <DataList> must contain at least one DataListAction or DataListCell or DataListCheck or DataListContent or DataListControl or DataListDragButton or DataListItem or DataListText child component.
+
+    Correct usage:
+      <DataList>
+        <DataListAction />
+      </DataList>
+  when:
+    frontend.referenced:
+      pattern: ^DataList$
+      location: JSX_COMPONENT
+      requiresChild: ^(DataListAction|DataListCell|DataListCheck|DataListContent|DataListControl|DataListDragButton|DataListItem|DataListText)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-datalist-itemcells-req-cell
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=DataList
+  effort: 1
+  category: mandatory
+  description: <DataListItemCells> must contain DataListCell children
+  message: |-
+    <DataListItemCells> must contain at least one DataListCell child component.
+
+    Correct usage:
+      <DataListItemCells>
+        <DataListCell />
+      </DataListItemCells>
+  when:
+    frontend.referenced:
+      pattern: ^DataListItemCells$
+      location: JSX_COMPONENT
+      requiresChild: ^(DataListCell)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-dropdown-list-in-dropdown-or-item
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Dropdown
+  effort: 1
+  category: mandatory
+  description: <DropdownList> must be a child of Dropdown or DropdownItem
+  message: |-
+    <DropdownList> must be used inside Dropdown or DropdownItem.
+
+    Correct usage (either):
+      <Dropdown>
+        <DropdownList />
+      </Dropdown>
+      or
+      <DropdownItem>
+        <DropdownList />
+      </DropdownItem>
+  when:
+    frontend.referenced:
+      pattern: ^DropdownList$
+      location: JSX_COMPONENT
+      notParent: ^(Dropdown|DropdownItem)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-dropdown-item-in-list
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Dropdown
+  effort: 1
+  category: mandatory
+  description: <DropdownItem> must be a child of DropdownList
+  message: |-
+    <DropdownItem> must be used inside <DropdownList>.
+
+    Correct usage:
+      <DropdownList>
+        <DropdownItem />
+      </DropdownList>
+  when:
+    frontend.referenced:
+      pattern: ^DropdownItem$
+      location: JSX_COMPONENT
+      notParent: ^DropdownList$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-dropdown-item-not-in-item-use-list
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Dropdown
+  effort: 3
+  category: mandatory
+  description: <DropdownItem> must be inside DropdownList, not directly in <DropdownItem>
+  message: |-
+    <DropdownItem> should be wrapped in <DropdownList> inside <DropdownItem>.
+
+    Replace:
+      <DropdownItem>
+        <DropdownItem />
+      </DropdownItem>
+
+    With:
+      <DropdownItem>
+        <DropdownList>
+          <DropdownItem />
+        </DropdownList>
+      </DropdownItem>
+  when:
+    frontend.referenced:
+      pattern: ^DropdownItem$
+      location: JSX_COMPONENT
+      parent: ^DropdownItem$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-dropdown-item-not-in-dropdown-use-list
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Dropdown
+  effort: 3
+  category: mandatory
+  description: <DropdownItem> must be inside DropdownList, not directly in <Dropdown>
+  message: |-
+    <DropdownItem> should be wrapped in <DropdownList> inside <Dropdown>.
+
+    Replace:
+      <Dropdown>
+        <DropdownItem />
+      </Dropdown>
+
+    With:
+      <Dropdown>
+        <DropdownList>
+          <DropdownItem />
+        </DropdownList>
+      </Dropdown>
+  when:
+    frontend.referenced:
+      pattern: ^DropdownItem$
+      location: JSX_COMPONENT
+      parent: ^Dropdown$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-dropdown-list-req-item
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Dropdown
+  effort: 1
+  category: mandatory
+  description: <DropdownList> must contain DropdownItem children
+  message: |-
+    <DropdownList> must contain at least one DropdownItem child component.
+
+    Correct usage:
+      <DropdownList>
+        <DropdownItem />
+      </DropdownList>
+  when:
+    frontend.referenced:
+      pattern: ^DropdownList$
+      location: JSX_COMPONENT
+      requiresChild: ^(DropdownItem)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-overflowmenu-control-in-overflowmenu
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=OverflowMenu
+  effort: 1
+  category: mandatory
+  description: <OverflowMenuControl> must be a child of OverflowMenu
+  message: |-
+    <OverflowMenuControl> must be used inside <OverflowMenu>.
+
+    Correct usage:
+      <OverflowMenu>
+        <OverflowMenuControl />
+      </OverflowMenu>
+  when:
+    frontend.referenced:
+      pattern: ^OverflowMenuControl$
+      location: JSX_COMPONENT
+      notParent: ^OverflowMenu$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-overflowmenu-dropdownitem-in-overflowmenu
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=OverflowMenu
+  effort: 1
+  category: mandatory
+  description: <OverflowMenuDropdownItem> must be a child of OverflowMenu
+  message: |-
+    <OverflowMenuDropdownItem> must be used inside <OverflowMenu>.
+
+    Correct usage:
+      <OverflowMenu>
+        <OverflowMenuDropdownItem />
+      </OverflowMenu>
+  when:
+    frontend.referenced:
+      pattern: ^OverflowMenuDropdownItem$
+      location: JSX_COMPONENT
+      notParent: ^OverflowMenu$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-overflowmenu-content-in-overflowmenu
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=OverflowMenu
+  effort: 1
+  category: mandatory
+  description: <OverflowMenuContent> must be a child of OverflowMenu
+  message: |-
+    <OverflowMenuContent> must be used inside <OverflowMenu>.
+
+    Correct usage:
+      <OverflowMenu>
+        <OverflowMenuContent />
+      </OverflowMenu>
+  when:
+    frontend.referenced:
+      pattern: ^OverflowMenuContent$
+      location: JSX_COMPONENT
+      notParent: ^OverflowMenu$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-overflowmenu-item-in-overflowmenu
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=OverflowMenu
+  effort: 1
+  category: mandatory
+  description: <OverflowMenuItem> must be a child of OverflowMenu
+  message: |-
+    <OverflowMenuItem> must be used inside <OverflowMenu>.
+
+    Correct usage:
+      <OverflowMenu>
+        <OverflowMenuItem />
+      </OverflowMenu>
+  when:
+    frontend.referenced:
+      pattern: ^OverflowMenuItem$
+      location: JSX_COMPONENT
+      notParent: ^OverflowMenu$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-overflowmenu-group-in-overflowmenu
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=OverflowMenu
+  effort: 1
+  category: mandatory
+  description: <OverflowMenuGroup> must be a child of OverflowMenu
+  message: |-
+    <OverflowMenuGroup> must be used inside <OverflowMenu>.
+
+    Correct usage:
+      <OverflowMenu>
+        <OverflowMenuGroup />
+      </OverflowMenu>
+  when:
+    frontend.referenced:
+      pattern: ^OverflowMenuGroup$
+      location: JSX_COMPONENT
+      notParent: ^OverflowMenu$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-page-section-in-page-or-breadcrumb-or-group
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Page
+  effort: 1
+  category: mandatory
+  description: <PageSection> must be a child of Page or PageBreadcrumb or PageGroup
+  message: |-
+    <PageSection> must be used inside Page or PageBreadcrumb or PageGroup.
+
+    Correct usage (either):
+      <Page>
+        <PageSection />
+      </Page>
+      or
+      <PageBreadcrumb>
+        <PageSection />
+      </PageBreadcrumb>
+      or
+      <PageGroup>
+        <PageSection />
+      </PageGroup>
+  when:
+    frontend.referenced:
+      pattern: ^PageSection$
+      location: JSX_COMPONENT
+      notParent: ^(Page|PageBreadcrumb|PageGroup)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-page-breadcrumb-in-page-or-group
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Page
+  effort: 1
+  category: mandatory
+  description: <PageBreadcrumb> must be a child of Page or PageGroup
+  message: |-
+    <PageBreadcrumb> must be used inside Page or PageGroup.
+
+    Correct usage (either):
+      <Page>
+        <PageBreadcrumb />
+      </Page>
+      or
+      <PageGroup>
+        <PageBreadcrumb />
+      </PageGroup>
+  when:
+    frontend.referenced:
+      pattern: ^PageBreadcrumb$
+      location: JSX_COMPONENT
+      notParent: ^(Page|PageGroup)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-select-list-in-select-or-option
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Select
+  effort: 1
+  category: mandatory
+  description: <SelectList> must be a child of Select or SelectOption
+  message: |-
+    <SelectList> must be used inside Select or SelectOption.
+
+    Correct usage (either):
+      <Select>
+        <SelectList />
+      </Select>
+      or
+      <SelectOption>
+        <SelectList />
+      </SelectOption>
+  when:
+    frontend.referenced:
+      pattern: ^SelectList$
+      location: JSX_COMPONENT
+      notParent: ^(Select|SelectOption)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-select-option-in-list
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Select
+  effort: 1
+  category: mandatory
+  description: <SelectOption> must be a child of SelectList
+  message: |-
+    <SelectOption> must be used inside <SelectList>.
+
+    Correct usage:
+      <SelectList>
+        <SelectOption />
+      </SelectList>
+  when:
+    frontend.referenced:
+      pattern: ^SelectOption$
+      location: JSX_COMPONENT
+      notParent: ^SelectList$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-select-option-not-in-select-use-list
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Select
+  effort: 3
+  category: mandatory
+  description: <SelectOption> must be inside SelectList, not directly in <Select>
+  message: |-
+    <SelectOption> should be wrapped in <SelectList> inside <Select>.
+
+    Replace:
+      <Select>
+        <SelectOption />
+      </Select>
+
+    With:
+      <Select>
+        <SelectList>
+          <SelectOption />
+        </SelectList>
+      </Select>
+  when:
+    frontend.referenced:
+      pattern: ^SelectOption$
+      location: JSX_COMPONENT
+      parent: ^Select$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-select-option-not-in-option-use-list
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Select
+  effort: 3
+  category: mandatory
+  description: <SelectOption> must be inside SelectList, not directly in <SelectOption>
+  message: |-
+    <SelectOption> should be wrapped in <SelectList> inside <SelectOption>.
+
+    Replace:
+      <SelectOption>
+        <SelectOption />
+      </SelectOption>
+
+    With:
+      <SelectOption>
+        <SelectList>
+          <SelectOption />
+        </SelectList>
+      </SelectOption>
+  when:
+    frontend.referenced:
+      pattern: ^SelectOption$
+      location: JSX_COMPONENT
+      parent: ^SelectOption$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-select-list-req-option
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Select
+  effort: 1
+  category: mandatory
+  description: <SelectList> must contain SelectOption children
+  message: |-
+    <SelectList> must contain at least one SelectOption child component.
+
+    Correct usage:
+      <SelectList>
+        <SelectOption />
+      </SelectList>
+  when:
+    frontend.referenced:
+      pattern: ^SelectList$
+      location: JSX_COMPONENT
+      requiresChild: ^(SelectOption)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-wizard-navitem-in-nav
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Wizard
+  effort: 1
+  category: mandatory
+  description: <WizardNavItem> must be a child of WizardNav
+  message: |-
+    <WizardNavItem> must be used inside <WizardNav>.
+
+    Correct usage:
+      <WizardNav>
+        <WizardNavItem />
+      </WizardNav>
+  when:
+    frontend.referenced:
+      pattern: ^WizardNavItem$
+      location: JSX_COMPONENT
+      notParent: ^WizardNav$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-wizard-navitem-not-in-navitem-use-nav
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Wizard
+  effort: 3
+  category: mandatory
+  description: <WizardNavItem> must be inside WizardNav, not directly in <WizardNavItem>
+  message: |-
+    <WizardNavItem> should be wrapped in <WizardNav> inside <WizardNavItem>.
+
+    Replace:
+      <WizardNavItem>
+        <WizardNavItem />
+      </WizardNavItem>
+
+    With:
+      <WizardNavItem>
+        <WizardNav>
+          <WizardNavItem />
+        </WizardNav>
+      </WizardNavItem>
+  when:
+    frontend.referenced:
+      pattern: ^WizardNavItem$
+      location: JSX_COMPONENT
+      parent: ^WizardNavItem$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-wizard-navitem-not-in-wizard-use-nav
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Wizard
+  effort: 3
+  category: mandatory
+  description: <WizardNavItem> must be inside WizardNav, not directly in <Wizard>
+  message: |-
+    <WizardNavItem> should be wrapped in <WizardNav> inside <Wizard>.
+
+    Replace:
+      <Wizard>
+        <WizardNavItem />
+      </Wizard>
+
+    With:
+      <Wizard>
+        <WizardNav>
+          <WizardNavItem />
+        </WizardNav>
+      </Wizard>
+  when:
+    frontend.referenced:
+      pattern: ^WizardNavItem$
+      location: JSX_COMPONENT
+      parent: ^Wizard$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-wizard-body-in-wizard
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Wizard
+  effort: 1
+  category: mandatory
+  description: <WizardBody> must be a child of Wizard
+  message: |-
+    <WizardBody> must be used inside <Wizard>.
+
+    Correct usage:
+      <Wizard>
+        <WizardBody />
+      </Wizard>
+  when:
+    frontend.referenced:
+      pattern: ^WizardBody$
+      location: JSX_COMPONENT
+      notParent: ^Wizard$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-wizard-context-in-wizard
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Wizard
+  effort: 1
+  category: mandatory
+  description: <WizardContext> must be a child of Wizard
+  message: |-
+    <WizardContext> must be used inside <Wizard>.
+
+    Correct usage:
+      <Wizard>
+        <WizardContext />
+      </Wizard>
+  when:
+    frontend.referenced:
+      pattern: ^WizardContext$
+      location: JSX_COMPONENT
+      notParent: ^Wizard$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-wizard-nav-req-navitem
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Wizard
+  effort: 1
+  category: mandatory
+  description: <WizardNav> must contain WizardNavItem children
+  message: |-
+    <WizardNav> must contain at least one WizardNavItem child component.
+
+    Correct usage:
+      <WizardNav>
+        <WizardNavItem />
+      </WizardNav>
+  when:
+    frontend.referenced:
+      pattern: ^WizardNav$
+      location: JSX_COMPONENT
+      requiresChild: ^(WizardNavItem)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-actionlist-actionlist-req-wrap
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=ActionList
+  effort: 3
+  category: mandatory
+  description: All children of <ActionList> must be wrapped in ActionListGroup or ActionListItem
+  message: |-
+    Components placed directly inside <ActionList> must be wrapped in <ActionListGroup>.
+
+    Replace:
+      <ActionList>
+        <SomeComponent />
+      </ActionList>
+
+    With:
+      <ActionList>
+        <ActionListGroup>
+          <SomeComponent />
+        </ActionListGroup>
+      </ActionList>
+  when:
+    frontend.referenced:
+      pattern: ^ActionList$
+      location: JSX_COMPONENT
+      notChild: ^(ActionListGroup|ActionListItem)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-emptystate-emptystate-req-wrap
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=EmptyState
+  effort: 3
+  category: mandatory
+  description: All children of <EmptyState> must be wrapped in EmptyStateBody or EmptyStateFooter or EmptyStateActions
+  message: |-
+    Components placed directly inside <EmptyState> must be wrapped in <EmptyStateBody>.
+
+    Replace:
+      <EmptyState>
+        <SomeComponent />
+      </EmptyState>
+
+    With:
+      <EmptyState>
+        <EmptyStateBody>
+          <SomeComponent />
+        </EmptyStateBody>
+      </EmptyState>
+  when:
+    frontend.referenced:
+      pattern: ^EmptyState$
+      location: JSX_COMPONENT
+      notChild: ^(EmptyStateBody|EmptyStateFooter|EmptyStateActions)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-inputgroup-inputgroup-req-wrap
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=InputGroup
+  effort: 3
+  category: mandatory
+  description: All children of <InputGroup> must be wrapped in InputGroupItem or InputGroupText
+  message: |-
+    Components placed directly inside <InputGroup> must be wrapped in <InputGroupItem>.
+
+    Replace:
+      <InputGroup>
+        <SomeComponent />
+      </InputGroup>
+
+    With:
+      <InputGroup>
+        <InputGroupItem>
+          <SomeComponent />
+        </InputGroupItem>
+      </InputGroup>
+  when:
+    frontend.referenced:
+      pattern: ^InputGroup$
+      location: JSX_COMPONENT
+      notChild: ^(InputGroupItem|InputGroupText)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-modal-modal-req-wrap
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Modal
+  effort: 3
+  category: mandatory
+  description: All children of <Modal> must be wrapped in ModalBody or ModalHeader or ModalFooter
+  message: |-
+    Components placed directly inside <Modal> must be wrapped in <ModalBody>.
+
+    Replace:
+      <Modal>
+        <SomeComponent />
+      </Modal>
+
+    With:
+      <Modal>
+        <ModalBody>
+          <SomeComponent />
+        </ModalBody>
+      </Modal>
+  when:
+    frontend.referenced:
+      pattern: ^Modal$
+      location: JSX_COMPONENT
+      notChild: ^(ModalBody|ModalHeader|ModalFooter)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-multiplefileupload-multiplefileupload-req-wrap
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=MultipleFileUpload
+  effort: 3
+  category: mandatory
+  description: All children of <MultipleFileUpload> must be wrapped in MultipleFileUploadMain or MultipleFileUploadStatus
+  message: |-
+    Components placed directly inside <MultipleFileUpload> must be wrapped in <MultipleFileUploadMain>.
+
+    Replace:
+      <MultipleFileUpload>
+        <SomeComponent />
+      </MultipleFileUpload>
+
+    With:
+      <MultipleFileUpload>
+        <MultipleFileUploadMain>
+          <SomeComponent />
+        </MultipleFileUploadMain>
+      </MultipleFileUpload>
+  when:
+    frontend.referenced:
+      pattern: ^MultipleFileUpload$
+      location: JSX_COMPONENT
+      notChild: ^(MultipleFileUploadMain|MultipleFileUploadStatus)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-notificationdrawer-notificationdrawer-req-wrap
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=NotificationDrawer
+  effort: 3
+  category: mandatory
+  description: All children of <NotificationDrawer> must be wrapped in NotificationDrawerBody or NotificationDrawerGroup or NotificationDrawerGroupList or NotificationDrawerHeader or NotificationDrawerList
+  message: |-
+    Components placed directly inside <NotificationDrawer> must be wrapped in <NotificationDrawerBody>.
+
+    Replace:
+      <NotificationDrawer>
+        <SomeComponent />
+      </NotificationDrawer>
+
+    With:
+      <NotificationDrawer>
+        <NotificationDrawerBody>
+          <SomeComponent />
+        </NotificationDrawerBody>
+      </NotificationDrawer>
+  when:
+    frontend.referenced:
+      pattern: ^NotificationDrawer$
+      location: JSX_COMPONENT
+      notChild: ^(NotificationDrawerBody|NotificationDrawerGroup|NotificationDrawerGroupList|NotificationDrawerHeader|NotificationDrawerList)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-panel-panel-req-wrap
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Panel
+  effort: 3
+  category: mandatory
+  description: All children of <Panel> must be wrapped in PanelMain or PanelMainBody or PanelHeader or PanelFooter
+  message: |-
+    Components placed directly inside <Panel> must be wrapped in <PanelMain>.
+
+    Replace:
+      <Panel>
+        <SomeComponent />
+      </Panel>
+
+    With:
+      <Panel>
+        <PanelMain>
+          <SomeComponent />
+        </PanelMain>
+      </Panel>
+  when:
+    frontend.referenced:
+      pattern: ^Panel$
+      location: JSX_COMPONENT
+      notChild: ^(PanelMain|PanelMainBody|PanelHeader|PanelFooter)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-sidebar-sidebar-req-wrap
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=Sidebar
+  effort: 3
+  category: mandatory
+  description: All children of <Sidebar> must be wrapped in SidebarContent or SidebarPanel
+  message: |-
+    Components placed directly inside <Sidebar> must be wrapped in <SidebarContent>.
+
+    Replace:
+      <Sidebar>
+        <SomeComponent />
+      </Sidebar>
+
+    With:
+      <Sidebar>
+        <SidebarContent>
+          <SomeComponent />
+        </SidebarContent>
+      </Sidebar>
+  when:
+    frontend.referenced:
+      pattern: ^Sidebar$
+      location: JSX_COMPONENT
+      notChild: ^(SidebarContent|SidebarPanel)$
+      from: '@patternfly/react-core'
+- ruleID: sd-cf-textinputgroup-textinputgroup-req-wrap
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/react-core
+  - family=TextInputGroup
+  effort: 3
+  category: mandatory
+  description: All children of <TextInputGroup> must be wrapped in TextInputGroupMain or TextInputGroupUtilities
+  message: |-
+    Components placed directly inside <TextInputGroup> must be wrapped in <TextInputGroupMain>.
+
+    Replace:
+      <TextInputGroup>
+        <SomeComponent />
+      </TextInputGroup>
+
+    With:
+      <TextInputGroup>
+        <TextInputGroupMain>
+          <SomeComponent />
+        </TextInputGroupMain>
+      </TextInputGroup>
+  when:
+    frontend.referenced:
+      pattern: ^TextInputGroup$
+      location: JSX_COMPONENT
+      notChild: ^(TextInputGroupMain|TextInputGroupUtilities)$
+      from: '@patternfly/react-core'
+- ruleID: sd-context-accordioncontent-accordionitemcontext
+  labels:
+  - source=semver-analyzer
+  - change-type=context-dependency
+  - package=@patternfly/react-core
+  - component=AccordionContent
+  effort: 3
+  category: mandatory
+  description: AccordionContent now requires AccordionItemContext context provider. Rendering without this provider may cause runtime errors or incorrect behavior.
+  message: |-
+    AccordionContent now requires AccordionItemContext context provider. Rendering without this provider may cause runtime errors or incorrect behavior.
+
+    If you import and use AccordionItemContext directly, review your usage.
+    The context shape or provider location may have changed.
+  when:
+    frontend.referenced:
+      pattern: ^AccordionItemContext$
+      location: IMPORT
+      from: '@patternfly/react-core'
+- ruleID: sd-context-accordionitem-accordionitemcontext
+  labels:
+  - source=semver-analyzer
+  - change-type=context-dependency
+  - package=@patternfly/react-core
+  - component=AccordionItem
+  effort: 3
+  category: mandatory
+  description: AccordionItem now provides AccordionItemContext context to its children. Child components may now depend on this provider being present.
+  message: |-
+    AccordionItem now provides AccordionItemContext context to its children. Child components may now depend on this provider being present.
+
+    If you import and use AccordionItemContext directly, review your usage.
+    The context shape or provider location may have changed.
+  when:
+    frontend.referenced:
+      pattern: ^AccordionItemContext$
+      location: IMPORT
+      from: '@patternfly/react-core'
+- ruleID: sd-context-accordiontoggle-accordionitemcontext
+  labels:
+  - source=semver-analyzer
+  - change-type=context-dependency
+  - package=@patternfly/react-core
+  - component=AccordionToggle
+  effort: 3
+  category: mandatory
+  description: AccordionToggle now requires AccordionItemContext context provider. Rendering without this provider may cause runtime errors or incorrect behavior.
+  message: |-
+    AccordionToggle now requires AccordionItemContext context provider. Rendering without this provider may cause runtime errors or incorrect behavior.
+
+    If you import and use AccordionItemContext directly, review your usage.
+    The context shape or provider location may have changed.
+  when:
+    frontend.referenced:
+      pattern: ^AccordionItemContext$
+      location: IMPORT
+      from: '@patternfly/react-core'
+- ruleID: sd-context-alert-alertgroupcontext
+  labels:
+  - source=semver-analyzer
+  - change-type=context-dependency
+  - package=@patternfly/react-core
+  - component=Alert
+  effort: 3
+  category: mandatory
+  description: Alert now requires AlertGroupContext context provider. Rendering without this provider may cause runtime errors or incorrect behavior.
+  message: |-
+    Alert now requires AlertGroupContext context provider. Rendering without this provider may cause runtime errors or incorrect behavior.
+
+    If you import and use AlertGroupContext directly, review your usage.
+    The context shape or provider location may have changed.
+  when:
+    frontend.referenced:
+      pattern: ^AlertGroupContext$
+      location: IMPORT
+      from: '@patternfly/react-core'
+- ruleID: sd-context-alertactionclosebutton-alertgroupcontext
+  labels:
+  - source=semver-analyzer
+  - change-type=context-dependency
+  - package=@patternfly/react-core
+  - component=AlertActionCloseButton
+  effort: 3
+  category: mandatory
+  description: AlertActionCloseButton now requires AlertGroupContext context provider. Rendering without this provider may cause runtime errors or incorrect behavior.
+  message: |-
+    AlertActionCloseButton now requires AlertGroupContext context provider. Rendering without this provider may cause runtime errors or incorrect behavior.
+
+    If you import and use AlertGroupContext directly, review your usage.
+    The context shape or provider location may have changed.
+  when:
+    frontend.referenced:
+      pattern: ^AlertGroupContext$
+      location: IMPORT
+      from: '@patternfly/react-core'
+- ruleID: sd-context-alertgroupinline-alertgroupcontext
+  labels:
+  - source=semver-analyzer
+  - change-type=context-dependency
+  - package=@patternfly/react-core
+  - component=AlertGroupInline
+  effort: 3
+  category: mandatory
+  description: AlertGroupInline now provides AlertGroupContext context to its children. Child components may now depend on this provider being present.
+  message: |-
+    AlertGroupInline now provides AlertGroupContext context to its children. Child components may now depend on this provider being present.
+
+    If you import and use AlertGroupContext directly, review your usage.
+    The context shape or provider location may have changed.
+  when:
+    frontend.referenced:
+      pattern: ^AlertGroupContext$
+      location: IMPORT
+      from: '@patternfly/react-core'
+- ruleID: sd-context-duallistselectorpane-duallistselectorcontext
+  labels:
+  - source=semver-analyzer
+  - change-type=context-dependency
+  - package=@patternfly/react-core
+  - component=DualListSelectorPane
+  effort: 3
+  category: mandatory
+  description: DualListSelectorPane no longer consumes DualListSelectorContext context. It will no longer respond to changes from this provider.
+  message: |-
+    DualListSelectorPane no longer consumes DualListSelectorContext context. It will no longer respond to changes from this provider.
+
+    If you import and use DualListSelectorContext directly, review your usage.
+    The context shape or provider location may have changed.
+  when:
+    frontend.referenced:
+      pattern: ^DualListSelectorContext$
+      location: IMPORT
+      from: '@patternfly/react-core'
+- ruleID: sd-context-duallistselectortree-duallistselectorcontext
+  labels:
+  - source=semver-analyzer
+  - change-type=context-dependency
+  - package=@patternfly/react-core
+  - component=DualListSelectorTree
+  effort: 3
+  category: mandatory
+  description: DualListSelectorTree now requires DualListSelectorContext context provider. Rendering without this provider may cause runtime errors or incorrect behavior.
+  message: |-
+    DualListSelectorTree now requires DualListSelectorContext context provider. Rendering without this provider may cause runtime errors or incorrect behavior.
+
+    If you import and use DualListSelectorContext directly, review your usage.
+    The context shape or provider location may have changed.
+  when:
+    frontend.referenced:
+      pattern: ^DualListSelectorContext$
+      location: IMPORT
+      from: '@patternfly/react-core'
+- ruleID: sd-context-td-tablecontext
+  labels:
+  - source=semver-analyzer
+  - change-type=context-dependency
+  - package=@patternfly/react-table
+  - component=Td
+  effort: 3
+  category: mandatory
+  description: Td now requires TableContext context provider. Rendering without this provider may cause runtime errors or incorrect behavior.
+  message: |-
+    Td now requires TableContext context provider. Rendering without this provider may cause runtime errors or incorrect behavior.
+
+    If you import and use TableContext directly, review your usage.
+    The context shape or provider location may have changed.
+  when:
+    frontend.referenced:
+      pattern: ^TableContext$
+      location: IMPORT
+      from: '@patternfly/react-table'
+- ruleID: sd-context-th-tablecontext
+  labels:
+  - source=semver-analyzer
+  - change-type=context-dependency
+  - package=@patternfly/react-table
+  - component=Th
+  effort: 3
+  category: mandatory
+  description: Th now requires TableContext context provider. Rendering without this provider may cause runtime errors or incorrect behavior.
+  message: |-
+    Th now requires TableContext context provider. Rendering without this provider may cause runtime errors or incorrect behavior.
+
+    If you import and use TableContext directly, review your usage.
+    The context shape or provider location may have changed.
+  when:
+    frontend.referenced:
+      pattern: ^TableContext$
+      location: IMPORT
+      from: '@patternfly/react-table'
+- ruleID: sd-migration-context-dropdowngroup-dropdowncontext
+  labels:
+  - source=semver-analyzer
+  - change-type=context-dependency
+  - package=@patternfly/react-core/deprecated
+  - component=DropdownGroup
+  effort: 3
+  category: mandatory
+  description: DropdownGroup no longer consumes DropdownContext context. It will no longer respond to changes from this provider.
+  message: |-
+    DropdownGroup no longer consumes DropdownContext context. It will no longer respond to changes from this provider.
+
+    If you import and use DropdownContext directly, review your usage.
+    The context shape or provider location may have changed.
+  when:
+    frontend.referenced:
+      pattern: ^DropdownContext$
+      location: IMPORT
+      from: '@patternfly/react-core/deprecated'
+- ruleID: sd-migration-context-dropdownitem-dropdownarrowcontext
+  labels:
+  - source=semver-analyzer
+  - change-type=context-dependency
+  - package=@patternfly/react-core/deprecated
+  - component=DropdownItem
+  effort: 3
+  category: mandatory
+  description: DropdownItem no longer consumes DropdownArrowContext context. It will no longer respond to changes from this provider.
+  message: |-
+    DropdownItem no longer consumes DropdownArrowContext context. It will no longer respond to changes from this provider.
+
+    If you import and use DropdownArrowContext directly, review your usage.
+    The context shape or provider location may have changed.
+  when:
+    frontend.referenced:
+      pattern: ^DropdownArrowContext$
+      location: IMPORT
+      from: '@patternfly/react-core/deprecated'
+- ruleID: sd-migration-context-dropdown-dropdowncontext
+  labels:
+  - source=semver-analyzer
+  - change-type=context-dependency
+  - package=@patternfly/react-core/deprecated
+  - component=Dropdown
+  effort: 3
+  category: mandatory
+  description: Dropdown no longer provides DropdownContext context. Child components that use useContext(DropdownContext) will receive the default value instead, which may cause runtime errors.
+  message: |-
+    Dropdown no longer provides DropdownContext context. Child components that use useContext(DropdownContext) will receive the default value instead, which may cause runtime errors.
+
+    If you import and use DropdownContext directly, review your usage.
+    The context shape or provider location may have changed.
+  when:
+    frontend.referenced:
+      pattern: ^DropdownContext$
+      location: IMPORT
+      from: '@patternfly/react-core/deprecated'
+- ruleID: sd-migration-context-select-selectcontext
+  labels:
+  - source=semver-analyzer
+  - change-type=context-dependency
+  - package=@patternfly/react-core/deprecated
+  - component=Select
+  effort: 3
+  category: mandatory
+  description: Select no longer provides SelectContext context. Child components that use useContext(SelectContext) will receive the default value instead, which may cause runtime errors.
+  message: |-
+    Select no longer provides SelectContext context. Child components that use useContext(SelectContext) will receive the default value instead, which may cause runtime errors.
+
+    If you import and use SelectContext directly, review your usage.
+    The context shape or provider location may have changed.
+  when:
+    frontend.referenced:
+      pattern: ^SelectContext$
+      location: IMPORT
+      from: '@patternfly/react-core/deprecated'
+- ruleID: sd-migration-context-dragdrop-dragdropcontext
+  labels:
+  - source=semver-analyzer
+  - change-type=context-dependency
+  - package=@patternfly/react-core/deprecated
+  - component=DragDrop
+  effort: 3
+  category: mandatory
+  description: DragDrop now provides DragDropContext context to its children. Child components may now depend on this provider being present.
+  message: |-
+    DragDrop now provides DragDropContext context to its children. Child components may now depend on this provider being present.
+
+    If you import and use DragDropContext directly, review your usage.
+    The context shape or provider location may have changed.
+  when:
+    frontend.referenced:
+      pattern: ^DragDropContext$
+      location: IMPORT
+      from: '@patternfly/react-core/deprecated'
+- ruleID: sd-migration-context-dragdrop-duallistselectorcontext
+  labels:
+  - source=semver-analyzer
+  - change-type=context-dependency
+  - package=@patternfly/react-core/deprecated
+  - component=DragDrop
+  effort: 3
+  category: mandatory
+  description: DragDrop no longer provides DualListSelectorContext context. Child components that use useContext(DualListSelectorContext) will receive the default value instead, which may cause runtime errors.
+  message: |-
+    DragDrop no longer provides DualListSelectorContext context. Child components that use useContext(DualListSelectorContext) will receive the default value instead, which may cause runtime errors.
+
+    If you import and use DualListSelectorContext directly, review your usage.
+    The context shape or provider location may have changed.
+  when:
+    frontend.referenced:
+      pattern: ^DualListSelectorContext$
+      location: IMPORT
+      from: '@patternfly/react-core/deprecated'
+- ruleID: sd-prop-to-child-duallistselector-filteroption-to-duallistselectorpane
+  labels:
+  - source=semver-analyzer
+  - change-type=prop-to-child
+  - package=@patternfly/react-core
+  - family=DualListSelector
+  - target-component=DualListSelectorPane
+  effort: 3
+  category: mandatory
+  description: The `filterOption` prop moved from <DualListSelector> to <DualListSelectorPane>
+  message: |-
+    The `filterOption` prop has been removed from <DualListSelector>.
+    Use <DualListSelectorPane filterOption={...} /> as a child of <DualListSelector> instead.
+
+    Before:
+      <DualListSelector filterOption={value}>
+        ...
+      </DualListSelector>
+
+    After:
+      <DualListSelector>
+        <DualListSelectorPane filterOption={value} />
+        ...
+      </DualListSelector>
+
+    IMPORTANT: These props stay on <DualListSelector>: `hasAnimations`, `id`, `isTree`.
+    Do NOT move them to <DualListSelectorPane>.
+  when:
+    frontend.referenced:
+      pattern: ^filterOption$
+      location: JSX_PROP
+      component: ^DualListSelector$
+      from: '@patternfly/react-core'
+- ruleID: sd-prop-to-child-duallistselector-isdisabled-to-duallistselectorlistitem
+  labels:
+  - source=semver-analyzer
+  - change-type=prop-to-child
+  - package=@patternfly/react-core
+  - family=DualListSelector
+  - target-component=DualListSelectorListItem
+  effort: 3
+  category: mandatory
+  description: The `isDisabled` prop moved from <DualListSelector> to <DualListSelectorListItem>
+  message: |-
+    The `isDisabled` prop has been removed from <DualListSelector>.
+    Use <DualListSelectorListItem isDisabled={...} /> as a child of <DualListSelector> instead.
+
+    Before:
+      <DualListSelector isDisabled={value}>
+        ...
+      </DualListSelector>
+
+    After:
+      <DualListSelector>
+        <DualListSelectorListItem isDisabled={value} />
+        ...
+      </DualListSelector>
+
+    IMPORTANT: These props stay on <DualListSelector>: `hasAnimations`, `id`, `isTree`.
+    Do NOT move them to <DualListSelectorListItem>.
+  when:
+    frontend.referenced:
+      pattern: ^isDisabled$
+      location: JSX_PROP
+      component: ^DualListSelector$
+      from: '@patternfly/react-core'
+- ruleID: sd-prop-to-child-duallistselector-issearchable-to-duallistselectorpane
+  labels:
+  - source=semver-analyzer
+  - change-type=prop-to-child
+  - package=@patternfly/react-core
+  - family=DualListSelector
+  - target-component=DualListSelectorPane
+  effort: 3
+  category: mandatory
+  description: The `isSearchable` prop moved from <DualListSelector> to <DualListSelectorPane>
+  message: |-
+    The `isSearchable` prop has been removed from <DualListSelector>.
+    Use <DualListSelectorPane isSearchable={...} /> as a child of <DualListSelector> instead.
+
+    Before:
+      <DualListSelector isSearchable={value}>
+        ...
+      </DualListSelector>
+
+    After:
+      <DualListSelector>
+        <DualListSelectorPane isSearchable={value} />
+        ...
+      </DualListSelector>
+
+    IMPORTANT: These props stay on <DualListSelector>: `hasAnimations`, `id`, `isTree`.
+    Do NOT move them to <DualListSelectorPane>.
+  when:
+    frontend.referenced:
+      pattern: ^isSearchable$
+      location: JSX_PROP
+      component: ^DualListSelector$
+      from: '@patternfly/react-core'
+- ruleID: sd-prop-to-child-duallistselector-onoptioncheck-to-duallistselectortree
+  labels:
+  - source=semver-analyzer
+  - change-type=prop-to-child
+  - package=@patternfly/react-core
+  - family=DualListSelector
+  - target-component=DualListSelectorTree
+  effort: 3
+  category: mandatory
+  description: The `onOptionCheck` prop moved from <DualListSelector> to <DualListSelectorTree>
+  message: |-
+    The `onOptionCheck` prop has been removed from <DualListSelector>.
+    Use <DualListSelectorTree onOptionCheck={...} /> as a child of <DualListSelector> instead.
+
+    Before:
+      <DualListSelector onOptionCheck={value}>
+        ...
+      </DualListSelector>
+
+    After:
+      <DualListSelector>
+        <DualListSelectorTree onOptionCheck={value} />
+        ...
+      </DualListSelector>
+
+    IMPORTANT: These props stay on <DualListSelector>: `hasAnimations`, `id`, `isTree`.
+    Do NOT move them to <DualListSelectorTree>.
+  when:
+    frontend.referenced:
+      pattern: ^onOptionCheck$
+      location: JSX_PROP
+      component: ^DualListSelector$
+      from: '@patternfly/react-core'
+- ruleID: sd-prop-to-child-duallistselector-onoptionselect-to-duallistselectorlistitem
+  labels:
+  - source=semver-analyzer
+  - change-type=prop-to-child
+  - package=@patternfly/react-core
+  - family=DualListSelector
+  - target-component=DualListSelectorListItem
+  effort: 3
+  category: mandatory
+  description: The `onOptionSelect` prop moved from <DualListSelector> to <DualListSelectorListItem>
+  message: |-
+    The `onOptionSelect` prop has been removed from <DualListSelector>.
+    Use <DualListSelectorListItem onOptionSelect={...} /> as a child of <DualListSelector> instead.
+
+    Before:
+      <DualListSelector onOptionSelect={value}>
+        ...
+      </DualListSelector>
+
+    After:
+      <DualListSelector>
+        <DualListSelectorListItem onOptionSelect={value} />
+        ...
+      </DualListSelector>
+
+    IMPORTANT: These props stay on <DualListSelector>: `hasAnimations`, `id`, `isTree`.
+    Do NOT move them to <DualListSelectorListItem>.
+  when:
+    frontend.referenced:
+      pattern: ^onOptionSelect$
+      location: JSX_PROP
+      component: ^DualListSelector$
+      from: '@patternfly/react-core'
+- ruleID: sd-prop-to-child-modal-description-to-modalheader
+  labels:
+  - source=semver-analyzer
+  - change-type=prop-to-child
+  - package=@patternfly/react-core
+  - family=Modal
+  - target-component=ModalHeader
+  effort: 3
+  category: mandatory
+  description: The `description` prop moved from <Modal> to <ModalHeader>
+  message: |-
+    The `description` prop has been removed from <Modal>.
+    Use <ModalHeader description={...} /> as a child of <Modal> instead.
+
+    Before:
+      <Modal description={value}>
+        ...
+      </Modal>
+
+    After:
+      <Modal>
+        <ModalHeader description={value} />
+        ...
+      </Modal>
+
+    IMPORTANT: These props stay on <Modal>: `appendTo`, `backdropClassName`, `disableFocusTrap`, `elementToFocus`, `id`, `isOpen`, `maxWidth`, `onClose`, `onEscapePress`, `ouiaId`.
+    Do NOT move them to <ModalHeader>.
+  when:
+    frontend.referenced:
+      pattern: ^description$
+      location: JSX_PROP
+      component: ^Modal$
+      from: '@patternfly/react-core'
+- ruleID: sd-prop-to-children-modal-footer-to-modalfooter
+  labels:
+  - source=semver-analyzer
+  - change-type=prop-to-child
+  - package=@patternfly/react-core
+  - family=Modal
+  - target-component=ModalFooter
+  effort: 3
+  category: mandatory
+  description: The `footer` prop (ReactNode) moved from <Modal> to <ModalFooter> children
+  message: |-
+    The `footer` prop has been removed from <Modal>.
+    Pass this content as children of <ModalFooter> instead.
+
+    Before:
+      <Modal footer={content}>
+        ...
+      </Modal>
+
+    After:
+      <Modal>
+        <ModalFooter>{content}</ModalFooter>
+        ...
+      </Modal>
+  when:
+    frontend.referenced:
+      pattern: ^footer$
+      location: JSX_PROP
+      component: ^Modal$
+      from: '@patternfly/react-core'
+- ruleID: sd-prop-to-children-modal-header-to-modalheader
+  labels:
+  - source=semver-analyzer
+  - change-type=prop-to-child
+  - package=@patternfly/react-core
+  - family=Modal
+  - target-component=ModalHeader
+  effort: 3
+  category: mandatory
+  description: The `header` prop (ReactNode) moved from <Modal> to <ModalHeader> children
+  message: |-
+    The `header` prop has been removed from <Modal>.
+    Pass this content as children of <ModalHeader> instead.
+
+    Before:
+      <Modal header={content}>
+        ...
+      </Modal>
+
+    After:
+      <Modal>
+        <ModalHeader>{content}</ModalHeader>
+        ...
+      </Modal>
+  when:
+    frontend.referenced:
+      pattern: ^header$
+      location: JSX_PROP
+      component: ^Modal$
+      from: '@patternfly/react-core'
+- ruleID: sd-prop-to-child-modal-help-to-modalheader
+  labels:
+  - source=semver-analyzer
+  - change-type=prop-to-child
+  - package=@patternfly/react-core
+  - family=Modal
+  - target-component=ModalHeader
+  effort: 3
+  category: mandatory
+  description: The `help` prop moved from <Modal> to <ModalHeader>
+  message: |-
+    The `help` prop has been removed from <Modal>.
+    Use <ModalHeader help={...} /> as a child of <Modal> instead.
+
+    Before:
+      <Modal help={value}>
+        ...
+      </Modal>
+
+    After:
+      <Modal>
+        <ModalHeader help={value} />
+        ...
+      </Modal>
+
+    IMPORTANT: These props stay on <Modal>: `appendTo`, `backdropClassName`, `disableFocusTrap`, `elementToFocus`, `id`, `isOpen`, `maxWidth`, `onClose`, `onEscapePress`, `ouiaId`.
+    Do NOT move them to <ModalHeader>.
+  when:
+    frontend.referenced:
+      pattern: ^help$
+      location: JSX_PROP
+      component: ^Modal$
+      from: '@patternfly/react-core'
+- ruleID: sd-prop-to-child-modal-title-to-modalheader
+  labels:
+  - source=semver-analyzer
+  - change-type=prop-to-child
+  - package=@patternfly/react-core
+  - family=Modal
+  - target-component=ModalHeader
+  effort: 3
+  category: mandatory
+  description: The `title` prop moved from <Modal> to <ModalHeader>
+  message: |-
+    The `title` prop has been removed from <Modal>.
+    Use <ModalHeader title={...} /> as a child of <Modal> instead.
+
+    Before:
+      <Modal title={value}>
+        ...
+      </Modal>
+
+    After:
+      <Modal>
+        <ModalHeader title={value} />
+        ...
+      </Modal>
+
+    IMPORTANT: These props stay on <Modal>: `appendTo`, `backdropClassName`, `disableFocusTrap`, `elementToFocus`, `id`, `isOpen`, `maxWidth`, `onClose`, `onEscapePress`, `ouiaId`.
+    Do NOT move them to <ModalHeader>.
+  when:
+    frontend.referenced:
+      pattern: ^title$
+      location: JSX_PROP
+      component: ^Modal$
+      from: '@patternfly/react-core'
+- ruleID: sd-prop-to-child-modal-titleiconvariant-to-modalheader
+  labels:
+  - source=semver-analyzer
+  - change-type=prop-to-child
+  - package=@patternfly/react-core
+  - family=Modal
+  - target-component=ModalHeader
+  effort: 3
+  category: mandatory
+  description: The `titleIconVariant` prop moved from <Modal> to <ModalHeader>
+  message: |-
+    The `titleIconVariant` prop has been removed from <Modal>.
+    Use <ModalHeader titleIconVariant={...} /> as a child of <Modal> instead.
+
+    Before:
+      <Modal titleIconVariant={value}>
+        ...
+      </Modal>
+
+    After:
+      <Modal>
+        <ModalHeader titleIconVariant={value} />
+        ...
+      </Modal>
+
+    IMPORTANT: These props stay on <Modal>: `appendTo`, `backdropClassName`, `disableFocusTrap`, `elementToFocus`, `id`, `isOpen`, `maxWidth`, `onClose`, `onEscapePress`, `ouiaId`.
+    Do NOT move them to <ModalHeader>.
+  when:
+    frontend.referenced:
+      pattern: ^titleIconVariant$
+      location: JSX_PROP
+      component: ^Modal$
+      from: '@patternfly/react-core'
+- ruleID: sd-child-to-prop-emptystate-emptystateicon-to-icon
+  labels:
+  - source=semver-analyzer
+  - change-type=child-to-prop
+  - package=@patternfly/react-core
+  - family=EmptyState
+  effort: 3
+  category: mandatory
+  description: <EmptyStateIcon> removed — use `icon` prop on <EmptyState> instead
+  message: |-
+    <EmptyStateIcon> has been removed. Use the `icon` prop on <EmptyState> instead.
+
+    Before:
+      <EmptyState>
+        <EmptyStateIcon />
+      </EmptyState>
+
+    After:
+      <EmptyState icon={...} />
+  when:
+    frontend.referenced:
+      pattern: ^EmptyStateIcon$
+      location: JSX_COMPONENT
+      parent: ^EmptyState$
+      parentFrom: '@patternfly/react-core'
+      from: '@patternfly/react-core'
+- ruleID: sd-deprecated-moved-chip-to-deprecated
+  labels:
+  - source=semver-analyzer
+  - change-type=deprecated-migration
+  - package=@patternfly/react-core/deprecated
+  - target-package=@patternfly/react-core
+  effort: 5
+  category: mandatory
+  description: <Chip> from /deprecated — migrate to new API in @patternfly/react-core
+  message: |
+    `<Chip>` from `@patternfly/react-core/deprecated` uses the old API.
+    Migrate to the new `<Chip>` from `@patternfly/react-core`.
+  when:
+    frontend.referenced:
+      pattern: ^Chip$
+      location: IMPORT
+      from: '@patternfly/react-core/deprecated'
+- ruleID: sd-deprecated-moved-chipgroup-to-deprecated
+  labels:
+  - source=semver-analyzer
+  - change-type=deprecated-migration
+  - package=@patternfly/react-core/deprecated
+  - target-package=@patternfly/react-core
+  effort: 5
+  category: mandatory
+  description: <ChipGroup> from /deprecated — migrate to new API in @patternfly/react-core
+  message: |
+    `<ChipGroup>` from `@patternfly/react-core/deprecated` uses the old API.
+    Migrate to the new `<ChipGroup>` from `@patternfly/react-core`.
+  when:
+    frontend.referenced:
+      pattern: ^ChipGroup$
+      location: IMPORT
+      from: '@patternfly/react-core/deprecated'
+- ruleID: sd-prop-override-menutoggle-ouiaid-data-ouia-component-id
+  labels:
+  - source=semver-analyzer
+  - change-type=prop-attribute-override
+  - has-codemod=false
+  - package=@patternfly/react-core
+  effort: 3
+  category: mandatory
+  description: MenuToggle manages `data-ouia-component-id` internally via the `ouiaId` prop
+  message: |-
+    The <MenuToggle> component internally generates the `data-ouia-component-id` HTML attribute from the `ouiaId` prop via its internal helper. If you pass `data-ouia-component-id` as an HTML attribute, it will be silently overridden.
+
+    Use the `ouiaId` prop instead:
+
+    Before: <MenuToggle data-ouia-component-id="value" />
+    After:  <MenuToggle ouiaId="value" />
+  when:
+    frontend.referenced:
+      pattern: ^data-ouia-component-id$
+      location: JSX_PROP
+      component: ^MenuToggle$
+      from: '@patternfly/react-core'
+- ruleID: sd-prop-override-menutoggle-ouiasafe-data-ouia-safe
+  labels:
+  - source=semver-analyzer
+  - change-type=prop-attribute-override
+  - has-codemod=false
+  - package=@patternfly/react-core
+  effort: 3
+  category: mandatory
+  description: MenuToggle manages `data-ouia-safe` internally via the `ouiaSafe` prop
+  message: |-
+    The <MenuToggle> component internally generates the `data-ouia-safe` HTML attribute from the `ouiaSafe` prop via its internal helper. If you pass `data-ouia-safe` as an HTML attribute, it will be silently overridden.
+
+    Use the `ouiaSafe` prop instead:
+
+    Before: <MenuToggle data-ouia-safe="value" />
+    After:  <MenuToggle ouiaSafe="value" />
+  when:
+    frontend.referenced:
+      pattern: ^data-ouia-safe$
+      location: JSX_PROP
+      component: ^MenuToggle$
+      from: '@patternfly/react-core'

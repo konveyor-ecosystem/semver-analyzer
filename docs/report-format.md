@@ -1,12 +1,12 @@
 # Report Format Reference
 
-The analysis report is a JSON document produced by the `analyze` command. This reference documents every field and its serialization behavior.
+The analysis report is a JSON document produced by the `semver-analyzer analyze` command. This reference documents every field and its serialization behavior.
 
 ## Overview
 
-- The report is generic over language (`AnalysisReport<L: Language>`). Currently, only TypeScript is implemented.
-- Many fields use `skip_serializing_if` -- they are **absent** from JSON when empty/null. Treat missing fields as empty collections or null.
-- Enum serialization varies: some are plain strings, some are internally tagged objects, some are externally tagged. See [Enum Reference](#enum-reference).
+- The report is generic over language (`AnalysisReport<L: Language>`). Currently, TypeScript and Java are implemented.
+- Many fields use `skip_serializing_if` — they are **absent** from JSON when empty/null. Treat missing fields as empty collections or null.
+- Language-specific extensions (e.g., `sd_result`, `hierarchy_deltas`) are flattened into the top-level JSON object via `#[serde(flatten)]`.
 
 ## Top-Level Fields
 
@@ -21,8 +21,8 @@ The analysis report is a JSON document produced by the `analyze` command. This r
 | `packages` | [PackageChanges](#packagechanges)[] | If non-empty | Pre-aggregated per-package view |
 | `member_renames` | object | If non-empty | Map of old member name -> new name |
 | `inferred_rename_patterns` | [InferredRenamePatterns](#inferredrenamepatterns) | If present | LLM-inferred rename patterns |
-| `hierarchy_deltas` | [HierarchyDelta](#hierarchydelta)[] | If non-empty | Component hierarchy changes |
-| `sd_result` | [SdPipelineResult](#sdpipelineresult) | If SD ran | Source-level diff results (default pipeline) |
+| `hierarchy_deltas` | [HierarchyDelta](#hierarchydelta)[] | If non-empty | Component hierarchy changes (TS extension, flattened) |
+| `sd_result` | [SdPipelineResult](#sdpipelineresult) | If SD ran | Source-level diff results (TS extension, flattened) |
 | `metadata` | [AnalysisMetadata](#analysismetadata) | Always | Tool version, LLM usage stats |
 
 ## Core Structures
@@ -67,7 +67,7 @@ Individual structural breaking change from the TD pipeline.
 | Field | Type | Present | Description |
 |-------|------|---------|-------------|
 | `symbol` | string | Always | Symbol name (e.g., `"CardProps.isFlat"`) |
-| `qualified_name` | string | If non-empty | Fully qualified name. Note: this is a `String`, not nullable -- absent means `""` |
+| `qualified_name` | string | If non-empty | Fully qualified name |
 | `kind` | string | Always | See [ApiChangeKind](#apichangekind) |
 | `change` | string | Always | See [ApiChangeType](#apichangetype) |
 | `before` | string | If present | Old signature/type |
@@ -85,14 +85,12 @@ Behavioral change from the BU pipeline.
 |-------|------|---------|-------------|
 | `symbol` | string | Always | Function/method name |
 | `kind` | string | Always | `"function"`, `"method"`, `"class"`, or `"module"` |
-| `category` | string | If present | TS categories: `"dom_structure"`, `"css_class"`, `"css_variable"`, `"accessibility"`, `"default_value"`, `"logic_change"`, `"data_attribute"`, `"render_output"` |
+| `category` | string | If present | e.g., `"dom_structure"`, `"css_class"`, `"css_variable"`, `"accessibility"`, `"default_value"`, `"logic_change"` |
 | `description` | string | Always | What changed |
 | `confidence` | number | If present | 0.0 to 1.0 |
 | `evidence_type` | string | If present | `"test_delta"`, `"llm_analysis"`, `"body_analysis"`, `"call_graph_propagation"` |
 | `referenced_symbols` | string[] | If non-empty | Related symbols |
 | `is_internal_only` | boolean | If present | Whether change is internal |
-
-Note: The `source_file` field exists in the Rust struct but is **never serialized** to JSON.
 
 ### ContainerChange
 
@@ -187,7 +185,7 @@ Pre-aggregated summary of all changes to a single type/interface/component.
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `name` | string | -- | Child component name |
+| `name` | string | — | Child component name |
 | `required` | boolean | `false` | Whether the child is mandatory |
 | `mechanism` | string | `"child"` | `"child"` (JSX child) or `"prop"` (passed as prop) |
 | `prop_name` | string | null | Prop name when mechanism is `"prop"` |
@@ -232,8 +230,8 @@ Internally tagged enum (`"type"` discriminator field):
 |---------|--------|-------------|
 | `moved_to_related_type` | `target_type`, `mechanism` (`"prop"` or `"children"`) | Member moved to another component |
 | `replaced_by_member` | `new_member` | Replaced by a differently-named member |
-| `made_automatic` | -- | Behavior is now automatic (no prop needed) |
-| `truly_removed` | -- | Genuinely removed with no replacement |
+| `made_automatic` | — | Behavior is now automatic (no prop needed) |
+| `truly_removed` | — | Genuinely removed with no replacement |
 
 ### ConstantGroup
 
@@ -311,7 +309,7 @@ Internally tagged enum (`"type"` discriminator field):
 
 ## SD Pipeline Result
 
-Present as `sd_result` when the default SD pipeline runs (absent with `--behavioral`).
+Present as `sd_result` when the default SD pipeline runs (absent with `--behavioral`). Flattened into the top-level JSON object.
 
 ### SdPipelineResult
 
@@ -322,18 +320,18 @@ Present as `sd_result` when the default SD pipeline runs (absent with `--behavio
 | `old_composition_trees` | [CompositionTree](#compositiontree)[] | If non-empty | Old-version composition trees |
 | `composition_changes` | [CompositionChange](#compositionchange)[] | Always | Delta between old and new trees |
 | `conformance_checks` | [ConformanceCheck](#conformancecheck)[] | Always | Structural validity rules |
-| `component_packages` | object | If non-empty | Map: component name -> package name (new) |
-| `old_component_packages` | object | If non-empty | Map: component name -> package name (old) |
-| `old_component_props` | object | If non-empty | Map: component -> prop names (old) |
-| `new_component_props` | object | If non-empty | Map: component -> prop names (new) |
-| `old_component_prop_types` | object | If non-empty | Map: component -> {prop: type} (old) |
-| `new_component_prop_types` | object | If non-empty | Map: component -> {prop: type} (new) |
-| `new_required_props` | object | If non-empty | Map: component -> required prop names |
-| `dep_repo_packages` | object | If non-empty | Map: package name -> version from dep repo |
+| `component_packages` | object | If non-empty | Map: component name → package name (new) |
+| `old_component_packages` | object | If non-empty | Map: component name → package name (old) |
+| `old_component_props` | object | If non-empty | Map: component → prop names (old) |
+| `new_component_props` | object | If non-empty | Map: component → prop names (new) |
+| `old_component_prop_types` | object | If non-empty | Map: component → {prop: type} (old) |
+| `new_component_prop_types` | object | If non-empty | Map: component → {prop: type} (new) |
+| `new_required_props` | object | If non-empty | Map: component → required prop names |
+| `dep_repo_packages` | object | If non-empty | Map: package name → version from dep repo |
 | `removed_css_blocks` | string[] | If non-empty | CSS component blocks removed |
 | `deprecated_replacements` | [DeprecatedReplacement](#deprecatedreplacement)[] | If non-empty | Deprecated component replacements |
-| `old_profiles` | object | If non-empty | Map: key -> [ComponentSourceProfile](#componentsourceprofile) |
-| `new_profiles` | object | If non-empty | Map: key -> [ComponentSourceProfile](#componentsourceprofile) |
+| `old_profiles` | object | If non-empty | Map: key → [ComponentSourceProfile](#componentsourceprofile) |
+| `new_profiles` | object | If non-empty | Map: key → [ComponentSourceProfile](#componentsourceprofile) |
 
 ### SourceLevelChange
 
@@ -353,7 +351,7 @@ Present as `sd_result` when the default SD pipeline runs (absent with `--behavio
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `root` | string | Family name (e.g., `"Table"`, `"deprecated/DualListSelector"`) |
+| `root` | string | Family name (e.g., `"Table"`) |
 | `family_members` | string[] | All components in the family |
 | `edges` | [CompositionEdge](#compositionedge)[] | Parent-child relationships |
 
@@ -361,10 +359,10 @@ Present as `sd_result` when the default SD pipeline runs (absent with `--behavio
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `parent` | string | -- | Parent component |
-| `child` | string | -- | Child component |
-| `relationship` | string | -- | `"bem_element"`, `"independent_block"`, `"internal"`, `"direct_child"`, `"unknown"` |
-| `required` | boolean | -- | Whether this nesting is required |
+| `parent` | string | — | Parent component |
+| `child` | string | — | Child component |
+| `relationship` | string | — | `"bem_element"`, `"independent_block"`, `"internal"`, `"direct_child"`, `"unknown"` |
+| `required` | boolean | — | Whether this nesting is required |
 | `bem_evidence` | string | null | BEM evidence description |
 | `strength` | string | `"allowed"` | `"required"` or `"allowed"` |
 
@@ -424,81 +422,77 @@ Large struct containing the full source-level profile of a component. Key fields
 |-------|------|-------------|
 | `name` | string | Component name |
 | `file` | string | Source file path |
-| `rendered_elements` | object | Map: HTML element -> count |
+| `rendered_elements` | object | Map: HTML element → count |
 | `rendered_components` | string[] | React components rendered |
-| `aria_attributes` | object | Map: `"element::attr"` -> value (double-colon key format) |
-| `role_attributes` | object | Map: element -> role value |
-| `data_attributes` | object | Map: `"element::attr"` -> value |
-| `prop_defaults` | object | Map: prop name -> default value |
+| `aria_attributes` | object | Map: `"element::attr"` → value |
+| `role_attributes` | object | Map: element → role value |
+| `data_attributes` | object | Map: `"element::attr"` → value |
+| `prop_defaults` | object | Map: prop name → default value |
 | `uses_portal` | boolean | Whether createPortal is used |
 | `consumed_contexts` | string[] | useContext dependencies |
 | `provided_contexts` | string[] | Context providers |
 | `is_forward_ref` | boolean | Wrapped in forwardRef |
 | `is_memo` | boolean | Wrapped in memo |
-| `css_tokens_used` | string[] | CSS token references (e.g., `"styles.button"`) |
+| `css_tokens_used` | string[] | CSS token references |
 | `bem_block` | string | BEM block name |
-| `extends_props` | string[] | Props interfaces this component extends |
-| `children_slot_path` | string[] | DOM path to where `{children}` renders |
+| `extends_props` | string[] | Props interfaces extended |
+| `children_slot_path` | string[] | DOM path to `{children}` |
 | `has_children_prop` | boolean | Whether component accepts children |
 | `all_props` | string[] | All prop names |
 | `required_props` | string[] | Required prop names |
-| `prop_types` | object | Map: prop name -> type string |
-
-Note: `aria_attributes` and `data_attributes` use a `"element::attribute"` key format (double-colon separated) because the underlying data is keyed by `(element_tag, attribute_name)` tuples.
+| `prop_types` | object | Map: prop name → type string |
 
 ## Enum Reference
 
 ### ApiChangeKind
 
-Plain string: `"function"`, `"method"`, `"class"`, `"interface"`, `"type_alias"`, `"constant"`, `"property"`, `"field"`, `"module_export"`
+`"function"`, `"method"`, `"class"`, `"interface"`, `"type_alias"`, `"constant"`, `"property"`, `"field"`, `"module_export"`
 
 ### ApiChangeType
 
-Plain string: `"removed"`, `"signature_changed"`, `"type_changed"`, `"visibility_changed"`, `"renamed"`
+`"removed"`, `"signature_changed"`, `"type_changed"`, `"visibility_changed"`, `"renamed"`
 
 ### SourceLevelCategory
 
-Plain string: `"dom_structure"`, `"aria_change"`, `"role_change"`, `"data_attribute"`, `"css_token"`, `"prop_default"`, `"portal_usage"`, `"context_dependency"`, `"composition"`, `"forward_ref"`, `"memo"`, `"rendered_component"`, `"prop_attribute_override"`
+`"dom_structure"`, `"aria_change"`, `"role_change"`, `"data_attribute"`, `"css_token"`, `"prop_default"`, `"portal_usage"`, `"context_dependency"`, `"composition"`, `"forward_ref"`, `"memo"`, `"rendered_component"`, `"prop_attribute_override"`
 
 ### TsManifestChangeType
 
-Plain string: `"entry_point_changed"`, `"exports_entry_removed"`, `"exports_entry_added"`, `"exports_condition_removed"`, `"module_system_changed"`, `"peer_dependency_added"`, `"peer_dependency_removed"`, `"peer_dependency_range_changed"`, `"engine_constraint_changed"`, `"bin_entry_removed"`
+`"entry_point_changed"`, `"exports_entry_removed"`, `"exports_entry_added"`, `"exports_condition_removed"`, `"module_system_changed"`, `"peer_dependency_added"`, `"peer_dependency_removed"`, `"peer_dependency_range_changed"`, `"engine_constraint_changed"`, `"bin_entry_removed"`
 
 ### ChildRelationship
 
-Plain string: `"bem_element"`, `"independent_block"`, `"internal"`, `"direct_child"`, `"unknown"`
+`"bem_element"`, `"independent_block"`, `"internal"`, `"direct_child"`, `"unknown"`
 
 ### EdgeStrength
 
-Plain string: `"required"`, `"allowed"` (default: `"allowed"`)
+`"required"`, `"allowed"` (default: `"allowed"`)
 
 ### ComponentStatus
 
-Plain string: `"modified"`, `"removed"`, `"added"`
+`"modified"`, `"removed"`, `"added"`
 
 ### FileStatus
 
-Plain string: `"added"`, `"modified"`, `"deleted"`, `"renamed"`
+`"added"`, `"modified"`, `"deleted"`, `"renamed"`
 
 ### EvidenceType
 
-Plain string: `"test_delta"`, `"llm_analysis"`, `"body_analysis"`, `"call_graph_propagation"`
+`"test_delta"`, `"llm_analysis"`, `"body_analysis"`, `"call_graph_propagation"`
 
 ## Serialization Notes
 
 1. **Missing fields = empty/null**: Fields with `skip_serializing_if` are omitted when empty. Treat absent fields as empty arrays, empty objects, or null.
 
-2. **`qualified_name` on ApiChange**: This is a `String`, not nullable. It is **absent** when empty (not `null`). On input, treat missing as `""`.
+2. **`qualified_name` on ApiChange**: This is a `String`, not nullable. It is absent when empty (not `null`).
 
-3. **`source_file` on BehavioralChange**: Exists in the Rust struct but is **never** serialized. You will never see this field in JSON.
+3. **Language extensions are flattened**: The `extensions` field uses `#[serde(flatten)]`, so TS-specific fields (`sd_result`, `hierarchy_deltas`) appear at the top level of the JSON, not nested.
 
-4. **Tuple-keyed maps**: `aria_attributes` and `data_attributes` in ComponentSourceProfile use `"element::attribute"` string keys (double-colon separator) because the underlying type is `BTreeMap<(String, String), String>`.
+4. **Tuple-keyed maps**: `aria_attributes` and `data_attributes` in ComponentSourceProfile use `"element::attribute"` string keys (double-colon separator).
 
 5. **Enum formats**:
    - Most enums: plain snake_case strings (`"removed"`, `"dom_structure"`)
-   - `RemovalDisposition`: Internally tagged with `"type"` discriminator (`{ "type": "moved_to_related_type", ... }`)
+   - `RemovalDisposition`: Internally tagged with `"type"` discriminator
    - `CompositionChangeType`, `ConformanceCheckType`: Externally tagged (`{ "variant_name": { ...fields } }`)
 
-6. **Default values**: `EdgeStrength` defaults to `"allowed"`, `ExpectedChild.required` defaults to `false`, `ExpectedChild.mechanism` defaults to `"child"`. Missing fields deserialize to these defaults.
-
-7. **`ConstantGroup` string fields**: `common_prefix_pattern` and `strategy_hint` always appear in JSON (even as `""`). They are not skipped when empty.
+6. **Default values**: `EdgeStrength` defaults to `"allowed"`, `ExpectedChild.required` defaults to `false`, `ExpectedChild.mechanism` defaults to `"child"`.

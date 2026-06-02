@@ -1,0 +1,19 @@
+- ruleID: semver-dep-update-openshift-console-dynamic-plugin-sdk
+  labels:
+  - change-type=dependency-update
+  - has-codemod=true
+  - source=semver-analyzer
+  effort: 1
+  category: mandatory
+  description: Update @openshift-console/dynamic-plugin-sdk to v4.21.0
+  message: |-
+    Update @openshift-console/dynamic-plugin-sdk from current version to ^4.21.0. This package has breaking changes between origin/release-4.17 and origin/release-4.19.
+
+    After updating package.json, regenerate your lockfile:
+    - npm: npm install
+    - yarn: yarn install
+    - pnpm: pnpm install
+  when:
+    frontend.dependency:
+      name: '@openshift-console/dynamic-plugin-sdk'
+      upperbound: 1.99.99

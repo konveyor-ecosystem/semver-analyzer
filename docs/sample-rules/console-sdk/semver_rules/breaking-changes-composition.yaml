@@ -1,0 +1,467 @@
+- ruleID: sd-composition-form-utils-removed-member-pagebody
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/console-shared
+  - family=form-utils
+  effort: 3
+  category: mandatory
+  description: PageBody was removed from the form-utils family
+  message: |-
+    <PageBody> has been removed from the form-utils family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^PageBody$
+      location: JSX_COMPONENT
+      from: '@patternfly/console-shared'
+- ruleID: sd-composition-formik-fields-removed-member-selectinputfield
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/console-shared
+  - family=formik-fields
+  effort: 3
+  category: mandatory
+  description: SelectInputField was removed from the formik-fields family
+  message: |-
+    <SelectInputField> has been removed from the formik-fields family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^SelectInputField$
+      location: JSX_COMPONENT
+      from: '@patternfly/console-shared'
+- ruleID: sd-composition-getting-started-removed-member-gettingstartedgrid
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/console-shared
+  - family=getting-started
+  effort: 3
+  category: mandatory
+  description: GettingStartedGrid was removed from the getting-started family
+  message: |-
+    <GettingStartedGrid> has been removed from the getting-started family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^GettingStartedGrid$
+      location: JSX_COMPONENT
+      from: '@patternfly/console-shared'
+- ruleID: sd-composition-layout-removed-member-pagelayout
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/console-shared
+  - family=layout
+  effort: 3
+  category: mandatory
+  description: PageLayout was removed from the layout family
+  message: |-
+    <PageLayout> has been removed from the layout family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^PageLayout$
+      location: JSX_COMPONENT
+      from: '@patternfly/console-shared'
+- ruleID: sd-composition-links-removed-member-linkto
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/console-shared
+  - family=links
+  effort: 3
+  category: mandatory
+  description: LinkTo was removed from the links family
+  message: |-
+    <LinkTo> has been removed from the links family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^LinkTo$
+      location: JSX_COMPONENT
+      from: '@patternfly/console-shared'
+- ruleID: sd-composition-links-removed-member-buttonlink
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/console-shared
+  - family=links
+  effort: 3
+  category: mandatory
+  description: ButtonLink was removed from the links family
+  message: |-
+    <ButtonLink> has been removed from the links family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^ButtonLink$
+      location: JSX_COMPONENT
+      from: '@patternfly/console-shared'
+- ruleID: sd-composition-monitoring-removed-member-monitoringalertsrulesdetailspage
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/dev-console
+  - family=monitoring
+  effort: 3
+  category: mandatory
+  description: MonitoringAlertsRulesDetailsPage was removed from the monitoring family
+  message: |-
+    <MonitoringAlertsRulesDetailsPage> has been removed from the monitoring family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^MonitoringAlertsRulesDetailsPage$
+      location: JSX_COMPONENT
+      from: '@patternfly/dev-console'
+- ruleID: sd-composition-overview-removed-member-functionspage
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/knative-plugin
+  - family=overview
+  effort: 3
+  category: mandatory
+  description: FunctionsPage was removed from the overview family
+  message: |-
+    <FunctionsPage> has been removed from the overview family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^FunctionsPage$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-composition-overview-removed-member-functiondetailspage
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/knative-plugin
+  - family=overview
+  effort: 3
+  category: mandatory
+  description: FunctionDetailsPage was removed from the overview family
+  message: |-
+    <FunctionDetailsPage> has been removed from the overview family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^FunctionDetailsPage$
+      location: JSX_COMPONENT
+      from: '@patternfly/knative-plugin'
+- ruleID: sd-composition-overview-removed-member-servinglistpage
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/react-core
+  - family=overview
+  effort: 3
+  category: mandatory
+  description: ServingListPage was removed from the overview family
+  message: |-
+    <ServingListPage> has been removed from the overview family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^ServingListPage$
+      location: JSX_COMPONENT
+      from: '@patternfly/react-core'
+- ruleID: sd-composition-secrets-removed-member-createconfigsubform
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/react-core
+  - family=secrets
+  effort: 3
+  category: mandatory
+  description: CreateConfigSubform was removed from the secrets family
+  message: |-
+    <CreateConfigSubform> has been removed from the secrets family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^CreateConfigSubform$
+      location: JSX_COMPONENT
+      from: '@patternfly/react-core'
+- ruleID: sd-composition-secrets-removed-member-keyvalueentryform
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/react-core
+  - family=secrets
+  effort: 3
+  category: mandatory
+  description: KeyValueEntryForm was removed from the secrets family
+  message: |-
+    <KeyValueEntryForm> has been removed from the secrets family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^KeyValueEntryForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/react-core'
+- ruleID: sd-composition-secrets-removed-member-uploadconfigsubform
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/react-core
+  - family=secrets
+  effort: 3
+  category: mandatory
+  description: UploadConfigSubform was removed from the secrets family
+  message: |-
+    <UploadConfigSubform> has been removed from the secrets family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^UploadConfigSubform$
+      location: JSX_COMPONENT
+      from: '@patternfly/react-core'
+- ruleID: sd-composition-secrets-removed-member-genericsecretform
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/react-core
+  - family=secrets
+  effort: 3
+  category: mandatory
+  description: GenericSecretForm was removed from the secrets family
+  message: |-
+    <GenericSecretForm> has been removed from the secrets family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^GenericSecretForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/react-core'
+- ruleID: sd-composition-secrets-removed-member-sourcesecretform
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/react-core
+  - family=secrets
+  effort: 3
+  category: mandatory
+  description: SourceSecretForm was removed from the secrets family
+  message: |-
+    <SourceSecretForm> has been removed from the secrets family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^SourceSecretForm$
+      location: JSX_COMPONENT
+      from: '@patternfly/react-core'
+- ruleID: sd-composition-tour-removed-member-guidedtourmastheadtrigger
+  labels:
+  - source=semver-analyzer
+  - change-type=composition
+  - package=@patternfly/console-app
+  - family=tour
+  effort: 3
+  category: mandatory
+  description: GuidedTourMastheadTrigger was removed from the tour family
+  message: |-
+    <GuidedTourMastheadTrigger> has been removed from the tour family.
+    Remove usages or replace with the recommended alternative.
+  when:
+    frontend.referenced:
+      pattern: ^GuidedTourMastheadTrigger$
+      location: JSX_COMPONENT
+      from: '@patternfly/console-app'
+- ruleID: sd-cf-baremetal-hosts-eventscard-in-baremetalhostdashboard
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/metal3-plugin
+  - family=baremetal-hosts
+  effort: 1
+  category: mandatory
+  description: <EventsCard> must be a child of BareMetalHostDashboard
+  message: |-
+    <EventsCard> must be used inside <BareMetalHostDashboard>.
+
+    Correct usage:
+      <BareMetalHostDashboard>
+        <EventsCard />
+      </BareMetalHostDashboard>
+  when:
+    frontend.referenced:
+      pattern: ^EventsCard$
+      location: JSX_COMPONENT
+      notParent: ^BareMetalHostDashboard$
+      from: '@patternfly/metal3-plugin'
+- ruleID: sd-cf-nodes-inventorycard-in-nodedashboard
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/console-app
+  - family=nodes
+  effort: 1
+  category: mandatory
+  description: <InventoryCard> must be a child of NodeDashboard
+  message: |-
+    <InventoryCard> must be used inside <NodeDashboard>.
+
+    Correct usage:
+      <NodeDashboard>
+        <InventoryCard />
+      </NodeDashboard>
+  when:
+    frontend.referenced:
+      pattern: ^InventoryCard$
+      location: JSX_COMPONENT
+      notParent: ^NodeDashboard$
+      from: '@patternfly/console-app'
+- ruleID: sd-cf-nodes-statuscard-in-nodedashboard
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/console-app
+  - family=nodes
+  effort: 1
+  category: mandatory
+  description: <StatusCard> must be a child of NodeDashboard
+  message: |-
+    <StatusCard> must be used inside <NodeDashboard>.
+
+    Correct usage:
+      <NodeDashboard>
+        <StatusCard />
+      </NodeDashboard>
+  when:
+    frontend.referenced:
+      pattern: ^StatusCard$
+      location: JSX_COMPONENT
+      notParent: ^NodeDashboard$
+      from: '@patternfly/console-app'
+- ruleID: sd-cf-nodes-nodehealth-in-nodedashboard
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/console-app
+  - family=nodes
+  effort: 1
+  category: mandatory
+  description: <NodeHealth> must be a child of NodeDashboard
+  message: |-
+    <NodeHealth> must be used inside <NodeDashboard>.
+
+    Correct usage:
+      <NodeDashboard>
+        <NodeHealth />
+      </NodeDashboard>
+  when:
+    frontend.referenced:
+      pattern: ^NodeHealth$
+      location: JSX_COMPONENT
+      notParent: ^NodeDashboard$
+      from: '@patternfly/console-app'
+- ruleID: sd-cf-nodes-nodealerts-in-nodedashboard
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/console-app
+  - family=nodes
+  effort: 1
+  category: mandatory
+  description: <NodeAlerts> must be a child of NodeDashboard
+  message: |-
+    <NodeAlerts> must be used inside <NodeDashboard>.
+
+    Correct usage:
+      <NodeDashboard>
+        <NodeAlerts />
+      </NodeDashboard>
+  when:
+    frontend.referenced:
+      pattern: ^NodeAlerts$
+      location: JSX_COMPONENT
+      notParent: ^NodeDashboard$
+      from: '@patternfly/console-app'
+- ruleID: sd-cf-nodes-activitycard-in-nodedashboard
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/console-app
+  - family=nodes
+  effort: 1
+  category: mandatory
+  description: <ActivityCard> must be a child of NodeDashboard
+  message: |-
+    <ActivityCard> must be used inside <NodeDashboard>.
+
+    Correct usage:
+      <NodeDashboard>
+        <ActivityCard />
+      </NodeDashboard>
+  when:
+    frontend.referenced:
+      pattern: ^ActivityCard$
+      location: JSX_COMPONENT
+      notParent: ^NodeDashboard$
+      from: '@patternfly/console-app'
+- ruleID: sd-cf-nodes-detailscard-in-nodedashboard
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/console-app
+  - family=nodes
+  effort: 1
+  category: mandatory
+  description: <DetailsCard> must be a child of NodeDashboard
+  message: |-
+    <DetailsCard> must be used inside <NodeDashboard>.
+
+    Correct usage:
+      <NodeDashboard>
+        <DetailsCard />
+      </NodeDashboard>
+  when:
+    frontend.referenced:
+      pattern: ^DetailsCard$
+      location: JSX_COMPONENT
+      notParent: ^NodeDashboard$
+      from: '@patternfly/console-app'
+- ruleID: sd-cf-nodes-utilizationcard-in-nodedashboard
+  labels:
+  - source=semver-analyzer
+  - change-type=conformance
+  - package=@patternfly/console-app
+  - family=nodes
+  effort: 1
+  category: mandatory
+  description: <UtilizationCard> must be a child of NodeDashboard
+  message: |-
+    <UtilizationCard> must be used inside <NodeDashboard>.
+
+    Correct usage:
+      <NodeDashboard>
+        <UtilizationCard />
+      </NodeDashboard>
+  when:
+    frontend.referenced:
+      pattern: ^UtilizationCard$
+      location: JSX_COMPONENT
+      notParent: ^NodeDashboard$
+      from: '@patternfly/console-app'
+- ruleID: sd-context-nodelogs-themecontext
+  labels:
+  - source=semver-analyzer
+  - change-type=context-dependency
+  - package=@patternfly/console-app
+  - component=NodeLogs
+  effort: 3
+  category: mandatory
+  description: NodeLogs now requires ThemeContext context provider. Rendering without this provider may cause runtime errors or incorrect behavior.
+  message: |-
+    NodeLogs now requires ThemeContext context provider. Rendering without this provider may cause runtime errors or incorrect behavior.
+
+    If you import and use ThemeContext directly, review your usage.
+    The context shape or provider location may have changed.
+  when:
+    frontend.referenced:
+      pattern: ^ThemeContext$
+      location: IMPORT
+      from: '@patternfly/console-app'

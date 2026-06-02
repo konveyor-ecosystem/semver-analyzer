@@ -1,0 +1,4 @@
+name: react-types-breaking-changes
+description: Breaking changes detected between v17 and v18 by semver-analyzer v0.0.5
+labels:
+- source=semver-analyzer

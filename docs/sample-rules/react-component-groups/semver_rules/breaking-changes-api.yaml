@@ -1,0 +1,1839 @@
+- ruleID: semver-packages-module-src-actionmenu-actionmenu-d-ts-actionmenu-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=removed
+  - kind=constant
+  - has-codemod=false
+  - package=@patternfly/react-component-groups
+  effort: 5
+  category: mandatory
+  description: Exported constant `ActionMenu` was removed
+  message: |-
+    Constant 'ActionMenu' was removed (constant): Exported constant `ActionMenu` was removed
+
+    File: packages/module/src/ActionMenu/ActionMenu.d.ts
+    Before: constant: ActionMenu: FunctionComponent<ActionMenuProps>
+  when:
+    or:
+    - frontend.referenced:
+        pattern: ^ActionMenu$
+        location: JSX_COMPONENT
+        from: '@patternfly/react-component-groups'
+    - frontend.referenced:
+        pattern: ^ActionMenu$
+        location: IMPORT
+        from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-actionmenu-actionmenu-d-ts-actionmenuprops-removed-group-3
+  labels:
+  - change-type=removed
+  - has-codemod=false
+  - kind=type-alias
+  - package=@patternfly/react-component-groups
+  - source=semver-analyzer
+  effort: 5
+  category: mandatory
+  description: 3 related changes
+  message: |
+    This rule contains 3 migration steps. Apply each one independently:
+
+    Step 1 of 3:
+    Type-alias 'ActionMenuProps' was removed (type-alias): Exported type alias `ActionMenuProps` was removed
+
+    File: packages/module/src/ActionMenu/ActionMenu.d.ts
+    Before: type alias: ActionMenuProps: EitherNotBoth<{
+        actions: ActionProps[];
+    }, {
+        groupedActions: GroupedActionsProps[];
+    }> & ActionMenuOptions
+
+    Step 2 of 3:
+    Type-alias 'ActionMenuVariant' was removed (type-alias): Exported enum `ActionMenuVariant` was removed
+
+    File: packages/module/src/ActionMenu/ActionMenu.d.ts
+    Before: enum: ActionMenuVariant
+
+    Step 3 of 3:
+    Type-alias 'ActionProps' was removed (type-alias): Exported type alias `ActionProps` was removed
+
+    File: packages/module/src/ActionMenu/ActionMenu.d.ts
+    Before: type alias: ActionProps: Omit<DropdownItemProps, 'innerRef'>
+  when:
+    or:
+    - or:
+      - frontend.referenced:
+          pattern: ^ActionMenuProps$
+          location: TYPE_REFERENCE
+          from: '@patternfly/react-component-groups'
+      - frontend.referenced:
+          pattern: ^ActionMenuProps$
+          location: IMPORT
+          from: '@patternfly/react-component-groups'
+    - or:
+      - frontend.referenced:
+          pattern: ^ActionMenuVariant$
+          location: TYPE_REFERENCE
+          from: '@patternfly/react-component-groups'
+      - frontend.referenced:
+          pattern: ^ActionMenuVariant$
+          location: IMPORT
+          from: '@patternfly/react-component-groups'
+    - or:
+      - frontend.referenced:
+          pattern: ^ActionProps$
+          location: TYPE_REFERENCE
+          from: '@patternfly/react-component-groups'
+      - frontend.referenced:
+          pattern: ^ActionProps$
+          location: IMPORT
+          from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-ansible-ansible-ansibleprops-d-ts-ansible-unsupported-signature-changed
+  labels:
+  - source=semver-analyzer
+  - change-type=signature-changed
+  - kind=property
+  - has-codemod=false
+  - package=@patternfly/react-component-groups
+  effort: 3
+  category: mandatory
+  description: property `unsupported` was replaced by `isSupported` in `AnsibleProps` with a different type
+  message: |-
+    Property 'Ansible.unsupported' had its signature changed (property): property `unsupported` was replaced by `isSupported` in `AnsibleProps` with a different type
+
+    File: packages/module/src/Ansible/Ansible.AnsibleProps.d.ts
+    Before: property: unsupported: boolean | number
+    After: property: isSupported: boolean
+  when:
+    frontend.referenced:
+      pattern: ^unsupported$
+      location: JSX_PROP
+      component: ^Ansible$
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-ansible-ansible-ansibleprops-d-ts-ansible-isrhaap-signature-changed
+  labels:
+  - source=semver-analyzer
+  - change-type=signature-changed
+  - kind=property
+  - has-codemod=true
+  - package=@patternfly/react-component-groups
+  - change-scope=additive
+  effort: 3
+  category: mandatory
+  description: property `isRHAAP` was added to `AnsibleProps`
+  message: |-
+    Property 'Ansible.isRHAAP' had its signature changed (property): property `isRHAAP` was added to `AnsibleProps`
+
+    File: packages/module/src/Ansible/Ansible.AnsibleProps.d.ts
+    After: property: isRHAAP: boolean
+  when:
+    frontend.referenced:
+      pattern: ^isRHAAP$
+      location: JSX_PROP
+      component: ^Ansible$
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-battery-battery-d-ts-batteryseverity-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=removed
+  - kind=type-alias
+  - has-codemod=false
+  - package=@patternfly/react-component-groups
+  effort: 5
+  category: mandatory
+  description: Exported type alias `BatterySeverity` was removed
+  message: |-
+    Type-alias 'BatterySeverity' was removed (type-alias): Exported type alias `BatterySeverity` was removed
+
+    File: packages/module/src/Battery/Battery.d.ts
+    Before: type alias: BatterySeverity: typeof BatterySeverity[keyof typeof BatterySeverity]
+  when:
+    or:
+    - frontend.referenced:
+        pattern: ^BatterySeverity$
+        location: TYPE_REFERENCE
+        from: '@patternfly/react-component-groups'
+    - frontend.referenced:
+        pattern: ^BatterySeverity$
+        location: IMPORT
+        from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-bulkselect-bulkselect-bulkselectprops-d-ts-bulkselect-dropdownlistprops-signature-changed
+  labels:
+  - source=semver-analyzer
+  - change-type=signature-changed
+  - kind=property
+  - has-codemod=true
+  - package=@patternfly/react-component-groups
+  - change-scope=additive
+  effort: 3
+  category: mandatory
+  description: property `dropdownListProps` was added to `BulkSelectProps`
+  message: |-
+    Property 'BulkSelect.dropdownListProps' had its signature changed (property): property `dropdownListProps` was added to `BulkSelectProps`
+
+    File: packages/module/src/BulkSelect/BulkSelect.BulkSelectProps.d.ts
+    After: property: dropdownListProps: Omit<DropdownListProps, 'children'>
+  when:
+    frontend.referenced:
+      pattern: ^dropdownListProps$
+      location: JSX_PROP
+      component: ^BulkSelect$
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-bulkselect-bulkselect-d-ts-bulkselectvalue-type-changed
+  labels:
+  - source=semver-analyzer
+  - change-type=type-changed
+  - kind=constant
+  - has-codemod=true
+  - package=@patternfly/react-component-groups
+  effort: 3
+  category: mandatory
+  description: 'Return type of `BulkSelectValue` changed from `{ readonly all: "all"; readonly none: "none"; readonly page: "page"; readonly nonePage: "nonePage" }` to `(typeof BulkSelectValue)[keyof typeof BulkSelectValue]`'
+  message: |-
+    Constant 'BulkSelectValue' had its type changed (constant): Return type of `BulkSelectValue` changed from `{ readonly all: "all"; readonly none: "none"; readonly page: "page"; readonly nonePage: "nonePage" }` to `(typeof BulkSelectValue)[keyof typeof BulkSelectValue]`
+
+    File: packages/module/src/BulkSelect/BulkSelect.d.ts
+    Before: { readonly all: "all"; readonly none: "none"; readonly page: "page"; readonly nonePage: "nonePage" }
+    After: (typeof BulkSelectValue)[keyof typeof BulkSelectValue]
+  when:
+    or:
+    - frontend.referenced:
+        pattern: ^BulkSelectValue$
+        location: JSX_COMPONENT
+        from: '@patternfly/react-component-groups'
+    - frontend.referenced:
+        pattern: ^BulkSelectValue$
+        location: IMPORT
+        from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-bulkselect-bulkselect-d-ts-bulkselectvalue-type-changed-2
+  labels:
+  - source=semver-analyzer
+  - change-type=type-changed
+  - kind=type-alias
+  - has-codemod=true
+  - package=@patternfly/react-component-groups
+  effort: 3
+  category: mandatory
+  description: Return type of `BulkSelectValue` changed from `typeof BulkSelectValue[keyof typeof BulkSelectValue]` to `(typeof BulkSelectValue)[keyof typeof BulkSelectValue]`
+  message: |-
+    Type-alias 'BulkSelectValue' had its type changed (type-alias): Return type of `BulkSelectValue` changed from `typeof BulkSelectValue[keyof typeof BulkSelectValue]` to `(typeof BulkSelectValue)[keyof typeof BulkSelectValue]`
+
+    File: packages/module/src/BulkSelect/BulkSelect.d.ts
+    Before: typeof BulkSelectValue[keyof typeof BulkSelectValue]
+    After: (typeof BulkSelectValue)[keyof typeof BulkSelectValue]
+  when:
+    or:
+    - frontend.referenced:
+        pattern: ^BulkSelectValue$
+        location: TYPE_REFERENCE
+        from: '@patternfly/react-component-groups'
+    - frontend.referenced:
+        pattern: ^BulkSelectValue$
+        location: IMPORT
+        from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-columnmanagementmodal-columnmanagementmodal-columnmanagementmodalprops-d-ts-columnmanagementmodal-enabledragdrop-signature-changed
+  labels:
+  - source=semver-analyzer
+  - change-type=signature-changed
+  - kind=property
+  - has-codemod=true
+  - package=@patternfly/react-component-groups
+  - change-scope=additive
+  effort: 3
+  category: mandatory
+  description: property `enableDragDrop` was added to `ColumnManagementModalProps`
+  message: |-
+    Property 'ColumnManagementModal.enableDragDrop' had its signature changed (property): property `enableDragDrop` was added to `ColumnManagementModalProps`
+
+    File: packages/module/src/ColumnManagementModal/ColumnManagementModal.ColumnManagementModalProps.d.ts
+    After: property: enableDragDrop: boolean
+  when:
+    frontend.referenced:
+      pattern: ^enableDragDrop$
+      location: JSX_PROP
+      component: ^ColumnManagementModal$
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-detailspageheader-detailspageheader-d-ts-pageheadinglabelprops-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=removed
+  - kind=type-alias
+  - has-codemod=false
+  - package=@patternfly/react-component-groups
+  effort: 5
+  category: mandatory
+  description: Exported type alias `PageHeadingLabelProps` was removed
+  message: |-
+    Type-alias 'PageHeadingLabelProps' was removed (type-alias): Exported type alias `PageHeadingLabelProps` was removed
+
+    File: packages/module/src/DetailsPageHeader/DetailsPageHeader.d.ts
+    Before: type alias: PageHeadingLabelProps: Omit<LabelProps, 'isEditable' | 'editableProps' | 'onEditComplete' | 'onEditCancel' | 'onClose' | 'closeBtn' | 'closeBtnAriaLabel' | 'closeBtnProps' | 'isOverflowLabel'>
+  when:
+    or:
+    - frontend.referenced:
+        pattern: ^PageHeadingLabelProps$
+        location: TYPE_REFERENCE
+        from: '@patternfly/react-component-groups'
+    - frontend.referenced:
+        pattern: ^PageHeadingLabelProps$
+        location: IMPORT
+        from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-errorboundary-errorboundary-errorboundaryprops-d-ts-errorboundary-errortitleheadinglevel-signature-changed-group-2
+  labels:
+  - change-scope=additive
+  - change-type=signature-changed
+  - has-codemod=true
+  - kind=property
+  - package=@patternfly/react-component-groups
+  - source=semver-analyzer
+  effort: 3
+  category: mandatory
+  description: 2 related changes
+  message: |
+    This rule contains 2 migration steps. Apply each one independently:
+
+    Step 1 of 2:
+    Property 'ErrorBoundary.errorTitleHeadingLevel' had its signature changed (property): property `errorTitleHeadingLevel` was added to `ErrorBoundaryProps`
+
+    File: packages/module/src/ErrorBoundary/ErrorBoundary.ErrorBoundaryProps.d.ts
+    After: property: errorTitleHeadingLevel: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+
+    Step 2 of 2:
+    Property 'ErrorBoundary.headerTitleHeadingLevel' had its signature changed (property): property `headerTitleHeadingLevel` was added to `ErrorBoundaryProps`
+
+    File: packages/module/src/ErrorBoundary/ErrorBoundary.ErrorBoundaryProps.d.ts
+    After: property: headerTitleHeadingLevel: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+  when:
+    or:
+    - frontend.referenced:
+        pattern: ^errorTitleHeadingLevel$
+        location: JSX_PROP
+        component: ^ErrorBoundary$
+        from: '@patternfly/react-component-groups'
+    - frontend.referenced:
+        pattern: ^headerTitleHeadingLevel$
+        location: JSX_PROP
+        component: ^ErrorBoundary$
+        from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-errorboundary-errorboundary-errorboundaryprops-d-ts-errorboundary-errortitle-type-changed-group-2
+  labels:
+  - change-type=type-changed
+  - has-codemod=true
+  - kind=property
+  - package=@patternfly/react-component-groups
+  - source=semver-analyzer
+  effort: 3
+  category: mandatory
+  description: 2 related changes
+  message: |
+    This rule contains 2 migration steps. Apply each one independently:
+
+    Step 1 of 2:
+    Property 'ErrorBoundary.errorTitle' had its type changed (property): Return type of `errorTitle` changed from `string` to `ReactNode`
+
+    File: packages/module/src/ErrorBoundary/ErrorBoundary.ErrorBoundaryProps.d.ts
+    Before: string
+    After: ReactNode
+
+    Step 2 of 2:
+    Property 'ErrorBoundary.headerTitle' had its type changed (property): Return type of `headerTitle` changed from `string` to `ReactNode`
+
+    File: packages/module/src/ErrorBoundary/ErrorBoundary.ErrorBoundaryProps.d.ts
+    Before: string
+    After: ReactNode
+  when:
+    or:
+    - frontend.referenced:
+        pattern: ^errorTitle$
+        location: JSX_PROP
+        component: ^ErrorBoundary$
+        from: '@patternfly/react-component-groups'
+    - frontend.referenced:
+        pattern: ^headerTitle$
+        location: JSX_PROP
+        component: ^ErrorBoundary$
+        from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-errorstate-errorstate-errorstateprops-d-ts-errorstate-errortitle-signature-changed
+  labels:
+  - source=semver-analyzer
+  - change-type=signature-changed
+  - kind=property
+  - has-codemod=false
+  - package=@patternfly/react-component-groups
+  effort: 3
+  category: mandatory
+  description: property `errorTitle` was replaced by `titleText` in `ErrorStateProps` with a different type
+  message: |-
+    Property 'ErrorState.errorTitle' had its signature changed (property): property `errorTitle` was replaced by `titleText` in `ErrorStateProps` with a different type
+
+    File: packages/module/src/ErrorState/ErrorState.ErrorStateProps.d.ts
+    Before: property: errorTitle: string
+    After: property: titleText: ReactNode
+  when:
+    frontend.referenced:
+      pattern: ^errorTitle$
+      location: JSX_PROP
+      component: ^ErrorState$
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-errorstate-errorstate-errorstateprops-d-ts-errorstate-status-signature-changed
+  labels:
+  - source=semver-analyzer
+  - change-type=signature-changed
+  - kind=property
+  - has-codemod=true
+  - package=@patternfly/react-component-groups
+  - change-scope=additive
+  effort: 3
+  category: mandatory
+  description: property `status` was added to `ErrorStateProps`
+  message: |-
+    Property 'ErrorState.status' had its signature changed (property): property `status` was added to `ErrorStateProps`
+
+    File: packages/module/src/ErrorState/ErrorState.ErrorStateProps.d.ts
+    After: property: status: 'custom' | 'danger' | 'info' | 'none' | 'success' | 'warning'
+  when:
+    frontend.referenced:
+      pattern: ^status$
+      location: JSX_PROP
+      component: ^ErrorState$
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-errorstate-errorstate-d-ts-errorstateprops-signature-changed
+  labels:
+  - source=semver-analyzer
+  - change-type=signature-changed
+  - kind=interface
+  - has-codemod=true
+  - package=@patternfly/react-component-groups
+  effort: 3
+  category: mandatory
+  description: '`ErrorStateProps` base class changed from Omit<EmptyStateProps, ''children''> to Omit<EmptyStateProps, ''children'' | ''titleText'' | ''status''>'
+  message: |-
+    Interface 'ErrorStateProps' had its signature changed (interface): `ErrorStateProps` base class changed from Omit<EmptyStateProps, 'children'> to Omit<EmptyStateProps, 'children' | 'titleText' | 'status'>
+
+    File: packages/module/src/ErrorState/ErrorState.d.ts
+    Before: Omit<EmptyStateProps, 'children'>
+    After: Omit<EmptyStateProps, 'children' | 'titleText' | 'status'>
+  when:
+    or:
+    - frontend.referenced:
+        pattern: ^ErrorStateProps$
+        location: JSX_COMPONENT
+        from: '@patternfly/react-component-groups'
+    - frontend.referenced:
+        pattern: ^ErrorStateProps$
+        location: IMPORT
+        from: '@patternfly/react-component-groups'
+    - frontend.referenced:
+        pattern: ^ErrorState$
+        location: IMPORT
+        from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-logsnippet-logsnippet-logsnippetprops-d-ts-logsnippet-logsnippet-type-changed
+  labels:
+  - source=semver-analyzer
+  - change-type=type-changed
+  - kind=property
+  - has-codemod=true
+  - package=@patternfly/react-component-groups
+  effort: 3
+  category: mandatory
+  description: Return type of `logSnippet` changed from `string` to `ReactNode`
+  message: |-
+    Property 'LogSnippet.logSnippet' had its type changed (property): Return type of `logSnippet` changed from `string` to `ReactNode`
+
+    File: packages/module/src/LogSnippet/LogSnippet.LogSnippetProps.d.ts
+    Before: string
+    After: ReactNode
+  when:
+    frontend.referenced:
+      pattern: ^logSnippet$
+      location: JSX_PROP
+      component: ^LogSnippet$
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-logsnippet-logsnippet-d-ts-logsnippetbordervariant-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=removed
+  - kind=type-alias
+  - has-codemod=false
+  - package=@patternfly/react-component-groups
+  effort: 5
+  category: mandatory
+  description: Exported type alias `LogSnippetBorderVariant` was removed
+  message: |-
+    Type-alias 'LogSnippetBorderVariant' was removed (type-alias): Exported type alias `LogSnippetBorderVariant` was removed
+
+    File: packages/module/src/LogSnippet/LogSnippet.d.ts
+    Before: type alias: LogSnippetBorderVariant: typeof LogSnippetBorderVariant[keyof typeof LogSnippetBorderVariant]
+  when:
+    or:
+    - frontend.referenced:
+        pattern: ^LogSnippetBorderVariant$
+        location: TYPE_REFERENCE
+        from: '@patternfly/react-component-groups'
+    - frontend.referenced:
+        pattern: ^LogSnippetBorderVariant$
+        location: IMPORT
+        from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-multicontentcard-multicontentcard-multicontentcardprops-d-ts-multicontentcard-toggletext-type-changed
+  labels:
+  - source=semver-analyzer
+  - change-type=type-changed
+  - kind=property
+  - has-codemod=true
+  - package=@patternfly/react-component-groups
+  effort: 3
+  category: mandatory
+  description: Return type of `toggleText` changed from `string` to `ReactNode`
+  message: |-
+    Property 'MultiContentCard.toggleText' had its type changed (property): Return type of `toggleText` changed from `string` to `ReactNode`
+
+    File: packages/module/src/MultiContentCard/MultiContentCard.MultiContentCardProps.d.ts
+    Before: string
+    After: ReactNode
+  when:
+    frontend.referenced:
+      pattern: ^toggleText$
+      location: JSX_PROP
+      component: ^MultiContentCard$
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-multicontentcard-multicontentcard-d-ts-multicontentcarddividervariant-type-changed
+  labels:
+  - source=semver-analyzer
+  - change-type=type-changed
+  - kind=constant
+  - has-codemod=true
+  - package=@patternfly/react-component-groups
+  effort: 3
+  category: mandatory
+  description: 'Return type of `MultiContentCardDividerVariant` changed from `{ readonly left: "left"; readonly right: "right" }` to `typeof MultiContentCardDividerVariant[keyof typeof MultiContentCardDividerVariant]`'
+  message: |-
+    Constant 'MultiContentCardDividerVariant' had its type changed (constant): Return type of `MultiContentCardDividerVariant` changed from `{ readonly left: "left"; readonly right: "right" }` to `typeof MultiContentCardDividerVariant[keyof typeof MultiContentCardDividerVariant]`
+
+    File: packages/module/src/MultiContentCard/MultiContentCard.d.ts
+    Before: { readonly left: "left"; readonly right: "right" }
+    After: typeof MultiContentCardDividerVariant[keyof typeof MultiContentCardDividerVariant]
+  when:
+    or:
+    - frontend.referenced:
+        pattern: ^MultiContentCardDividerVariant$
+        location: JSX_COMPONENT
+        from: '@patternfly/react-component-groups'
+    - frontend.referenced:
+        pattern: ^MultiContentCardDividerVariant$
+        location: IMPORT
+        from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-multicontentcard-multicontentcard-d-ts-multicontentcardbordervariant-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=removed
+  - kind=type-alias
+  - has-codemod=false
+  - package=@patternfly/react-component-groups
+  effort: 5
+  category: mandatory
+  description: Exported type alias `MultiContentCardBorderVariant` was removed
+  message: |-
+    Type-alias 'MultiContentCardBorderVariant' was removed (type-alias): Exported type alias `MultiContentCardBorderVariant` was removed
+
+    File: packages/module/src/MultiContentCard/MultiContentCard.d.ts
+    Before: type alias: MultiContentCardBorderVariant: typeof MultiContentCardBorderVariant[keyof typeof MultiContentCardBorderVariant]
+  when:
+    or:
+    - frontend.referenced:
+        pattern: ^MultiContentCardBorderVariant$
+        location: TYPE_REFERENCE
+        from: '@patternfly/react-component-groups'
+    - frontend.referenced:
+        pattern: ^MultiContentCardBorderVariant$
+        location: IMPORT
+        from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-servicecard-servicecard-servicecardprops-d-ts-servicecard-description-type-changed-group-3
+  labels:
+  - change-type=type-changed
+  - has-codemod=true
+  - kind=property
+  - package=@patternfly/react-component-groups
+  - source=semver-analyzer
+  effort: 3
+  category: mandatory
+  description: 3 related changes
+  message: |
+    This rule contains 3 migration steps. Apply each one independently:
+
+    Step 1 of 3:
+    Property 'ServiceCard.description' had its type changed (property): Return type of `description` changed from `string` to `ReactNode`
+
+    File: packages/module/src/ServiceCard/ServiceCard.ServiceCardProps.d.ts
+    Before: string
+    After: ReactNode
+
+    Step 2 of 3:
+    Property 'ServiceCard.helperText' had its type changed (property): Return type of `helperText` changed from `string` to `ReactNode`
+
+    File: packages/module/src/ServiceCard/ServiceCard.ServiceCardProps.d.ts
+    Before: string
+    After: ReactNode
+
+    Step 3 of 3:
+    Property 'ServiceCard.subtitle' had its type changed (property): Return type of `subtitle` changed from `string` to `ReactNode`
+
+    File: packages/module/src/ServiceCard/ServiceCard.ServiceCardProps.d.ts
+    Before: string
+    After: ReactNode
+  when:
+    or:
+    - frontend.referenced:
+        pattern: ^description$
+        location: JSX_PROP
+        component: ^ServiceCard$
+        from: '@patternfly/react-component-groups'
+    - frontend.referenced:
+        pattern: ^helperText$
+        location: JSX_PROP
+        component: ^ServiceCard$
+        from: '@patternfly/react-component-groups'
+    - frontend.referenced:
+        pattern: ^subtitle$
+        location: JSX_PROP
+        component: ^ServiceCard$
+        from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-status-status-statusprops-d-ts-status-description-type-changed
+  labels:
+  - source=semver-analyzer
+  - change-type=type-changed
+  - kind=property
+  - has-codemod=true
+  - package=@patternfly/react-component-groups
+  effort: 3
+  category: mandatory
+  description: Return type of `description` changed from `string` to `ReactNode`
+  message: |-
+    Property 'Status.description' had its type changed (property): Return type of `description` changed from `string` to `ReactNode`
+
+    File: packages/module/src/Status/Status.StatusProps.d.ts
+    Before: string
+    After: ReactNode
+  when:
+    frontend.referenced:
+      pattern: ^description$
+      location: JSX_PROP
+      component: ^Status$
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-status-status-d-ts-iconstatus-type-changed-group-2
+  labels:
+  - change-type=type-changed
+  - has-codemod=true
+  - kind=constant
+  - package=@patternfly/react-component-groups
+  - source=semver-analyzer
+  effort: 3
+  category: mandatory
+  description: 2 related changes
+  message: |
+    This rule contains 2 migration steps. Apply each one independently:
+
+    Step 1 of 2:
+    Constant 'IconStatus' had its type changed (constant): Return type of `IconStatus` changed from `{ readonly custom: "custom"; readonly info: "info"; readonly success: "success"; readonly warning: "warning"; readonly danger: "danger" }` to `(typeof IconStatus)[keyof typeof IconStatus]`
+
+    File: packages/module/src/Status/Status.d.ts
+    Before: { readonly custom: "custom"; readonly info: "info"; readonly success: "success"; readonly warning: "warning"; readonly danger: "danger" }
+    After: (typeof IconStatus)[keyof typeof IconStatus]
+
+    Step 2 of 2:
+    Constant 'StatusVariant' had its type changed (constant): Return type of `StatusVariant` changed from `{ readonly link: "link"; readonly popover: "popover"; readonly plain: "plain" }` to `(typeof StatusVariant)[keyof typeof StatusVariant]`
+
+    File: packages/module/src/Status/Status.d.ts
+    Before: { readonly link: "link"; readonly popover: "popover"; readonly plain: "plain" }
+    After: (typeof StatusVariant)[keyof typeof StatusVariant]
+  when:
+    or:
+    - or:
+      - frontend.referenced:
+          pattern: ^IconStatus$
+          location: JSX_COMPONENT
+          from: '@patternfly/react-component-groups'
+      - frontend.referenced:
+          pattern: ^IconStatus$
+          location: IMPORT
+          from: '@patternfly/react-component-groups'
+    - or:
+      - frontend.referenced:
+          pattern: ^StatusVariant$
+          location: JSX_COMPONENT
+          from: '@patternfly/react-component-groups'
+      - frontend.referenced:
+          pattern: ^StatusVariant$
+          location: IMPORT
+          from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-status-status-d-ts-iconstatus-type-changed-2-group-2
+  labels:
+  - change-type=type-changed
+  - has-codemod=true
+  - kind=type-alias
+  - package=@patternfly/react-component-groups
+  - source=semver-analyzer
+  effort: 3
+  category: mandatory
+  description: 2 related changes
+  message: |
+    This rule contains 2 migration steps. Apply each one independently:
+
+    Step 1 of 2:
+    Type-alias 'IconStatus' had its type changed (type-alias): Return type of `IconStatus` changed from `typeof IconStatus[keyof typeof IconStatus]` to `(typeof IconStatus)[keyof typeof IconStatus]`
+
+    File: packages/module/src/Status/Status.d.ts
+    Before: typeof IconStatus[keyof typeof IconStatus]
+    After: (typeof IconStatus)[keyof typeof IconStatus]
+
+    Step 2 of 2:
+    Type-alias 'StatusVariant' had its type changed (type-alias): Return type of `StatusVariant` changed from `typeof StatusVariant[keyof typeof StatusVariant]` to `(typeof StatusVariant)[keyof typeof StatusVariant]`
+
+    File: packages/module/src/Status/Status.d.ts
+    Before: typeof StatusVariant[keyof typeof StatusVariant]
+    After: (typeof StatusVariant)[keyof typeof StatusVariant]
+  when:
+    or:
+    - or:
+      - frontend.referenced:
+          pattern: ^IconStatus$
+          location: TYPE_REFERENCE
+          from: '@patternfly/react-component-groups'
+      - frontend.referenced:
+          pattern: ^IconStatus$
+          location: IMPORT
+          from: '@patternfly/react-component-groups'
+    - or:
+      - frontend.referenced:
+          pattern: ^StatusVariant$
+          location: TYPE_REFERENCE
+          from: '@patternfly/react-component-groups'
+      - frontend.referenced:
+          pattern: ^StatusVariant$
+          location: IMPORT
+          from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-unavailablecontent-unavailablecontent-unavailablecontentprops-d-ts-unavailablecontent-unavailablebodyprestatuslinktext-signature-changed-group-2
+  labels:
+  - change-type=signature-changed
+  - has-codemod=false
+  - kind=property
+  - package=@patternfly/react-component-groups
+  - source=semver-analyzer
+  effort: 3
+  category: mandatory
+  description: 2 related changes
+  message: |
+    This rule contains 2 migration steps. Apply each one independently:
+
+    Step 1 of 2:
+    Property 'UnavailableContent.unavailableBodyPreStatusLinkText' had its signature changed (property): property `unavailableBodyPreStatusLinkText` was replaced by `bodyText` in `UnavailableContentProps` with a different type
+
+    File: packages/module/src/UnavailableContent/UnavailableContent.UnavailableContentProps.d.ts
+    Before: property: unavailableBodyPreStatusLinkText: string
+    After: property: bodyText: ReactNode
+
+    Step 2 of 2:
+    Property 'UnavailableContent.unavailableTitleText' had its signature changed (property): property `unavailableTitleText` was replaced by `titleText` in `UnavailableContentProps` with a different type
+
+    File: packages/module/src/UnavailableContent/UnavailableContent.UnavailableContentProps.d.ts
+    Before: property: unavailableTitleText: string
+    After: property: titleText: ReactNode
+  when:
+    or:
+    - frontend.referenced:
+        pattern: ^unavailableBodyPreStatusLinkText$
+        location: JSX_PROP
+        component: ^UnavailableContent$
+        from: '@patternfly/react-component-groups'
+    - frontend.referenced:
+        pattern: ^unavailableTitleText$
+        location: JSX_PROP
+        component: ^UnavailableContent$
+        from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-unavailablecontent-unavailablecontent-unavailablecontentprops-d-ts-unavailablecontent-statuspagelinktext-type-changed
+  labels:
+  - source=semver-analyzer
+  - change-type=type-changed
+  - kind=property
+  - has-codemod=true
+  - package=@patternfly/react-component-groups
+  effort: 3
+  category: mandatory
+  description: Return type of `statusPageLinkText` changed from `string` to `ReactNode`
+  message: |-
+    Property 'UnavailableContent.statusPageLinkText' had its type changed (property): Return type of `statusPageLinkText` changed from `string` to `ReactNode`
+
+    File: packages/module/src/UnavailableContent/UnavailableContent.UnavailableContentProps.d.ts
+    Before: string
+    After: ReactNode
+  when:
+    frontend.referenced:
+      pattern: ^statusPageLinkText$
+      location: JSX_PROP
+      component: ^UnavailableContent$
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-unavailablecontent-unavailablecontent-d-ts-unavailablecontentprops-signature-changed
+  labels:
+  - source=semver-analyzer
+  - change-type=signature-changed
+  - kind=interface
+  - has-codemod=true
+  - package=@patternfly/react-component-groups
+  - change-scope=additive
+  effort: 3
+  category: mandatory
+  description: '`UnavailableContentProps` base class changed from none to Omit<EmptyStateProps, ''children'' | ''titleText'' | ''bodyText''>'
+  message: |-
+    Interface 'UnavailableContentProps' had its signature changed (interface): `UnavailableContentProps` base class changed from none to Omit<EmptyStateProps, 'children' | 'titleText' | 'bodyText'>
+
+    File: packages/module/src/UnavailableContent/UnavailableContent.d.ts
+    After: Omit<EmptyStateProps, 'children' | 'titleText' | 'bodyText'>
+  when:
+    or:
+    - frontend.referenced:
+        pattern: ^UnavailableContentProps$
+        location: JSX_COMPONENT
+        from: '@patternfly/react-component-groups'
+    - frontend.referenced:
+        pattern: ^UnavailableContentProps$
+        location: IMPORT
+        from: '@patternfly/react-component-groups'
+    - frontend.referenced:
+        pattern: ^UnavailableContent$
+        location: IMPORT
+        from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-warningmodal-warningmodal-warningmodalprops-d-ts-warningmodal-confirmationinputlabel-signature-changed-group-3
+  labels:
+  - change-scope=additive
+  - change-type=signature-changed
+  - has-codemod=true
+  - kind=property
+  - package=@patternfly/react-component-groups
+  - source=semver-analyzer
+  effort: 3
+  category: mandatory
+  description: 3 related changes
+  message: |
+    This rule contains 3 migration steps. Apply each one independently:
+
+    Step 1 of 3:
+    Property 'WarningModal.confirmationInputLabel' had its signature changed (property): property `confirmationInputLabel` was added to `WarningModalProps`
+
+    File: packages/module/src/WarningModal/WarningModal.WarningModalProps.d.ts
+    After: property: confirmationInputLabel: ReactNode
+
+    Step 2 of 3:
+    Property 'WarningModal.confirmationInputProps' had its signature changed (property): property `confirmationInputProps` was added to `WarningModalProps`
+
+    File: packages/module/src/WarningModal/WarningModal.WarningModalProps.d.ts
+    After: property: confirmationInputProps: TextInputProps
+
+    Step 3 of 3:
+    Property 'WarningModal.confirmationText' had its signature changed (property): property `confirmationText` was added to `WarningModalProps`
+
+    File: packages/module/src/WarningModal/WarningModal.WarningModalProps.d.ts
+    After: property: confirmationText: string
+  when:
+    or:
+    - frontend.referenced:
+        pattern: ^confirmationInputLabel$
+        location: JSX_PROP
+        component: ^WarningModal$
+        from: '@patternfly/react-component-groups'
+    - frontend.referenced:
+        pattern: ^confirmationInputProps$
+        location: JSX_PROP
+        component: ^WarningModal$
+        from: '@patternfly/react-component-groups'
+    - frontend.referenced:
+        pattern: ^confirmationText$
+        location: JSX_PROP
+        component: ^WarningModal$
+        from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-warningmodal-warningmodal-warningmodalprops-d-ts-warningmodal-cancelbuttonlabel-type-changed-group-3
+  labels:
+  - change-type=type-changed
+  - has-codemod=true
+  - kind=property
+  - package=@patternfly/react-component-groups
+  - source=semver-analyzer
+  effort: 3
+  category: mandatory
+  description: 3 related changes
+  message: |
+    This rule contains 3 migration steps. Apply each one independently:
+
+    Step 1 of 3:
+    Property 'WarningModal.cancelButtonLabel' had its type changed (property): Return type of `cancelButtonLabel` changed from `string` to `ReactNode`
+
+    File: packages/module/src/WarningModal/WarningModal.WarningModalProps.d.ts
+    Before: string
+    After: ReactNode
+
+    Step 2 of 3:
+    Property 'WarningModal.checkboxLabel' had its type changed (property): Return type of `checkboxLabel` changed from `string` to `ReactNode`
+
+    File: packages/module/src/WarningModal/WarningModal.WarningModalProps.d.ts
+    Before: string
+    After: ReactNode
+
+    Step 3 of 3:
+    Property 'WarningModal.confirmButtonLabel' had its type changed (property): Return type of `confirmButtonLabel` changed from `string` to `ReactNode`
+
+    File: packages/module/src/WarningModal/WarningModal.WarningModalProps.d.ts
+    Before: string
+    After: ReactNode
+  when:
+    or:
+    - frontend.referenced:
+        pattern: ^cancelButtonLabel$
+        location: JSX_PROP
+        component: ^WarningModal$
+        from: '@patternfly/react-component-groups'
+    - frontend.referenced:
+        pattern: ^checkboxLabel$
+        location: JSX_PROP
+        component: ^WarningModal$
+        from: '@patternfly/react-component-groups'
+    - frontend.referenced:
+        pattern: ^confirmButtonLabel$
+        location: JSX_PROP
+        component: ^WarningModal$
+        from: '@patternfly/react-component-groups'
+- ruleID: semver-actionbutton-component-import-deprecated
+  labels:
+  - source=semver-analyzer
+  - change-type=component-removal
+  - kind=interface
+  - has-codemod=false
+  effort: 3
+  category: mandatory
+  description: ActionButton has significant breaking changes — 0 of 2 props removed
+  message: |-
+    MIGRATION: <ActionButton> was removed.
+
+    This component has no detected direct replacement.
+    Replace all <ActionButton> usages with the recommended alternative.
+
+    Remove ActionButton from the import statement.
+  when:
+    frontend.referenced:
+      pattern: ^ActionButton$
+      location: IMPORT
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-actionmenuoptions-component-import-deprecated
+  labels:
+  - source=semver-analyzer
+  - change-type=component-removal
+  - kind=interface
+  - has-codemod=false
+  effort: 3
+  category: mandatory
+  description: ActionMenuOptions has significant breaking changes — 0 of 5 props removed
+  message: |-
+    MIGRATION: <ActionMenuOptions> was removed.
+
+    This component has no detected direct replacement.
+    Replace all <ActionMenuOptions> usages with the recommended alternative.
+
+    Remove ActionMenuOptions from the import statement.
+  when:
+    frontend.referenced:
+      pattern: ^ActionMenuOptions$
+      location: IMPORT
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-battery-component-import-deprecated
+  labels:
+  - source=semver-analyzer
+  - change-type=component-removal
+  - kind=interface
+  - has-codemod=false
+  effort: 3
+  category: mandatory
+  description: Battery has significant breaking changes — 0 of 5 props removed
+  message: |-
+    MIGRATION: Replace <Battery> with props on <Severity>.
+
+    Property mapping:
+      - Battery.labelHidden  →  Severity.labelHidden
+      - Battery.className  →  Severity.className
+      - Battery.label  →  Severity.label
+      - Battery.ouiaId  →  Severity.ouiaId
+      - Battery.severity  →  Severity.severity
+
+    Remove <Battery> from JSX and move its props to <Severity>.
+    Also remove Battery from the import statement.
+  when:
+    frontend.referenced:
+      pattern: ^Battery$
+      location: IMPORT
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-contentheader-component-import-deprecated
+  labels:
+  - source=semver-analyzer
+  - change-type=component-removal
+  - kind=interface
+  - has-codemod=false
+  effort: 3
+  category: mandatory
+  description: ContentHeader has significant breaking changes — 0 of 8 props removed
+  message: |-
+    MIGRATION: <ContentHeader> was removed.
+
+    Use <PageHeader> instead.
+    A sibling component in the same family was renamed to <PageHeader>. Replace all <ContentHeader> usages with <PageHeader>.
+
+    Remove ContentHeader from the import statement.
+  when:
+    frontend.referenced:
+      pattern: ^ContentHeader$
+      location: IMPORT
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-detailspage-component-import-deprecated
+  labels:
+  - source=semver-analyzer
+  - change-type=component-removal
+  - kind=interface
+  - has-codemod=false
+  effort: 3
+  category: mandatory
+  description: DetailsPage has significant breaking changes — 0 of 1 props removed
+  message: |-
+    MIGRATION: <DetailsPage> was removed.
+
+    This component has no detected direct replacement.
+    Replace all <DetailsPage> usages with the recommended alternative.
+
+    Remove DetailsPage from the import statement.
+  when:
+    frontend.referenced:
+      pattern: ^DetailsPage$
+      location: IMPORT
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-detailspageheader-component-import-deprecated
+  labels:
+  - source=semver-analyzer
+  - change-type=component-removal
+  - kind=interface
+  - has-codemod=false
+  effort: 3
+  category: mandatory
+  description: DetailsPageHeader has significant breaking changes — 0 of 4 props removed
+  message: |-
+    MIGRATION: Replace <DetailsPageHeader> with props on <PageHeader>.
+
+    Property mapping:
+      - DetailsPageHeader.actionMenu  →  PageHeader.actionMenu
+      - DetailsPageHeader.breadcrumbs  →  PageHeader.breadcrumbs
+
+    Removed with no direct equivalent: pageHeading, actionButtons
+
+    Remove <DetailsPageHeader> from JSX and move its props to <PageHeader>.
+    Also remove DetailsPageHeader from the import statement.
+  when:
+    frontend.referenced:
+      pattern: ^DetailsPageHeader$
+      location: IMPORT
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-groupedactions-component-import-deprecated
+  labels:
+  - source=semver-analyzer
+  - change-type=component-removal
+  - kind=interface
+  - has-codemod=false
+  effort: 3
+  category: mandatory
+  description: GroupedActions has significant breaking changes — 0 of 2 props removed
+  message: |-
+    MIGRATION: <GroupedActions> was removed.
+
+    This component has no detected direct replacement.
+    Replace all <GroupedActions> usages with the recommended alternative.
+
+    Remove GroupedActions from the import statement.
+  when:
+    frontend.referenced:
+      pattern: ^GroupedActions$
+      location: IMPORT
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-horizontalnav-component-import-deprecated
+  labels:
+  - source=semver-analyzer
+  - change-type=component-removal
+  - kind=interface
+  - has-codemod=false
+  effort: 3
+  category: mandatory
+  description: HorizontalNav has significant breaking changes — 0 of 3 props removed
+  message: |-
+    MIGRATION: <HorizontalNav> was removed.
+
+    This component has no detected direct replacement.
+    Replace all <HorizontalNav> usages with the recommended alternative.
+
+    Remove HorizontalNav from the import statement.
+  when:
+    frontend.referenced:
+      pattern: ^HorizontalNav$
+      location: IMPORT
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-invalidobject-component-import-deprecated
+  labels:
+  - source=semver-analyzer
+  - change-type=component-removal
+  - kind=interface
+  - has-codemod=false
+  effort: 3
+  category: mandatory
+  description: InvalidObject has significant breaking changes — 0 of 5 props removed
+  message: |-
+    MIGRATION: <InvalidObject> was removed.
+
+    Use <MissingPage> instead.
+
+    Import change:
+      Replace: import { InvalidObject } from '@patternfly/react-component-groups';
+      With:    import { MissingPage } from '@patternfly/react-component-groups';
+
+    Property mapping:
+      - InvalidObject.invalidObjectBodyText  →  MissingPage.bodyText (renamed)
+      - InvalidObject.invalidObjectTitleText  →  MissingPage.titleText (renamed)
+      - InvalidObject.ouiaId  →  MissingPage.ouiaId
+      - InvalidObject.toHomePageText  →  MissingPage.toHomePageText
+      - InvalidObject.toHomePageUrl  →  MissingPage.toHomePageUrl
+
+    Remove InvalidObject from the import statement.
+  when:
+    frontend.referenced:
+      pattern: ^InvalidObject$
+      location: IMPORT
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-notauthorized-component-import-deprecated
+  labels:
+  - source=semver-analyzer
+  - change-type=component-removal
+  - kind=interface
+  - has-codemod=false
+  effort: 3
+  category: mandatory
+  description: NotAuthorized has significant breaking changes — 0 of 12 props removed
+  message: |-
+    MIGRATION: Replace <NotAuthorized> with props on <UnauthorizedAccess>.
+
+    Property mapping:
+      - NotAuthorized.prevPageButtonText  →  UnauthorizedAccess.prevPageButtonText
+      - NotAuthorized.primaryAction  →  UnauthorizedAccess.primaryAction
+      - NotAuthorized.secondaryActions  →  UnauthorizedAccess.secondaryActions
+      - NotAuthorized.ouiaId  →  UnauthorizedAccess.ouiaId
+      - NotAuthorized.className  →  UnauthorizedAccess.className
+      - NotAuthorized.serviceName  →  UnauthorizedAccess.serviceName
+      - NotAuthorized.showReturnButton  →  UnauthorizedAccess.showReturnButton
+      - NotAuthorized.toLandingPageUrl  →  UnauthorizedAccess.toLandingPageUrl
+      - NotAuthorized.toLandingPageText  →  UnauthorizedAccess.toLandingPageText
+      - NotAuthorized.icon  →  UnauthorizedAccess.icon
+      - NotAuthorized.title  →  UnauthorizedAccess.titleText (renamed)
+      - NotAuthorized.description  →  UnauthorizedAccess.bodyText (renamed)
+
+    Remove <NotAuthorized> from JSX and move its props to <UnauthorizedAccess>.
+    Also remove NotAuthorized from the import statement.
+  when:
+    frontend.referenced:
+      pattern: ^NotAuthorized$
+      location: IMPORT
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-errorstate-errorstate-errorstateprops-d-ts-errorstate-defaulterrordescription-renamed
+  labels:
+  - source=semver-analyzer
+  - change-type=renamed
+  - kind=property
+  - has-codemod=true
+  - package=@patternfly/react-component-groups
+  effort: 1
+  category: mandatory
+  description: property `defaultErrorDescription` was renamed to `defaultBodyText` in `ErrorStateProps`
+  message: |-
+    Property 'ErrorState.defaultErrorDescription' was renamed (property): property `defaultErrorDescription` was renamed to `defaultBodyText` in `ErrorStateProps`
+
+    File: packages/module/src/ErrorState/ErrorState.ErrorStateProps.d.ts
+    Before: defaultErrorDescription
+    After: defaultBodyText
+  when:
+    frontend.referenced:
+      pattern: ^defaultErrorDescription$
+      location: JSX_PROP
+      component: ^ErrorState$
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-errorstate-errorstate-errorstateprops-d-ts-errorstate-errordescription-renamed
+  labels:
+  - source=semver-analyzer
+  - change-type=renamed
+  - kind=property
+  - has-codemod=true
+  - package=@patternfly/react-component-groups
+  effort: 1
+  category: mandatory
+  description: property `errorDescription` was renamed to `bodyText` in `ErrorStateProps`
+  message: |-
+    Property 'ErrorState.errorDescription' was renamed (property): property `errorDescription` was renamed to `bodyText` in `ErrorStateProps`
+
+    File: packages/module/src/ErrorState/ErrorState.ErrorStateProps.d.ts
+    Before: errorDescription
+    After: bodyText
+  when:
+    frontend.referenced:
+      pattern: ^errorDescription$
+      location: JSX_PROP
+      component: ^ErrorState$
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-logsnippet-logsnippet-logsnippetprops-d-ts-logsnippet-leftbordervariant-renamed
+  labels:
+  - source=semver-analyzer
+  - change-type=renamed
+  - kind=property
+  - has-codemod=true
+  - package=@patternfly/react-component-groups
+  effort: 1
+  category: mandatory
+  description: property `leftBorderVariant` was renamed to `variant` in `LogSnippetProps`
+  message: |-
+    Property 'LogSnippet.leftBorderVariant' was renamed (property): property `leftBorderVariant` was renamed to `variant` in `LogSnippetProps`
+
+    File: packages/module/src/LogSnippet/LogSnippet.LogSnippetProps.d.ts
+    Before: leftBorderVariant
+    After: variant
+  when:
+    frontend.referenced:
+      pattern: ^leftBorderVariant$
+      location: JSX_PROP
+      component: ^LogSnippet$
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-multicontentcard-multicontentcard-multicontentcardprops-d-ts-multicontentcard-leftbordervariant-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=removed
+  - kind=property
+  - has-codemod=false
+  - package=@patternfly/react-component-groups
+  effort: 5
+  category: mandatory
+  description: property `leftBorderVariant` was removed from `MultiContentCardProps`
+  message: |-
+    Property 'MultiContentCard.leftBorderVariant' was removed (property): property `leftBorderVariant` was removed from `MultiContentCardProps`
+
+    File: packages/module/src/MultiContentCard/MultiContentCard.MultiContentCardProps.d.ts
+    Before: property: leftBorderVariant: MultiContentCardBorderVariant
+  when:
+    frontend.referenced:
+      pattern: ^leftBorderVariant$
+      location: JSX_PROP
+      component: ^MultiContentCard$
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-multicontentcard-multicontentcard-multicontentcardprops-d-ts-multicontentcard-withheaderborder-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=removed
+  - kind=property
+  - has-codemod=false
+  - package=@patternfly/react-component-groups
+  effort: 5
+  category: mandatory
+  description: property `withHeaderBorder` was removed from `MultiContentCardProps`
+  message: |-
+    Property 'MultiContentCard.withHeaderBorder' was removed (property): property `withHeaderBorder` was removed from `MultiContentCardProps`
+
+    File: packages/module/src/MultiContentCard/MultiContentCard.MultiContentCardProps.d.ts
+    Before: property: withHeaderBorder: boolean
+  when:
+    frontend.referenced:
+      pattern: ^withHeaderBorder$
+      location: JSX_PROP
+      component: ^MultiContentCard$
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-packages-module-src-unavailablecontent-unavailablecontent-unavailablecontentprops-d-ts-unavailablecontent-unavailablebodypoststatuslinktext-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=removed
+  - kind=property
+  - has-codemod=false
+  - package=@patternfly/react-component-groups
+  effort: 5
+  category: mandatory
+  description: property `unavailableBodyPostStatusLinkText` was removed from `UnavailableContentProps`
+  message: |-
+    Property 'UnavailableContent.unavailableBodyPostStatusLinkText' was removed (property): property `unavailableBodyPostStatusLinkText` was removed from `UnavailableContentProps`
+
+    File: packages/module/src/UnavailableContent/UnavailableContent.UnavailableContentProps.d.ts
+    Before: property: unavailableBodyPostStatusLinkText: string
+  when:
+    frontend.referenced:
+      pattern: ^unavailableBodyPostStatusLinkText$
+      location: JSX_PROP
+      component: ^UnavailableContent$
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-pageheaderlink-component-import-deprecated
+  labels:
+  - source=semver-analyzer
+  - change-type=component-removal
+  - kind=interface
+  - has-codemod=false
+  effort: 3
+  category: mandatory
+  description: PageHeaderLink has significant breaking changes — 0 of 2 props removed
+  message: |-
+    MIGRATION: Replace <PageHeaderLink> with props on <PageHeaderLink>.
+
+    Property mapping:
+      - PageHeaderLink.isExternal  →  PageHeaderLink.isExternal
+      - PageHeaderLink.label  →  PageHeaderLink.label
+
+    Remove <PageHeaderLink> from JSX and move its props to <PageHeaderLink>.
+    Also remove PageHeaderLink from the import statement.
+  when:
+    frontend.referenced:
+      pattern: ^PageHeaderLink$
+      location: IMPORT
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-pageheading-component-import-deprecated
+  labels:
+  - source=semver-analyzer
+  - change-type=component-removal
+  - kind=interface
+  - has-codemod=false
+  effort: 3
+  category: mandatory
+  description: PageHeading has significant breaking changes — 0 of 4 props removed
+  message: |-
+    MIGRATION: Replace <PageHeading> with props on <PageHeader>.
+
+    Property mapping:
+      - PageHeading.label  →  PageHeader.label
+      - PageHeading.title  →  PageHeader.title
+
+    Removed with no direct equivalent: iconAfterTitle, iconBeforeTitle
+
+    Remove <PageHeading> from JSX and move its props to <PageHeader>.
+    Also remove PageHeading from the import statement.
+  when:
+    frontend.referenced:
+      pattern: ^PageHeading$
+      location: IMPORT
+      from: '@patternfly/react-component-groups'
+- ruleID: semver-patternfly-react-component-groups-constant-removed-llmassisted-combined
+  labels:
+  - source=semver-analyzer
+  - change-type=removed
+  - kind=constant
+  - has-codemod=true
+  - package=@patternfly/react-component-groups
+  effort: 3
+  category: mandatory
+  description: 21 constants from @patternfly/react-component-groups have breaking changes
+  message: |-
+    21 constants from `@patternfly/react-component-groups` had breaking changes (removed).
+    Affected constants include: default, default, default, default, BatterySeverity and 16 more.
+
+    Per-constant changes:
+      - default: removed (was variable: default)
+      - default: removed (was variable: default)
+      - default: removed (was variable: default)
+      - default: removed (was variable: default)
+      - default: removed (was variable: default)
+      - default: removed (was variable: default)
+      - default: removed (was variable: default)
+      - default: removed (was variable: default)
+      - default: removed (was variable: default)
+      - default: removed (was variable: default)
+      - default: removed (was variable: default)
+      - default: removed (was variable: default)
+      - default: removed (was variable: default)
+      - default: removed (was variable: default)
+      - default: removed (was variable: default)
+      - default: removed (was variable: default)
+      - default: removed (was variable: default)
+      ... and 11 more
+  when:
+    frontend.referenced:
+      pattern: ^(BatterySeverity|LogSnippetBorderVariant|MultiContentCardBorderVariant|default)$
+      location: IMPORT
+      from: '@patternfly/react-component-groups'
+- ruleID: sd-required-prop-staledatawarning-culled
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/module
+  effort: 1
+  category: mandatory
+  description: '<StaleDataWarning> now requires the `culled` prop (type: `CullingDate`)'
+  message: |-
+    <StaleDataWarning> has a new required prop `culled` (type: `CullingDate`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <StaleDataWarning culled={...} />
+  when:
+    frontend.referenced:
+      pattern: ^StaleDataWarning$
+      location: JSX_COMPONENT
+      from: '@patternfly/module'
+- ruleID: sd-required-prop-staledatawarning-currdate
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/module
+  effort: 1
+  category: mandatory
+  description: '<StaleDataWarning> now requires the `currDate` prop (type: `CullingDate`)'
+  message: |-
+    <StaleDataWarning> has a new required prop `currDate` (type: `CullingDate`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <StaleDataWarning currDate={...} />
+  when:
+    frontend.referenced:
+      pattern: ^StaleDataWarning$
+      location: JSX_COMPONENT
+      from: '@patternfly/module'
+- ruleID: sd-required-prop-staledatawarning-stale
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/module
+  effort: 1
+  category: mandatory
+  description: '<StaleDataWarning> now requires the `stale` prop (type: `CullingDate`)'
+  message: |-
+    <StaleDataWarning> has a new required prop `stale` (type: `CullingDate`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <StaleDataWarning stale={...} />
+  when:
+    frontend.referenced:
+      pattern: ^StaleDataWarning$
+      location: JSX_COMPONENT
+      from: '@patternfly/module'
+- ruleID: sd-required-prop-staledatawarning-stalewarning
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/module
+  effort: 1
+  category: mandatory
+  description: '<StaleDataWarning> now requires the `staleWarning` prop (type: `CullingDate`)'
+  message: |-
+    <StaleDataWarning> has a new required prop `staleWarning` (type: `CullingDate`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <StaleDataWarning staleWarning={...} />
+  when:
+    frontend.referenced:
+      pattern: ^StaleDataWarning$
+      location: JSX_COMPONENT
+      from: '@patternfly/module'
+- ruleID: sd-required-prop-fieldbuilder-firstcolumnlabel
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/module
+  effort: 1
+  category: mandatory
+  description: '<FieldBuilder> now requires the `firstColumnLabel` prop (type: `React.ReactNode`)'
+  message: |-
+    <FieldBuilder> has a new required prop `firstColumnLabel` (type: `React.ReactNode`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <FieldBuilder firstColumnLabel={...} />
+  when:
+    frontend.referenced:
+      pattern: ^FieldBuilder$
+      location: JSX_COMPONENT
+      from: '@patternfly/module'
+- ruleID: sd-required-prop-fieldbuilder-onaddrow
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/module
+  effort: 1
+  category: mandatory
+  description: '<FieldBuilder> now requires the `onAddRow` prop (type: `(event: React.MouseEvent) => void`)'
+  message: |-
+    <FieldBuilder> has a new required prop `onAddRow` (type: `(event: React.MouseEvent) => void`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <FieldBuilder onAddRow={...} />
+  when:
+    frontend.referenced:
+      pattern: ^FieldBuilder$
+      location: JSX_COMPONENT
+      from: '@patternfly/module'
+- ruleID: sd-required-prop-fieldbuilder-onremoverow
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/module
+  effort: 1
+  category: mandatory
+  description: '<FieldBuilder> now requires the `onRemoveRow` prop (type: `(event: React.MouseEvent, index: number) => void`)'
+  message: |-
+    <FieldBuilder> has a new required prop `onRemoveRow` (type: `(event: React.MouseEvent, index: number) => void`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <FieldBuilder onRemoveRow={...} />
+  when:
+    frontend.referenced:
+      pattern: ^FieldBuilder$
+      location: JSX_COMPONENT
+      from: '@patternfly/module'
+- ruleID: sd-required-prop-fieldbuilder-rowcount
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/module
+  effort: 1
+  category: mandatory
+  description: '<FieldBuilder> now requires the `rowCount` prop (type: `number`)'
+  message: |-
+    <FieldBuilder> has a new required prop `rowCount` (type: `number`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <FieldBuilder rowCount={...} />
+  when:
+    frontend.referenced:
+      pattern: ^FieldBuilder$
+      location: JSX_COMPONENT
+      from: '@patternfly/module'
+- ruleID: sd-required-prop-listmanager-columns
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/module
+  effort: 1
+  category: mandatory
+  description: '<ListManager> now requires the `columns` prop (type: `ListManagerItem[]`)'
+  message: |-
+    <ListManager> has a new required prop `columns` (type: `ListManagerItem[]`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <ListManager columns={...} />
+  when:
+    frontend.referenced:
+      pattern: ^ListManager$
+      location: JSX_COMPONENT
+      from: '@patternfly/module'
+- ruleID: sd-required-prop-severity-label
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/module
+  effort: 1
+  category: mandatory
+  description: '<Severity> now requires the `label` prop (type: `React.ReactNode`)'
+  message: |-
+    <Severity> has a new required prop `label` (type: `React.ReactNode`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <Severity label={...} />
+  when:
+    frontend.referenced:
+      pattern: ^Severity$
+      location: JSX_COMPONENT
+      from: '@patternfly/module'
+- ruleID: sd-required-prop-severity-severity
+  labels:
+  - source=semver-analyzer
+  - change-type=required-prop-added
+  - package=@patternfly/module
+  effort: 1
+  category: mandatory
+  description: '<Severity> now requires the `severity` prop (type: `SeverityType`)'
+  message: |-
+    <Severity> has a new required prop `severity` (type: `SeverityType`).
+    This prop must be provided — omitting it will cause a TypeScript error.
+
+    Add the prop: <Severity severity={...} />
+  when:
+    frontend.referenced:
+      pattern: ^Severity$
+      location: JSX_COMPONENT
+      from: '@patternfly/module'
+- ruleID: sd-test-multicontentcard-cy-aria-label-kebab-dropdown-toggle-menutoggle-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/react-core
+  effort: 1
+  category: optional
+  description: 'Test impact: MultiContentCard.cy aria-label ''kebab dropdown toggle'' removed'
+  message: |-
+    MultiContentCard.cy no longer has aria-label='kebab dropdown toggle'.
+
+    Tests using getByLabelText('kebab dropdown toggle') to find this component will fail.
+
+    aria-label attribute removed from <MenuToggle> in MultiContentCard.cy
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByLabelText|queryByLabelText|findByLabelText|getAllByLabelText|queryAllByLabelText|findAllByLabelText)$
+      location: FUNCTION_CALL
+      value: ^kebab dropdown toggle$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-ansible-attr-conditionality-data-ouia-component-id-i
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - change-type=attribute-conditionality
+  - impact=frontend-testing
+  - package=@patternfly/module
+  effort: 1
+  category: optional
+  description: 'Test impact: Ansible `data-ouia-component-id` now conditionally rendered'
+  message: |-
+    Ansible no longer always renders `data-ouia-component-id` on `<i>`.
+
+    Previously, `getAttribute('data-ouia-component-id')` returned a string value (e.g., `"false"`) even when the attribute was semantically "off". Now the attribute is omitted entirely when not active, so `getAttribute('data-ouia-component-id')` returns `null`.
+
+    Update test assertions:
+      `.getAttribute('data-ouia-component-id').toBe('false')` → `.not.toHaveAttribute('data-ouia-component-id')`
+      or: `.getAttribute('data-ouia-component-id').toBeNull()`
+      or: `expect(element).not.toHaveAttribute('data-ouia-component-id')`
+  when:
+    builtin.filecontent:
+      pattern: (getAttribute|toHaveAttribute|\.not\.toHaveAttribute)\(\s*['"]data-ouia-component-id['"]\s*[,)]
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-columnmanagementmodal-aria-label-selected-columns-datalist-removed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/module
+  effort: 1
+  category: optional
+  description: 'Test impact: ColumnManagementModal aria-label ''Selected columns'' removed'
+  message: |-
+    ColumnManagementModal no longer has aria-label='Selected columns'.
+
+    Tests using getByLabelText('Selected columns') to find this component will fail.
+
+    aria-label attribute removed from <DataList> in ColumnManagementModal
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByLabelText|queryByLabelText|findByLabelText|getAllByLabelText|queryAllByLabelText|findAllByLabelText)$
+      location: FUNCTION_CALL
+      value: ^Selected columns$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-errorstate-default-something-went-wrong-changed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/module
+  effort: 1
+  category: optional
+  description: 'Test impact: ErrorState default ''Something went wrong'' removed'
+  message: |-
+    ErrorState default prop value 'Something went wrong' was removed.
+
+    Tests using queries that match the old default value will fail:
+      getByLabelText('Something went wrong') and getByText('Something went wrong') may no longer match.
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByText|queryByText|findByText|getAllByText|queryAllByText|findAllByText|getByLabelText|queryByLabelText|findByLabelText|getAllByLabelText|queryAllByLabelText|findAllByLabelText)$
+      location: FUNCTION_CALL
+      value: ^Something went wrong$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-unavailablecontent-default-status-page-changed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/module
+  effort: 1
+  category: optional
+  description: 'Test impact: UnavailableContent default ''status page'' changed'
+  message: |-
+    UnavailableContent default prop value changed: 'status page' → 'Status Page'.
+
+    Tests using queries that match the old default value will fail:
+      getByLabelText('status page') → getByLabelText('Status Page')
+      getByText('status page') → getByText('Status Page')
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByText|queryByText|findByText|getAllByText|queryAllByText|findAllByText|getByLabelText|queryByLabelText|findByLabelText|getAllByLabelText|queryAllByLabelText|findAllByLabelText)$
+      location: FUNCTION_CALL
+      value: ^status page$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-unavailablecontent-default-for-known-outages--changed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/module
+  effort: 1
+  category: optional
+  description: 'Test impact: UnavailableContent default ''for known outages.'' removed'
+  message: |-
+    UnavailableContent default prop value 'for known outages.' was removed.
+
+    Tests using queries that match the old default value will fail:
+      getByLabelText('for known outages.') and getByText('for known outages.') may no longer match.
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByText|queryByText|findByText|getAllByText|queryAllByText|findAllByText|getByLabelText|queryByLabelText|findByLabelText|getAllByLabelText|queryAllByLabelText|findAllByLabelText)$
+      location: FUNCTION_CALL
+      value: ^for known outages\.$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-unavailablecontent-default-try-refreshing-the-page--if-the-problem-persists--contact-your-organization-administrator-or-visit-our-changed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/module
+  effort: 1
+  category: optional
+  description: 'Test impact: UnavailableContent default ''Try refreshing the page. If the problem persists, contact your organization administrator or visit our'' removed'
+  message: |-
+    UnavailableContent default prop value 'Try refreshing the page. If the problem persists, contact your organization administrator or visit our' was removed.
+
+    Tests using queries that match the old default value will fail:
+      getByLabelText('Try refreshing the page. If the problem persists, contact your organization administrator or visit our') and getByText('Try refreshing the page. If the problem persists, contact your organization administrator or visit our') may no longer match.
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByText|queryByText|findByText|getAllByText|queryAllByText|findAllByText|getByLabelText|queryByLabelText|findByLabelText|getAllByLabelText|queryAllByLabelText|findAllByLabelText)$
+      location: FUNCTION_CALL
+      value: ^Try refreshing the page\. If the problem persists, contact your organization administrator or visit our$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-test-unavailablecontent-default-this-page-is-temporarily-unavailable-changed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/module
+  effort: 1
+  category: optional
+  description: 'Test impact: UnavailableContent default ''This page is temporarily unavailable'' removed'
+  message: |-
+    UnavailableContent default prop value 'This page is temporarily unavailable' was removed.
+
+    Tests using queries that match the old default value will fail:
+      getByLabelText('This page is temporarily unavailable') and getByText('This page is temporarily unavailable') may no longer match.
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByText|queryByText|findByText|getAllByText|queryAllByText|findAllByText|getByLabelText|queryByLabelText|findByLabelText|getAllByLabelText|queryAllByLabelText|findAllByLabelText)$
+      location: FUNCTION_CALL
+      value: ^This page is temporarily unavailable$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-migration-test-missingpage-default-invalidobject-changed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/module
+  effort: 1
+  category: optional
+  description: 'Test impact: MissingPage default ''InvalidObject'' changed'
+  message: |-
+    MissingPage default prop value changed: 'InvalidObject' → 'MissingPage'.
+
+    Tests using queries that match the old default value will fail:
+      getByLabelText('InvalidObject') → getByLabelText('MissingPage')
+      getByText('InvalidObject') → getByText('MissingPage')
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByText|queryByText|findByText|getAllByText|queryAllByText|findAllByText|getByLabelText|queryByLabelText|findByLabelText|getAllByLabelText|queryAllByLabelText|findAllByLabelText)$
+      location: FUNCTION_CALL
+      value: ^InvalidObject$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-migration-test-missingpage-default-let-s-find-you-a-new-one--try-a-new-search-or-return-home--changed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/module
+  effort: 1
+  category: optional
+  description: 'Test impact: MissingPage default ''Let''s find you a new one. Try a new search or return home.'' removed'
+  message: |-
+    MissingPage default prop value 'Let's find you a new one. Try a new search or return home.' was removed.
+
+    Tests using queries that match the old default value will fail:
+      getByLabelText('Let's find you a new one. Try a new search or return home.') and getByText('Let's find you a new one. Try a new search or return home.') may no longer match.
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByText|queryByText|findByText|getAllByText|queryAllByText|findAllByText|getByLabelText|queryByLabelText|findByLabelText|getAllByLabelText|queryAllByLabelText|findAllByLabelText)$
+      location: FUNCTION_CALL
+      value: ^Let's find you a new one\. Try a new search or return home\.$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-migration-test-missingpage-default-we-lost-that-page-changed
+  labels:
+  - source=semver-analyzer
+  - change-type=test-impact
+  - impact=frontend-testing
+  - package=@patternfly/module
+  effort: 1
+  category: optional
+  description: 'Test impact: MissingPage default ''We lost that page'' removed'
+  message: |-
+    MissingPage default prop value 'We lost that page' was removed.
+
+    Tests using queries that match the old default value will fail:
+      getByLabelText('We lost that page') and getByText('We lost that page') may no longer match.
+  when:
+    frontend.referenced:
+      pattern: (^|\.)(getByText|queryByText|findByText|getAllByText|queryAllByText|findAllByText|getByLabelText|queryByLabelText|findByLabelText|getAllByLabelText|queryAllByLabelText|findAllByLabelText)$
+      location: FUNCTION_CALL
+      value: ^We lost that page$
+      filePattern: .*\.(test|spec)\.(ts|tsx|js|jsx)$
+- ruleID: sd-prop-default-unavailablecontent-statuspagelinktext
+  labels:
+  - source=semver-analyzer
+  - change-type=prop-default-changed
+  - package=@patternfly/module
+  effort: 1
+  category: potential
+  description: Default value of `statusPageLinkText` on <UnavailableContent> changed (was `'status page'`)
+  message: |-
+    The default value of `statusPageLinkText` on <UnavailableContent> changed from `'status page'` to `'Status Page'`.
+    Existing code relying on the old default may behave differently.
+
+    Review whether your code relies on the old default. If so, add the prop explicitly:
+      <UnavailableContent statusPageLinkText={'status page'} />
+  when:
+    frontend.referenced:
+      pattern: ^UnavailableContent$
+      location: JSX_COMPONENT
+      from: '@patternfly/module'
+- ruleID: sd-prop-default-missingpage-ouiaid
+  labels:
+  - source=semver-analyzer
+  - change-type=prop-default-changed
+  - package=@patternfly/module
+  effort: 1
+  category: potential
+  description: Default value of `ouiaId` on <MissingPage> changed (was `"InvalidObject"`)
+  message: |-
+    The default value of `ouiaId` on <MissingPage> changed from `"InvalidObject"` to `"MissingPage"`.
+    Existing code relying on the old default may behave differently.
+
+    Review whether your code relies on the old default. If so, add the prop explicitly:
+      <MissingPage ouiaId={"InvalidObject"} />
+  when:
+    frontend.referenced:
+      pattern: ^MissingPage$
+      location: JSX_COMPONENT
+      from: '@patternfly/module'
+- ruleID: sd-new-absorbing-prop-warningmodal-confirmationinputlabel
+  labels:
+  - source=semver-analyzer
+  - change-type=new-absorbing-prop
+  - package=@patternfly/module
+  effort: 3
+  category: potential
+  description: New `confirmationInputLabel` prop on <WarningModal> may absorb children content
+  message: |-
+    Component <WarningModal> has a new prop `confirmationInputLabel` (type: `React.ReactNode`) added in v6 that accepts JSX content.
+
+    This prop may be intended to receive content that was previously passed as children. Review the JSX children of <WarningModal> and determine if any should be moved to the `confirmationInputLabel` prop.
+
+    Example migration:
+      Before: <WarningModal>{content} other children</WarningModal>
+      After:  <WarningModal confirmationInputLabel={{content}}>other children</WarningModal>
+  when:
+    frontend.referenced:
+      pattern: ^WarningModal$
+      location: JSX_COMPONENT
+      from: '@patternfly/module'
