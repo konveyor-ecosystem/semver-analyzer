@@ -1,1 +1,4 @@
 target
+build/.ansible/
+build/vault.yml
+*.retry

@@ -1,0 +1,625 @@
+---
+# EC2 Multi-Arch Container Build Playbook
+#
+# Builds patternfly-tools container image natively on EC2 (amd64 + arm64),
+# creates a manifest list, and pushes to Quay.io.
+#
+# Prerequisites:
+#   pip install ansible boto3 botocore
+#   ansible-galaxy collection install amazon.aws community.crypto
+#
+# Usage:
+#   # Create vault file with Quay credentials
+#   ansible-vault create build/vault.yml
+#   # Contents: quay_username: "robot+name"  quay_password: "token"
+#
+#   # Full build (provision + build + push)
+#   ansible-playbook build/ec2-build.yml -e @build/vault.yml --vault-password-file ~/.vault_pass -e guid=my-build-01
+#
+#   # Provision only
+#   ansible-playbook build/ec2-build.yml --tags provision -e @build/vault.yml --vault-password-file ~/.vault_pass -e guid=my-build-01
+#
+#   # Build only (instances already running)
+#   ansible-playbook build/ec2-build.yml --tags build -e @build/vault.yml --vault-password-file ~/.vault_pass -e guid=my-build-01
+#
+#   # Destroy infrastructure
+#   ansible-playbook build/ec2-build.yml --tags destroy -e guid=my-build-01
+#
+#   # Override Containerfile ARGs
+#   ansible-playbook build/ec2-build.yml -e @build/vault.yml --vault-password-file ~/.vault_pass \
+#     -e guid=my-build-01 -e '{"containerfile_args_overrides": {"PF_REACT_TO": "v6.5.0"}}'
+
+###############################################################################
+# Play 1: Validate prerequisites, provision EC2 instances
+###############################################################################
+- name: Validate and provision EC2 build infrastructure
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tags: [provision]
+
+  vars:
+    # ── Infrastructure ───────────────────────────────────────────────────
+    aws_region: us-east-1
+    ec2_instance_type_amd64: c5.2xlarge
+    ec2_instance_type_arm64: c6g.2xlarge
+    ec2_root_volume_size: 80
+    rhel_ami_owner: "309956199498"
+    rhel_ami_amd64: ""
+    rhel_ami_arm64: ""
+    ssh_key_dir: "{{ playbook_dir }}/.ansible/keys/{{ guid }}"
+    ssh_key_name: "ec2-build-{{ guid }}"
+    security_group_name: "ec2-build-sg-{{ guid }}"
+    resource_tags:
+      GUID: "{{ guid }}"
+      Project: semver-ec2-build
+
+    # ── Registry ─────────────────────────────────────────────────────────
+    registry: quay.io
+    registry_namespace: konveyor
+    image_name: patternfly-tools
+    image_tag: latest
+
+    # ── Build context ────────────────────────────────────────────────────
+    build_context_files:
+      - Containerfile
+      - run.sh
+      - eval.sh
+      - prompt.md
+      - eval_prompt.md
+      - goose-config.yaml
+      - goosehints-mempalace
+      - README.run.md
+
+    # ── Containerfile ARG defaults ───────────────────────────────────────
+    _containerfile_args_defaults:
+      # Stage 1: go-builder
+      KANTRA_VERSION: "v0.9.2-rc.1"
+      KANTRA_REPO: "https://github.com/konveyor/kantra.git"
+      KANTRA_BRANCH: "main"
+      # Stage 2: rust-builder
+      SEMVER_REPO: "https://github.com/konveyor-ecosystem/semver-analyzer.git"
+      SEMVER_BRANCH: "main"
+      KONVEYOR_CORE_REPO: "https://github.com/konveyor-ecosystem/konveyor-core.git"
+      KONVEYOR_CORE_BRANCH: "main"
+      FAP_REPO: "https://github.com/konveyor-ecosystem/frontend-analyzer-provider.git"
+      FAP_BRANCH: "main"
+      FIX_ENGINE_REPO: "https://github.com/konveyor-ecosystem/fix-engine.git"
+      FIX_ENGINE_BRANCH: "main"
+      # Stage 3a: pf-rule-gen
+      PF_REACT_REPO: "https://github.com/patternfly/patternfly-react.git"
+      PF_CSS_REPO: "https://github.com/patternfly/patternfly.git"
+      PF_REACT_FROM: "v5.3.3"
+      PF_REACT_TO: "v6.4.1"
+      PF_DEP_FROM: "v5.4.0"
+      PF_DEP_TO: "v6.4.0"
+      PF_FROM_NODE_VERSION: "18"
+      PF_TO_NODE_VERSION: "20"
+      PF_FROM_INSTALL_CMD: "corepack yarn install"
+      PF_FROM_BUILD_CMD: "corepack yarn build"
+      PF_TO_BUILD_CMD: "yarn build:generate && yarn build:esm"
+      PF_DEP_NODE_VERSION: "18"
+      PF_DEP_BUILD_CMD: "export NODE_ENV=development && yarn install && npx gulp buildPatternfly"
+      TOKEN_MAPPINGS_URL: "https://raw.githubusercontent.com/konveyor-ecosystem/semver-analyzer/refs/heads/main/hack/integration/patternfly-token-mappings.yaml"
+      # Stage 3b: topology-rule-gen
+      TOPOLOGY_REPO: "https://github.com/patternfly/react-topology.git"
+      TOPOLOGY_FROM: "v5.4.1"
+      TOPOLOGY_TO: "v6.4.0"
+      TOPOLOGY_FROM_NODE_VERSION: "20"
+      TOPOLOGY_TO_NODE_VERSION: "20"
+      TOPOLOGY_FROM_INSTALL_CMD: "yarn config set cache-folder /tmp/yarn-cache && rm -rf /tmp/yarn-cache && yarn install --frozen-lockfile --ignore-scripts --mutex file:/tmp/yarn-mutex --network-concurrency 1"
+      TOPOLOGY_TO_INSTALL_CMD: "yarn config set cache-folder /tmp/yarn-cache && rm -rf /tmp/yarn-cache && yarn install --frozen-lockfile --ignore-scripts --mutex file:/tmp/yarn-mutex --network-concurrency 1"
+      TOPOLOGY_FROM_BUILD_CMD: "yarn build"
+      TOPOLOGY_TO_BUILD_CMD: "yarn build"
+      # Stage 3c: rcg-rule-gen
+      RCG_REPO: "https://github.com/patternfly/react-component-groups.git"
+      RCG_FROM: "v5.5.3"
+      RCG_TO: "v6.4.0"
+      RCG_FROM_NODE_VERSION: "20"
+      RCG_TO_NODE_VERSION: "20"
+      RCG_FROM_INSTALL_CMD: "npm ci --ignore-scripts"
+      RCG_TO_INSTALL_CMD: "npm ci --ignore-scripts"
+      RCG_FROM_BUILD_CMD: "npm run build"
+      RCG_TO_BUILD_CMD: "npm run build"
+      # Stage 3d: sdk-rule-gen
+      SDK_REPO: "https://github.com/openshift/dynamic-plugin-sdk.git"
+      SDK_FROM_DATE: "2023-04-13"
+      SDK_TO_DATE: "2024-01-15"
+      SDK_FROM_NODE_VERSION: "20"
+      SDK_TO_NODE_VERSION: "20"
+      SDK_FROM_BUILD_CMD: "yarn install && yarn build"
+      SDK_TO_BUILD_CMD: "yarn install && yarn build"
+      # Stage 3e: console-rule-gen
+      CONSOLE_REPO: "https://github.com/openshift/console.git"
+      CONSOLE_FROM: "origin/release-4.17"
+      CONSOLE_TO: "origin/release-4.19"
+      CONSOLE_FROM_NODE_VERSION: "20"
+      CONSOLE_TO_NODE_VERSION: "20"
+      CONSOLE_INSTALL_CMD: "cd frontend && corepack enable && YARN_ENABLE_SCRIPTS=false yarn install"
+      CONSOLE_BUILD_CMD: "cd frontend && yarn build-plugin-sdk"
+      CONSOLE_SDK_FROM_VERSION: "1.4.0"
+      CONSOLE_SDK_TO_VERSION: "4.21.0"
+      # Stage 3f: react-rule-gen
+      REACT_REPO: "https://github.com/facebook/react.git"
+      REACT_FROM: "v17.0.2"
+      REACT_TO: "v18.3.1"
+      REACT_FROM_NODE_VERSION: "18"
+      REACT_TO_NODE_VERSION: "18"
+      REACT_FROM_BUILD_CMD: "yarn build"
+      REACT_TO_BUILD_CMD: "yarn build"
+      REACT_FROM_INSTALL_CMD: "yarn config set cache-folder /tmp/yarn-cache && rm -rf /tmp/yarn-cache && yarn install --ignore-scripts --ignore-optional --mutex file:/tmp/yarn-mutex --network-concurrency 1"
+      REACT_TO_INSTALL_CMD: "yarn config set cache-folder /tmp/yarn-cache && rm -rf /tmp/yarn-cache && yarn install --ignore-scripts --ignore-optional --mutex file:/tmp/yarn-mutex --network-concurrency 1"
+      # Stage 3g: react-types-gen
+      DT_REPO: "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+      REACT_TYPES_FROM: "v17"
+      REACT_TYPES_TO: "v18"
+
+    containerfile_args_overrides: {}
+
+    _containerfile_args: "{{ _containerfile_args_defaults | combine(containerfile_args_overrides) }}"
+
+  tasks:
+    # ── Validation (always runs) ───────────────────────────────────────
+    - name: Validate GUID is provided
+      ansible.builtin.assert:
+        that: guid is defined and guid | length > 0
+        fail_msg: "guid is required. Pass -e guid=<unique-id> to identify this deployment."
+      tags: [always]
+
+    - name: Validate AWS credentials
+      amazon.aws.aws_caller_info:
+        region: "{{ aws_region }}"
+      register: _aws_identity
+      tags: [always]
+
+    - name: Show AWS identity
+      ansible.builtin.debug:
+        msg: "AWS account {{ _aws_identity.account }} ({{ _aws_identity.arn }})"
+      tags: [always]
+
+    - name: Validate Quay credentials are provided
+      ansible.builtin.assert:
+        that:
+          - quay_username is defined and quay_username | length > 0
+          - quay_password is defined and quay_password | length > 0
+        fail_msg: "quay_username and quay_password must be provided via vault file (-e @build/vault.yml)"
+      tags: [always]
+
+    # ── Discover existing infrastructure ───────────────────────────────
+    - name: Check for existing EC2 instances with this GUID
+      amazon.aws.ec2_instance_info:
+        region: "{{ aws_region }}"
+        filters:
+          "tag:GUID": "{{ guid }}"
+          "tag:Project": semver-ec2-build
+          instance-state-name: [running, pending]
+      register: _existing_instances
+      tags: [provision, build]
+
+    - name: Report discovered instances
+      ansible.builtin.debug:
+        msg: "Found {{ _existing_instances.instances | length }} existing instance(s) for GUID={{ guid }}"
+      tags: [provision, build]
+
+    # ── SSH key pair ───────────────────────────────────────────────────
+    - name: Ensure local SSH key directory exists
+      ansible.builtin.file:
+        path: "{{ ssh_key_dir }}"
+        state: directory
+        mode: "0700"
+      when: _existing_instances.instances | length < 2
+
+    - name: Check for existing AWS key pair
+      amazon.aws.ec2_key_info:
+        region: "{{ aws_region }}"
+        names: ["{{ ssh_key_name }}"]
+      register: _existing_key
+
+    - name: Generate local SSH key pair
+      community.crypto.openssh_keypair:
+        path: "{{ ssh_key_dir }}/{{ ssh_key_name }}"
+        type: rsa
+        size: 4096
+      when: _existing_key.keypairs | length == 0
+
+    - name: Import SSH key pair to AWS
+      amazon.aws.ec2_key:
+        region: "{{ aws_region }}"
+        name: "{{ ssh_key_name }}"
+        key_material: "{{ lookup('file', ssh_key_dir + '/' + ssh_key_name + '.pub') }}"
+        state: present
+        tags: "{{ resource_tags }}"
+      when: _existing_key.keypairs | length == 0
+
+    # ── Security group ─────────────────────────────────────────────────
+    - name: Detect caller public IP
+      ansible.builtin.uri:
+        url: https://checkip.amazonaws.com
+        return_content: true
+      register: _my_ip
+      when: _existing_instances.instances | length < 2
+
+    - name: Create security group
+      amazon.aws.ec2_security_group:
+        region: "{{ aws_region }}"
+        name: "{{ security_group_name }}"
+        description: "SSH access for EC2 build {{ guid }}"
+        rules:
+          - proto: tcp
+            ports: [22]
+            cidr_ip: "{{ _my_ip.content | default('0.0.0.0/32') | trim }}/32"
+            rule_desc: SSH from build runner
+        rules_egress:
+          - proto: all
+            cidr_ip: "0.0.0.0/0"
+            rule_desc: All outbound
+        tags: "{{ resource_tags }}"
+        state: present
+      register: _sg
+      when: _existing_instances.instances | length < 2
+
+    # ── AMI lookup ─────────────────────────────────────────────────────
+    - name: Look up latest RHEL 9 AMI (x86_64)
+      amazon.aws.ec2_ami_info:
+        region: "{{ aws_region }}"
+        owners: ["{{ rhel_ami_owner }}"]
+        filters:
+          name: "RHEL-9*_HVM-*-x86_64-*-Hourly*"
+          architecture: x86_64
+          state: available
+      register: _ami_amd64_lookup
+      when: rhel_ami_amd64 == "" and (_existing_instances.instances | selectattr('tags.Arch', 'equalto', 'amd64') | list | length == 0)
+
+    - name: Look up latest RHEL 9 AMI (arm64)
+      amazon.aws.ec2_ami_info:
+        region: "{{ aws_region }}"
+        owners: ["{{ rhel_ami_owner }}"]
+        filters:
+          name: "RHEL-9*_HVM-*-arm64-*-Hourly*"
+          architecture: arm64
+          state: available
+      register: _ami_arm64_lookup
+      when: rhel_ami_arm64 == "" and (_existing_instances.instances | selectattr('tags.Arch', 'equalto', 'arm64') | list | length == 0)
+
+    - name: Resolve amd64 AMI ID
+      ansible.builtin.set_fact:
+        _ami_amd64: "{{ rhel_ami_amd64 if rhel_ami_amd64 else (_ami_amd64_lookup.images | sort(attribute='creation_date') | last).image_id }}"
+      when:
+        - _existing_instances.instances | selectattr('tags.Arch', 'equalto', 'amd64') | list | length == 0
+        - rhel_ami_amd64 != '' or (_ami_amd64_lookup.images | default([]) | length > 0)
+
+    - name: Resolve arm64 AMI ID
+      ansible.builtin.set_fact:
+        _ami_arm64: "{{ rhel_ami_arm64 if rhel_ami_arm64 else (_ami_arm64_lookup.images | sort(attribute='creation_date') | last).image_id }}"
+      when:
+        - _existing_instances.instances | selectattr('tags.Arch', 'equalto', 'arm64') | list | length == 0
+        - rhel_ami_arm64 != '' or (_ami_arm64_lookup.images | default([]) | length > 0)
+
+    - name: Validate amd64 AMI was resolved
+      ansible.builtin.assert:
+        that: _ami_amd64 is defined and _ami_amd64 | length > 0
+        fail_msg: "Could not resolve RHEL 9 x86_64 AMI for {{ aws_region }}. Pass rhel_ami_amd64 explicitly."
+      when: _existing_instances.instances | selectattr('tags.Arch', 'equalto', 'amd64') | list | length == 0
+
+    - name: Validate arm64 AMI was resolved
+      ansible.builtin.assert:
+        that: _ami_arm64 is defined and _ami_arm64 | length > 0
+        fail_msg: "Could not resolve RHEL 9 arm64 AMI for {{ aws_region }}. Pass rhel_ami_arm64 explicitly."
+      when: _existing_instances.instances | selectattr('tags.Arch', 'equalto', 'arm64') | list | length == 0
+
+    # ── Launch instances ───────────────────────────────────────────────
+    - name: Launch amd64 build instance
+      amazon.aws.ec2_instance:
+        region: "{{ aws_region }}"
+        name: "ec2-build-amd64-{{ guid }}"
+        instance_type: "{{ ec2_instance_type_amd64 }}"
+        image_id: "{{ _ami_amd64 }}"
+        key_name: "{{ ssh_key_name }}"
+        security_group: "{{ security_group_name }}"
+        volumes:
+          - device_name: /dev/sda1
+            ebs:
+              volume_size: "{{ ec2_root_volume_size }}"
+              volume_type: gp3
+              delete_on_termination: true
+        tags: "{{ resource_tags | combine({'Arch': 'amd64'}) }}"
+        wait: true
+        state: running
+      register: _amd64_instance
+      when: _existing_instances.instances | selectattr('tags.Arch', 'equalto', 'amd64') | list | length == 0
+
+    - name: Launch arm64 build instance
+      amazon.aws.ec2_instance:
+        region: "{{ aws_region }}"
+        name: "ec2-build-arm64-{{ guid }}"
+        instance_type: "{{ ec2_instance_type_arm64 }}"
+        image_id: "{{ _ami_arm64 }}"
+        key_name: "{{ ssh_key_name }}"
+        security_group: "{{ security_group_name }}"
+        volumes:
+          - device_name: /dev/sda1
+            ebs:
+              volume_size: "{{ ec2_root_volume_size }}"
+              volume_type: gp3
+              delete_on_termination: true
+        tags: "{{ resource_tags | combine({'Arch': 'arm64'}) }}"
+        wait: true
+        state: running
+      register: _arm64_instance
+      when: _existing_instances.instances | selectattr('tags.Arch', 'equalto', 'arm64') | list | length == 0
+
+    # ── Gather all running instances ───────────────────────────────────
+    - name: Refresh instance inventory
+      amazon.aws.ec2_instance_info:
+        region: "{{ aws_region }}"
+        filters:
+          "tag:GUID": "{{ guid }}"
+          "tag:Project": semver-ec2-build
+          instance-state-name: running
+      register: _all_instances
+      tags: [provision, build]
+
+    - name: Fail if instances are missing
+      ansible.builtin.assert:
+        that: _all_instances.instances | length == 2
+        fail_msg: "Expected 2 running instances for GUID={{ guid }}, found {{ _all_instances.instances | length }}. Run with --tags provision first."
+      tags: [provision, build]
+
+    - name: Wait for SSH on all instances
+      ansible.builtin.wait_for:
+        host: "{{ item.public_ip_address }}"
+        port: 22
+        timeout: 300
+      loop: "{{ _all_instances.instances }}"
+      loop_control:
+        label: "{{ item.tags.Arch }} ({{ item.public_ip_address }})"
+      tags: [provision, build]
+
+    # ── Dynamic inventory ──────────────────────────────────────────────
+    - name: Add amd64 instance to inventory
+      ansible.builtin.add_host:
+        name: "{{ (_all_instances.instances | selectattr('tags.Arch', 'equalto', 'amd64') | first).public_ip_address }}"
+        groups: [build_hosts, amd64_hosts]
+        ansible_user: ec2-user
+        ansible_ssh_private_key_file: "{{ ssh_key_dir }}/{{ ssh_key_name }}"
+        ansible_ssh_common_args: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ServerAliveInterval=60 -o ServerAliveCountMax=120"
+        build_arch: amd64
+        build_platform: linux/amd64
+        registry: "{{ registry }}"
+        registry_namespace: "{{ registry_namespace }}"
+        image_name: "{{ image_name }}"
+        image_tag: "{{ image_tag }}"
+        quay_username: "{{ quay_username }}"
+        quay_password: "{{ quay_password }}"
+        _containerfile_args: "{{ _containerfile_args }}"
+        build_context_files: "{{ build_context_files }}"
+      tags: [provision, build]
+
+    - name: Add arm64 instance to inventory
+      ansible.builtin.add_host:
+        name: "{{ (_all_instances.instances | selectattr('tags.Arch', 'equalto', 'arm64') | first).public_ip_address }}"
+        groups: [build_hosts, arm64_hosts]
+        ansible_user: ec2-user
+        ansible_ssh_private_key_file: "{{ ssh_key_dir }}/{{ ssh_key_name }}"
+        ansible_ssh_common_args: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ServerAliveInterval=60 -o ServerAliveCountMax=120"
+        build_arch: arm64
+        build_platform: linux/arm64
+        registry: "{{ registry }}"
+        registry_namespace: "{{ registry_namespace }}"
+        image_name: "{{ image_name }}"
+        image_tag: "{{ image_tag }}"
+        quay_username: "{{ quay_username }}"
+        quay_password: "{{ quay_password }}"
+        _containerfile_args: "{{ _containerfile_args }}"
+        build_context_files: "{{ build_context_files }}"
+      tags: [provision, build]
+
+    - name: Show instance summary
+      ansible.builtin.debug:
+        msg: >-
+          {{ item.tags.Arch }}: {{ item.instance_id }} ({{ item.instance_type }})
+          at {{ item.public_ip_address }}
+      loop: "{{ _all_instances.instances }}"
+      loop_control:
+        label: "{{ item.tags.Arch }}"
+      tags: [provision, build]
+
+
+###############################################################################
+# Play 2: Build container images on EC2 instances (parallel)
+###############################################################################
+- name: Build container images
+  hosts: build_hosts
+  strategy: free
+  become: true
+  gather_facts: false
+  tags: [build]
+
+  tasks:
+    - name: Wait for cloud-init to finish
+      ansible.builtin.command: cloud-init status --wait
+      changed_when: false
+
+    - name: Install build prerequisites
+      ansible.builtin.dnf:
+        name: [podman, buildah, git, skopeo]
+        state: present
+
+    - name: Configure podman to use cgroupfs
+      ansible.builtin.copy:
+        dest: /etc/containers/containers.conf
+        content: |
+          [engine]
+          cgroup_manager = "cgroupfs"
+        mode: "0644"
+
+    - name: Create build context directory
+      ansible.builtin.file:
+        path: /home/ec2-user/build-context
+        state: directory
+        owner: ec2-user
+        mode: "0755"
+
+    - name: Copy build context files
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/{{ item }}"
+        dest: "/home/ec2-user/build-context/{{ item }}"
+        owner: ec2-user
+        mode: "0644"
+      loop: "{{ build_context_files }}"
+
+    - name: Log in to container registry
+      ansible.builtin.command:
+        cmd: "podman login {{ registry }} -u {{ quay_username }} -p {{ quay_password }}"
+      no_log: true
+      changed_when: true
+
+    - name: Build container image
+      ansible.builtin.shell: |
+        set -euo pipefail
+        podman build \
+          --format docker \
+          --platform {{ build_platform }} \
+          --tag {{ registry }}/{{ registry_namespace }}/{{ image_name }}:{{ image_tag }}-{{ build_arch }} \
+          {% for k, v in _containerfile_args.items() %}
+          --build-arg {{ k }}={{ v | quote }} \
+          {% endfor %}
+          -f /home/ec2-user/build-context/Containerfile \
+          /home/ec2-user/build-context/
+      args:
+        executable: /bin/bash
+      async: 14400
+      poll: 60
+      register: _build_result
+
+    - name: Apply rule count labels
+      ansible.builtin.shell: |
+        set -euo pipefail
+        IMAGE="{{ registry }}/{{ registry_namespace }}/{{ image_name }}:{{ image_tag }}-{{ build_arch }}"
+        CONTAINER=$(buildah from "$IMAGE")
+        SUMMARY=$(buildah run "$CONTAINER" cat /opt/patternfly-tools/RULES_SUMMARY)
+        while IFS=': ' read -r name count _; do
+          [ -n "$name" ] && buildah config --label "io.konveyor.rules.${name}.rule-count=${count}" "$CONTAINER"
+        done <<< "$SUMMARY"
+        buildah commit "$CONTAINER" "$IMAGE"
+        buildah rm "$CONTAINER"
+      args:
+        executable: /bin/bash
+      changed_when: true
+
+    - name: Push per-architecture image
+      ansible.builtin.command:
+        cmd: "podman push {{ registry }}/{{ registry_namespace }}/{{ image_name }}:{{ image_tag }}-{{ build_arch }}"
+      register: _push_result
+      changed_when: true
+
+    - name: Report build result
+      ansible.builtin.debug:
+        msg: "{{ build_arch }} image pushed: {{ registry }}/{{ registry_namespace }}/{{ image_name }}:{{ image_tag }}-{{ build_arch }}"
+
+
+###############################################################################
+# Play 3: Create and push manifest list (runs on amd64 instance)
+###############################################################################
+- name: Create and push manifest list
+  hosts: amd64_hosts
+  become: true
+  gather_facts: false
+  tags: [build]
+
+  vars:
+    _full_image: "{{ registry }}/{{ registry_namespace }}/{{ image_name }}:{{ image_tag }}"
+
+  tasks:
+    - name: Create manifest list
+      ansible.builtin.shell: |
+        set -euo pipefail
+        podman manifest create {{ _full_image }} \
+          {{ _full_image }}-amd64 \
+          {{ _full_image }}-arm64
+      args:
+        executable: /bin/bash
+      changed_when: true
+
+    - name: Push manifest list
+      ansible.builtin.command:
+        cmd: "podman manifest push {{ _full_image }} docker://{{ _full_image }} --all"
+      changed_when: true
+
+    - name: Verify manifest list in registry
+      ansible.builtin.shell: |
+        set -euo pipefail
+        skopeo inspect --raw "docker://{{ _full_image }}" \
+          | python3 -c "import json,sys; m=json.load(sys.stdin); assert 'manifests' in m, 'Not a manifest list'; print(f'Manifest list with {len(m[\"manifests\"])} entries')"
+      args:
+        executable: /bin/bash
+      register: _verify
+      changed_when: false
+
+    - name: Report success
+      ansible.builtin.debug:
+        msg: "Multi-arch image pushed: {{ _full_image }} — {{ _verify.stdout }}"
+
+
+###############################################################################
+# Play 4: Destroy infrastructure (only with --tags destroy)
+###############################################################################
+- name: Destroy EC2 build infrastructure
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tags: [destroy, never]
+
+  vars:
+    aws_region: us-east-1
+    ssh_key_dir: "{{ playbook_dir }}/.ansible/keys/{{ guid }}"
+    ssh_key_name: "ec2-build-{{ guid }}"
+    security_group_name: "ec2-build-sg-{{ guid }}"
+
+  tasks:
+    - name: Validate GUID is provided
+      ansible.builtin.assert:
+        that: guid is defined and guid | length > 0
+        fail_msg: "guid is required for destroy. Pass -e guid=<id> matching the deployment to tear down."
+
+    - name: Find instances with this GUID
+      amazon.aws.ec2_instance_info:
+        region: "{{ aws_region }}"
+        filters:
+          "tag:GUID": "{{ guid }}"
+          "tag:Project": semver-ec2-build
+      register: _destroy_instances
+
+    - name: Terminate instances
+      amazon.aws.ec2_instance:
+        region: "{{ aws_region }}"
+        instance_ids: "{{ _destroy_instances.instances | map(attribute='instance_id') | list }}"
+        state: absent
+        wait: true
+      when: _destroy_instances.instances | length > 0
+
+    - name: Wait for instances to terminate
+      ansible.builtin.pause:
+        seconds: 10
+      when: _destroy_instances.instances | length > 0
+
+    - name: Delete security group
+      amazon.aws.ec2_security_group:
+        region: "{{ aws_region }}"
+        name: "{{ security_group_name }}"
+        state: absent
+
+    - name: Delete AWS key pair
+      amazon.aws.ec2_key:
+        region: "{{ aws_region }}"
+        name: "{{ ssh_key_name }}"
+        state: absent
+
+    - name: Remove local SSH keys
+      ansible.builtin.file:
+        path: "{{ ssh_key_dir }}"
+        state: absent
+
+    - name: Report cleanup complete
+      ansible.builtin.debug:
+        msg: "All resources for GUID={{ guid }} have been destroyed."

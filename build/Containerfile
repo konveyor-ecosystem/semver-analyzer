@@ -1,10 +1,11 @@
 # Stage 1: Go builder — kantra and kantra release assets
-FROM registry.access.redhat.com/ubi9/go-toolset AS go-builder
+FROM registry.access.redhat.com/ubi10/go-toolset AS go-builder
 
 ARG KANTRA_VERSION=v0.9.2-rc.1
 ARG KANTRA_REPO=https://github.com/konveyor/kantra.git
 ARG KANTRA_BRANCH=main
-ARG KANTRA_ARCH=amd64
+ARG TARGETARCH=amd64
+ARG KANTRA_ARCH=${TARGETARCH}
 USER root
 RUN dnf install -y unzip && dnf clean all
 
@@ -23,7 +24,7 @@ RUN : > /kantra-assets/maven-index.txt \
 
 
 # Stage 2: Rust builder — semver-analyzer, frontend-analyzer-provider, fix-engine-cli
-FROM registry.access.redhat.com/ubi9/ubi AS rust-builder
+FROM registry.access.redhat.com/ubi10/ubi AS rust-builder
 
 ARG SEMVER_REPO=https://github.com/konveyor-ecosystem/semver-analyzer.git
 ARG SEMVER_BRANCH=main
@@ -63,7 +64,7 @@ RUN strip \
 # ═══════════════════════════════════════════════════════════════════════════
 # Stage 3a: PatternFly React rules
 # ═══════════════════════════════════════════════════════════════════════════
-FROM registry.access.redhat.com/ubi9/ubi AS pf-rule-gen
+FROM registry.access.redhat.com/ubi10/ubi AS pf-rule-gen
 
 ARG PF_REACT_REPO=https://github.com/patternfly/patternfly-react.git
 ARG PF_CSS_REPO=https://github.com/patternfly/patternfly.git
@@ -80,7 +81,7 @@ ARG PF_DEP_NODE_VERSION=18
 ARG PF_DEP_BUILD_CMD="export NODE_ENV=development && yarn install && npx gulp buildPatternfly"
 ARG TOKEN_MAPPINGS_URL=https://raw.githubusercontent.com/konveyor-ecosystem/semver-analyzer/refs/heads/main/hack/integration/patternfly-token-mappings.yaml
 
-RUN dnf install -y git make gcc gcc-c++ && dnf clean all
+RUN dnf install -y git make gcc gcc-c++ python-setuptools && dnf clean all
 
 ENV NVM_DIR=/root/.nvm
 RUN bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash \
@@ -123,12 +124,13 @@ RUN mkdir -p /rules/semver_rules \
     --output-dir /rules/semver_rules \
     --ruleset-name patternfly-breaking-changes \
     --rename-patterns /src/patternfly-token-mappings.yaml
+RUN grep -rch 'ruleID:' /rules 2>/dev/null | awk '{s+=$1} END {print s+0}' > /rules/rule_count
 
 
 # ═══════════════════════════════════════════════════════════════════════════
 # Stage 3b: PatternFly React Topology rules
 # ═══════════════════════════════════════════════════════════════════════════
-FROM registry.access.redhat.com/ubi9/ubi AS topology-rule-gen
+FROM registry.access.redhat.com/ubi10/ubi AS topology-rule-gen
 
 ARG TOPOLOGY_REPO=https://github.com/patternfly/react-topology.git
 ARG TOPOLOGY_FROM=v5.4.1
@@ -174,12 +176,13 @@ RUN mkdir -p /rules/semver_rules \
     --from-report /src/topology_report.json \
     --output-dir /rules/semver_rules \
     --ruleset-name topology-breaking-changes
+RUN grep -rch 'ruleID:' /rules 2>/dev/null | awk '{s+=$1} END {print s+0}' > /rules/rule_count
 
 
 # ═══════════════════════════════════════════════════════════════════════════
 # Stage 3c: PatternFly React Component Groups rules
 # ═══════════════════════════════════════════════════════════════════════════
-FROM registry.access.redhat.com/ubi9/ubi AS rcg-rule-gen
+FROM registry.access.redhat.com/ubi10/ubi AS rcg-rule-gen
 
 ARG RCG_REPO=https://github.com/patternfly/react-component-groups.git
 ARG RCG_FROM=v5.5.3
@@ -225,12 +228,13 @@ RUN mkdir -p /rules/semver_rules \
     --from-report /src/rcg_report.json \
     --output-dir /rules/semver_rules \
     --ruleset-name react-component-groups-breaking-changes
+RUN grep -rch 'ruleID:' /rules 2>/dev/null | awk '{s+=$1} END {print s+0}' > /rules/rule_count
 
 
 # ═══════════════════════════════════════════════════════════════════════════
 # Stage 3d: Dynamic Plugin SDK rules
 # ═══════════════════════════════════════════════════════════════════════════
-FROM registry.access.redhat.com/ubi9/ubi AS sdk-rule-gen
+FROM registry.access.redhat.com/ubi10/ubi AS sdk-rule-gen
 
 ARG SDK_REPO=https://github.com/openshift/dynamic-plugin-sdk.git
 ARG SDK_FROM_DATE=2023-04-13
@@ -279,19 +283,67 @@ RUN mkdir -p /rules/semver_rules \
     --from-report /src/sdk_report.json \
     --output-dir /rules/semver_rules \
     --ruleset-name dynamic-plugin-sdk-breaking-changes
+RUN grep -rch 'ruleID:' /rules 2>/dev/null | awk '{s+=$1} END {print s+0}' > /rules/rule_count
 
 
 # ═══════════════════════════════════════════════════════════════════════════
-# Stage 3e: Console SDK rules (disabled — needs --package-name-map from updates branch)
+# Stage 3e: Console SDK rules
 # ═══════════════════════════════════════════════════════════════════════════
-FROM registry.access.redhat.com/ubi9/ubi-minimal AS console-rule-gen
-RUN mkdir -p /rules/semver_rules
+FROM registry.access.redhat.com/ubi10/ubi AS console-rule-gen
+
+ARG CONSOLE_REPO=https://github.com/openshift/console.git
+ARG CONSOLE_FROM=origin/release-4.17
+ARG CONSOLE_TO=origin/release-4.19
+ARG CONSOLE_FROM_NODE_VERSION=20
+ARG CONSOLE_TO_NODE_VERSION=20
+ARG CONSOLE_INSTALL_CMD="cd frontend && corepack enable && YARN_ENABLE_SCRIPTS=false yarn install"
+ARG CONSOLE_BUILD_CMD="cd frontend && yarn build-plugin-sdk"
+ARG CONSOLE_SDK_FROM_VERSION=1.4.0
+ARG CONSOLE_SDK_TO_VERSION=4.21.0
+
+RUN dnf install -y git make gcc gcc-c++ && dnf clean all
+
+ENV NVM_DIR=/root/.nvm
+RUN bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash \
+    && source "$NVM_DIR/nvm.sh" \
+    && nvm install "$CONSOLE_FROM_NODE_VERSION" \
+    && nvm install "$CONSOLE_TO_NODE_VERSION" \
+    && nvm alias default "$CONSOLE_TO_NODE_VERSION" \
+    && npm install -g corepack && corepack enable'
+
+COPY --from=rust-builder /src/semver-analyzer/target/release/semver-analyzer /usr/local/bin/
+
+WORKDIR /src
+RUN git clone "$CONSOLE_REPO"
+
+ENV YARN_ENABLE_SCRIPTS=false
+RUN bash -c 'source "$NVM_DIR/nvm.sh" && semver-analyzer analyze typescript \
+    --repo /src/console \
+    --from "$CONSOLE_FROM" --to "$CONSOLE_TO" \
+    --from-node-version "$CONSOLE_FROM_NODE_VERSION" \
+    --to-node-version "$CONSOLE_TO_NODE_VERSION" \
+    --from-install-command "$CONSOLE_INSTALL_CMD" \
+    --to-install-command "$CONSOLE_INSTALL_CMD" \
+    --from-build-command "$CONSOLE_BUILD_CMD" \
+    --to-build-command "$CONSOLE_BUILD_CMD" \
+    --no-llm \
+    \
+    -o /src/console_report.json'
+
+RUN mkdir -p /rules/semver_rules \
+    && semver-analyzer konveyor typescript \
+    --from-report /src/console_report.json \
+    --output-dir /rules/semver_rules \
+    --ruleset-name console-sdk-breaking-changes \
+    --package-name-map "@console/dynamic-plugin-sdk=@openshift-console/dynamic-plugin-sdk" \
+    --package-version "@openshift-console/dynamic-plugin-sdk=${CONSOLE_SDK_FROM_VERSION}:${CONSOLE_SDK_TO_VERSION}"
+RUN grep -rch 'ruleID:' /rules 2>/dev/null | awk '{s+=$1} END {print s+0}' > /rules/rule_count
 
 
 # ═══════════════════════════════════════════════════════════════════════════
 # Stage 3f: React rules
 # ═══════════════════════════════════════════════════════════════════════════
-FROM registry.access.redhat.com/ubi9/ubi AS react-rule-gen
+FROM registry.access.redhat.com/ubi10/ubi AS react-rule-gen
 
 ARG REACT_REPO=https://github.com/facebook/react.git
 ARG REACT_FROM=v17.0.2
@@ -301,7 +353,7 @@ ARG REACT_TO_NODE_VERSION=18
 ARG REACT_FROM_BUILD_CMD="yarn build"
 ARG REACT_TO_BUILD_CMD="yarn build"
 
-RUN dnf install -y git make gcc gcc-c++ java-17-openjdk-headless && dnf clean all
+RUN dnf install -y git make gcc gcc-c++ java-21-openjdk-headless && dnf clean all
 
 ENV NVM_DIR=/root/.nvm
 RUN bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash \
@@ -339,12 +391,13 @@ RUN mkdir -p /rules/semver_rules \
     --from-report /src/react_report.json \
     --output-dir /rules/semver_rules \
     --ruleset-name react-breaking-changes
+RUN grep -rch 'ruleID:' /rules 2>/dev/null | awk '{s+=$1} END {print s+0}' > /rules/rule_count
 
 
 # ═══════════════════════════════════════════════════════════════════════════
 # Stage 3g: React Types rules (synthetic repo from DefinitelyTyped)
 # ═══════════════════════════════════════════════════════════════════════════
-FROM registry.access.redhat.com/ubi9/ubi AS react-types-gen
+FROM registry.access.redhat.com/ubi10/ubi AS react-types-gen
 
 ARG DT_REPO=https://github.com/DefinitelyTyped/DefinitelyTyped.git
 ARG REACT_TYPES_FROM=v17
@@ -395,6 +448,7 @@ RUN mkdir -p /rules/semver_rules \
     --from-report /src/react_types_report.json \
     --output-dir /rules/semver_rules \
     --ruleset-name react-types-breaking-changes
+RUN grep -rch 'ruleID:' /rules 2>/dev/null | awk '{s+=$1} END {print s+0}' > /rules/rule_count
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -467,6 +521,91 @@ RUN chmod 444 /root/.config/goose/config.yaml
 # run.sh and prompt
 COPY run.sh eval.sh prompt.md eval_prompt.md* ./
 RUN chmod +x run.sh eval.sh bin/* .kantra/kantra
+
+# Rule counts from each generator stage
+COPY --from=pf-rule-gen /rules/rule_count /tmp/counts/patternfly
+COPY --from=topology-rule-gen /rules/rule_count /tmp/counts/topology
+COPY --from=rcg-rule-gen /rules/rule_count /tmp/counts/react-component-groups
+COPY --from=sdk-rule-gen /rules/rule_count /tmp/counts/dynamic-plugin-sdk
+COPY --from=console-rule-gen /rules/rule_count /tmp/counts/console-sdk
+COPY --from=react-rule-gen /rules/rule_count /tmp/counts/react
+COPY --from=react-types-gen /rules/rule_count /tmp/counts/react-types
+
+# Image metadata — source repos, version ranges, and rule counts
+ARG KANTRA_VERSION=v0.9.2-rc.1
+ARG KANTRA_REPO=https://github.com/konveyor/kantra.git
+ARG KANTRA_BRANCH=main
+ARG SEMVER_REPO=https://github.com/konveyor-ecosystem/semver-analyzer.git
+ARG SEMVER_BRANCH=main
+ARG KONVEYOR_CORE_REPO=https://github.com/konveyor-ecosystem/konveyor-core.git
+ARG KONVEYOR_CORE_BRANCH=main
+ARG FAP_REPO=https://github.com/konveyor-ecosystem/frontend-analyzer-provider.git
+ARG FAP_BRANCH=main
+ARG FIX_ENGINE_REPO=https://github.com/konveyor-ecosystem/fix-engine.git
+ARG FIX_ENGINE_BRANCH=main
+ARG PF_REACT_REPO=https://github.com/patternfly/patternfly-react.git
+ARG PF_REACT_FROM=v5.3.3
+ARG PF_REACT_TO=v6.4.1
+ARG TOPOLOGY_REPO=https://github.com/patternfly/react-topology.git
+ARG TOPOLOGY_FROM=v5.4.1
+ARG TOPOLOGY_TO=v6.4.0
+ARG RCG_REPO=https://github.com/patternfly/react-component-groups.git
+ARG RCG_FROM=v5.5.3
+ARG RCG_TO=v6.4.0
+ARG SDK_REPO=https://github.com/openshift/dynamic-plugin-sdk.git
+ARG SDK_FROM_DATE=2023-04-13
+ARG SDK_TO_DATE=2024-01-15
+ARG CONSOLE_REPO=https://github.com/openshift/console.git
+ARG CONSOLE_FROM=origin/release-4.17
+ARG CONSOLE_TO=origin/release-4.19
+ARG REACT_REPO=https://github.com/facebook/react.git
+ARG REACT_FROM=v17.0.2
+ARG REACT_TO=v18.3.1
+ARG DT_REPO=https://github.com/DefinitelyTyped/DefinitelyTyped.git
+ARG REACT_TYPES_FROM=v17
+ARG REACT_TYPES_TO=v18
+
+LABEL io.konveyor.kantra.repo="${KANTRA_REPO}" \
+      io.konveyor.kantra.branch="${KANTRA_BRANCH}" \
+      io.konveyor.kantra.version="${KANTRA_VERSION}" \
+      io.konveyor.semver-analyzer.repo="${SEMVER_REPO}" \
+      io.konveyor.semver-analyzer.branch="${SEMVER_BRANCH}" \
+      io.konveyor.konveyor-core.repo="${KONVEYOR_CORE_REPO}" \
+      io.konveyor.konveyor-core.branch="${KONVEYOR_CORE_BRANCH}" \
+      io.konveyor.frontend-analyzer-provider.repo="${FAP_REPO}" \
+      io.konveyor.frontend-analyzer-provider.branch="${FAP_BRANCH}" \
+      io.konveyor.fix-engine.repo="${FIX_ENGINE_REPO}" \
+      io.konveyor.fix-engine.branch="${FIX_ENGINE_BRANCH}" \
+      io.konveyor.rules.patternfly.repo="${PF_REACT_REPO}" \
+      io.konveyor.rules.patternfly.from="${PF_REACT_FROM}" \
+      io.konveyor.rules.patternfly.to="${PF_REACT_TO}" \
+      io.konveyor.rules.topology.repo="${TOPOLOGY_REPO}" \
+      io.konveyor.rules.topology.from="${TOPOLOGY_FROM}" \
+      io.konveyor.rules.topology.to="${TOPOLOGY_TO}" \
+      io.konveyor.rules.react-component-groups.repo="${RCG_REPO}" \
+      io.konveyor.rules.react-component-groups.from="${RCG_FROM}" \
+      io.konveyor.rules.react-component-groups.to="${RCG_TO}" \
+      io.konveyor.rules.dynamic-plugin-sdk.repo="${SDK_REPO}" \
+      io.konveyor.rules.dynamic-plugin-sdk.from-date="${SDK_FROM_DATE}" \
+      io.konveyor.rules.dynamic-plugin-sdk.to-date="${SDK_TO_DATE}" \
+      io.konveyor.rules.console-sdk.repo="${CONSOLE_REPO}" \
+      io.konveyor.rules.console-sdk.from="${CONSOLE_FROM}" \
+      io.konveyor.rules.console-sdk.to="${CONSOLE_TO}" \
+      io.konveyor.rules.react.repo="${REACT_REPO}" \
+      io.konveyor.rules.react.from="${REACT_FROM}" \
+      io.konveyor.rules.react.to="${REACT_TO}" \
+      io.konveyor.rules.react-types.repo="${DT_REPO}" \
+      io.konveyor.rules.react-types.from="${REACT_TYPES_FROM}" \
+      io.konveyor.rules.react-types.to="${REACT_TYPES_TO}"
+
+# Dynamic labels for rule counts (buildah/podman only — docker ignores --label in RUN)
+# These are applied after the static LABEL instruction via the entrypoint wrapper,
+# but also written to RULES_SUMMARY for easy inspection at runtime.
+RUN for f in /tmp/counts/*; do \
+      name=$(basename "$f"); count=$(cat "$f"); \
+      echo "$name: $count rules"; \
+    done | tee RULES_SUMMARY \
+    && rm -rf /tmp/counts
 
 VOLUME ["/workspace"]
 
