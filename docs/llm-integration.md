@@ -1,97 +1,58 @@
 # LLM Integration
 
-The semver-analyzer can optionally use an external LLM for behavioral analysis. LLM integration is **only used with the `--behavioral` pipeline** -- the default source-level diff (SD) pipeline is fully deterministic and requires no LLM.
+semver-analyzer can optionally use an external LLM for analysis tasks. The LLM is invoked as a CLI subprocess — there are no direct API integrations. No API keys are configured in semver-analyzer itself; the external tool handles authentication.
 
-## Overview
+## When LLM Is Used
 
-- The LLM is invoked as an **external CLI subprocess** -- there are no direct API integrations
-- No API keys are configured in semver-analyzer itself -- the external tool handles authentication
-- The LLM command receives a prompt as its last argument and returns JSON via stdout
-- Any CLI tool that follows this contract can be used (see [Using a Different Provider](#using-a-different-provider))
+The default SD (Source-level Diff) pipeline is mostly deterministic but makes **1-2 LLM calls** for rename inference (constant rename patterns and interface renames) and hierarchy inference. These are skipped with `--no-llm`.
 
-## When to Use LLM Analysis
+The BU (Behavioral) pipeline (`--behavioral`) makes **many more** LLM calls — per changed file, per private function with breaks, etc. This is the heavier LLM use case.
 
-The default SD pipeline covers most use cases deterministically:
+| Pipeline | LLM usage | What it covers |
+|----------|-----------|----------------|
+| SD (default) | 1-2 calls for rename/hierarchy inference | API diff, composition trees, CSS tokens, React patterns, DOM/ARIA, prop defaults |
+| SD + `--no-llm` | Zero calls | Same as above, but skips rename/hierarchy inference |
+| BU (`--behavioral`) | Many calls (per-file + per-function) | Test-delta correlation, behavioral inference, call graph propagation |
+| BU + `--no-llm` | Zero calls | Test-delta heuristics only, no LLM semantic analysis |
 
-| SD Pipeline (default) | BU + LLM Pipeline (`--behavioral`) |
-|----------------------|-------------------------------------|
-| API surface diff | API surface diff |
-| Component composition trees | Test-delta correlation |
-| CSS token analysis | LLM behavioral inference |
-| React API pattern detection | Call graph propagation |
-| DOM/ARIA/role changes | Constant rename inference |
-| Prop defaults, bindings | Interface rename detection |
-| Deterministic, fast, free | Non-deterministic, slower, costs money |
-
-Use `--behavioral` with LLM when you need:
-- Analysis of behavioral changes that don't affect the API surface or source profiles
-- Test-based confidence signals (test assertions changed = high confidence break)
-- LLM-powered understanding of complex implementation changes
-
-For most library migration analysis, the default SD pipeline is sufficient.
+For most library migration analysis, the default SD pipeline (with or without `--no-llm`) is sufficient.
 
 ## Installing Goose
 
-[Goose](https://github.com/aaif-goose/goose) is the recommended LLM CLI tool. It's an open-source AI agent from the [Agentic AI Foundation](https://aaif.io/) that supports 15+ LLM providers.
-
-### Install
+[Goose](https://github.com/block/goose) is the recommended LLM CLI tool. It supports multiple LLM providers (Anthropic, OpenAI, Google, Ollama, etc.).
 
 ```bash
-# macOS / Linux
-curl -fsSL https://github.com/aaif-goose/goose/releases/download/stable/download_cli.sh | bash
-
-# Or see full install options at:
-# https://goose-docs.ai/docs/getting-started/installation
-```
-
-### Verify installation
-
-```bash
+curl -fsSL https://github.com/block/goose/releases/download/stable/download_cli.sh | bash
 goose --version
 ```
 
-### Configure a model
-
-Goose manages its own model configuration. On first run, it will prompt you to configure a provider (Anthropic, OpenAI, Google, Ollama, etc.) and API key. See the [goose documentation](https://goose-docs.ai/docs/quickstart) for setup details.
-
-No specific model is required by semver-analyzer -- whatever model you configure in goose is what gets used. More capable models (Claude Sonnet/Opus, GPT-4) produce better behavioral analysis.
+On first run, Goose prompts you to configure a provider and API key. See the [Goose documentation](https://block.github.io/goose/docs/getting-started/installation) for details.
 
 ## Usage
 
-### Basic usage
-
 ```bash
+# Default pipeline with LLM rename inference
+semver-analyzer analyze typescript \
+  --repo /path/to/library \
+  --from v1.0.0 --to v2.0.0 \
+  -o report.json
+
+# Default pipeline, no LLM at all
+semver-analyzer analyze typescript \
+  --repo /path/to/library \
+  --from v1.0.0 --to v2.0.0 \
+  --no-llm \
+  -o report.json
+
+# Behavioral pipeline with full LLM analysis
 semver-analyzer analyze typescript \
   --repo /path/to/library \
   --from v1.0.0 --to v2.0.0 \
   --behavioral \
   --llm-command "goose run --no-session -q -t" \
   -o report.json
-```
 
-### Goose flags explained
-
-| Flag | Purpose |
-|------|---------|
-| `run` | Run goose in single-prompt mode |
-| `--no-session` | Don't create or use a persistent session |
-| `-q` | Quiet mode -- suppress interactive UI output |
-| `-t` | Treat the final argument as the prompt text (not a file path) |
-
-### Key options
-
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--llm-command <cmd>` | `goose run --no-session -q -t` | CLI command to invoke. If not specified, this default is used when `--behavioral` is set |
-| `--llm-timeout <secs>` | `120` | Timeout per LLM invocation |
-| `--llm-all-files` | off | Send all changed files to LLM, not just those with test changes. Increases coverage but also cost |
-| `--no-llm` | off | Skip LLM analysis entirely (static behavioral analysis only) |
-
-### Running without LLM
-
-You can use `--behavioral` with `--no-llm` to get test-delta heuristics without LLM calls:
-
-```bash
+# Behavioral pipeline, no LLM (test-delta heuristics only)
 semver-analyzer analyze typescript \
   --repo /path/to/library \
   --from v1.0.0 --to v2.0.0 \
@@ -99,20 +60,33 @@ semver-analyzer analyze typescript \
   -o report.json
 ```
 
-This detects behavioral breaks via test assertion changes and call graph analysis, but skips the LLM-powered semantic analysis.
+### CLI Flags
 
-## Using a Different Provider
+| Flag | Default | Description |
+|------|---------|-------------|
+| `--behavioral` | off | Use the BU pipeline instead of the default SD pipeline |
+| `--llm-command <cmd>` | `goose run --no-session -q -t` | CLI command to invoke for LLM analysis |
+| `--llm-timeout <secs>` | `120` | Timeout per LLM invocation |
+| `--llm-all-files` | off | Send all changed files to LLM, not just those with test changes. Requires `--behavioral` |
+| `--no-llm` | off | Skip all LLM analysis |
+
+### Goose Flags Explained
+
+| Flag | Purpose |
+|------|---------|
+| `run` | Run Goose in single-prompt mode |
+| `--no-session` | Don't create or use a persistent session |
+| `-q` | Quiet mode — suppress interactive UI output |
+| `-t` | Treat the final argument as the prompt text (not a file path) |
+
+## CLI Contract for Custom Providers
 
 Any CLI tool can be used as long as it follows this contract:
 
-### CLI Contract
-
-1. **Prompt as last argument**: The `--llm-command` string is split on whitespace, and the entire prompt is appended as a single final argument
-2. **Response on stdout**: The tool must write its response to stdout
-3. **Exit code 0**: Non-zero exit codes are treated as errors
-4. **JSON in response**: The response must contain valid JSON, either in a fenced code block (`` ```json ... ``` ``) or inline. The parser tries multiple extraction strategies
-
-### How invocation works
+1. **Prompt as last argument:** The `--llm-command` string is split on whitespace, and the entire prompt is appended as a single final argument
+2. **Response on stdout:** The tool must write its response to stdout
+3. **Exit code 0:** Non-zero exit codes are treated as errors
+4. **JSON in response:** The response must contain valid JSON, either in a fenced code block (`` ```json ... ``` ``) or inline. The parser tries multiple extraction strategies
 
 Given `--llm-command "my-tool --format json"`, the analyzer runs:
 
@@ -120,19 +94,15 @@ Given `--llm-command "my-tool --format json"`, the analyzer runs:
 my-tool --format json "<entire prompt text>"
 ```
 
-The prompt text can be very long (thousands of characters), containing code diffs, function signatures, and structured instructions. The tool must handle large arguments.
+The prompt text can be very long (thousands of characters). The tool must handle large arguments.
 
-### Example with a custom wrapper
-
-If your LLM tool doesn't accept prompts as arguments, write a wrapper script:
+### Wrapper Script Example
 
 ```bash
 #!/bin/bash
-# llm-wrapper.sh -- adapts stdin-based tools for semver-analyzer
+# llm-wrapper.sh — adapts stdin-based tools for semver-analyzer
 echo "$1" | my-llm-tool --stdin --json
 ```
-
-Then use:
 
 ```bash
 semver-analyzer analyze typescript \
@@ -144,38 +114,29 @@ semver-analyzer analyze typescript \
 
 ## What the LLM Analyzes
 
-When the behavioral pipeline runs with LLM enabled, the analyzer makes multiple LLM calls for different analysis tasks:
+### SD Pipeline (default, 1-2 calls)
 
-| Task | What it does | When it runs |
-|------|-------------|-------------|
-| Function spec inference | Infers preconditions, postconditions, error behavior for changed functions | Per changed function |
-| Breaking verdict | Determines if a spec change is breaking | Per changed function |
-| Propagation check | Checks if a private function's break propagates to public API | Per private function with breaks |
-| File behavioral analysis | Analyzes full file diffs for behavioral changes | When `--llm-all-files` is set |
-| Constant rename inference | Detects rename patterns in large constant groups | Once, if many constants changed |
-| Interface rename detection | Finds renamed interfaces with low lexical similarity | Once, if many interfaces changed |
-| Hierarchy inference | Infers component parent-child relationships | Once per package |
+| Task | When it runs |
+|------|-------------|
+| Constant rename inference | Once, if many constants were removed — detects regex rename patterns |
+| Interface rename detection | Once, if many interfaces were removed — finds renames with low lexical similarity |
+| Hierarchy inference | Once per package — infers component parent-child relationships |
+
+### BU Pipeline (`--behavioral`, many calls)
+
+| Task | When it runs |
+|------|-------------|
+| File behavioral analysis | Per changed source file — analyzes diffs for behavioral changes |
+| Propagation check | Per private function with breaks — checks if break propagates to public API |
+| Constant rename inference | Same as SD |
+| Interface rename detection | Same as SD |
+| Hierarchy inference | Same as SD |
 
 ## Cost Considerations
 
-- Each analysis can make **dozens to hundreds** of LLM calls depending on the number of changed functions
-- For large libraries (e.g., PatternFly v5 -> v6), expect hundreds of calls
-- Cost depends entirely on the model configured in your LLM tool
-- The `--llm-timeout` flag prevents individual calls from hanging (default: 120s)
-- Use the default SD pipeline (no `--behavioral` flag) for **zero LLM cost** -- it covers most migration analysis needs deterministically
-- Use `--behavioral --no-llm` for test-delta analysis without any LLM cost
-
-LLM usage statistics are included in the report's `metadata.llm_usage` field:
-
-```json
-{
-  "metadata": {
-    "llm_usage": {
-      "total_calls": 142,
-      "total_input_tokens": 850000,
-      "total_output_tokens": 120000,
-      "estimated_cost_usd": 3.45
-    }
-  }
-}
-```
+- **SD pipeline (default):** 1-2 LLM calls total. Negligible cost.
+- **BU pipeline (`--behavioral`):** Dozens to hundreds of calls depending on the number of changed files. For large libraries (e.g., PatternFly v5 → v6), expect significant cost.
+- Cost depends on the model configured in your LLM tool. More capable models produce better results.
+- The `--llm-timeout` flag prevents individual calls from hanging (default: 120s).
+- Use `--no-llm` for zero LLM cost on either pipeline.
+- The analyzer runs up to 5 concurrent LLM calls.
