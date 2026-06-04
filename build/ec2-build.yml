@@ -43,7 +43,7 @@
     aws_region: us-east-1
     ec2_instance_type_amd64: c5.2xlarge
     ec2_instance_type_arm64: c6g.2xlarge
-    ec2_root_volume_size: 80
+    ec2_root_volume_size: 120
     rhel_ami_owner: "309956199498"
     rhel_ami_amd64: ""
     rhel_ami_arm64: ""
@@ -63,13 +63,13 @@
     # ── Build context ────────────────────────────────────────────────────
     build_context_files:
       - Containerfile
+      - build.sh
       - run.sh
       - eval.sh
       - prompt.md
       - eval_prompt.md
       - goose-config.yaml
       - goosehints-mempalace
-      - README.run.md
 
     # ── Containerfile ARG defaults ───────────────────────────────────────
     _containerfile_args_defaults:
@@ -183,7 +183,7 @@
           - quay_username is defined and quay_username | length > 0
           - quay_password is defined and quay_password | length > 0
         fail_msg: "quay_username and quay_password must be provided via vault file (-e @build/vault.yml)"
-      tags: [always]
+      tags: [provision, build]
 
     # ── Discover existing infrastructure ───────────────────────────────
     - name: Check for existing EC2 instances with this GUID
@@ -194,12 +194,12 @@
           "tag:Project": semver-ec2-build
           instance-state-name: [running, pending]
       register: _existing_instances
-      tags: [provision, build]
+      tags: [provision, build, archive]
 
     - name: Report discovered instances
       ansible.builtin.debug:
         msg: "Found {{ _existing_instances.instances | length }} existing instance(s) for GUID={{ guid }}"
-      tags: [provision, build]
+      tags: [provision, build, archive]
 
     # ── SSH key pair ───────────────────────────────────────────────────
     - name: Ensure local SSH key directory exists
@@ -357,13 +357,13 @@
           "tag:Project": semver-ec2-build
           instance-state-name: running
       register: _all_instances
-      tags: [provision, build]
+      tags: [provision, build, archive]
 
     - name: Fail if instances are missing
       ansible.builtin.assert:
         that: _all_instances.instances | length == 2
         fail_msg: "Expected 2 running instances for GUID={{ guid }}, found {{ _all_instances.instances | length }}. Run with --tags provision first."
-      tags: [provision, build]
+      tags: [provision, build, archive]
 
     - name: Wait for SSH on all instances
       ansible.builtin.wait_for:
@@ -373,7 +373,7 @@
       loop: "{{ _all_instances.instances }}"
       loop_control:
         label: "{{ item.tags.Arch }} ({{ item.public_ip_address }})"
-      tags: [provision, build]
+      tags: [provision, build, archive]
 
     # ── Dynamic inventory ──────────────────────────────────────────────
     - name: Add amd64 instance to inventory
@@ -389,11 +389,11 @@
         registry_namespace: "{{ registry_namespace }}"
         image_name: "{{ image_name }}"
         image_tag: "{{ image_tag }}"
-        quay_username: "{{ quay_username }}"
-        quay_password: "{{ quay_password }}"
+        quay_username: "{{ quay_username | default('') }}"
+        quay_password: "{{ quay_password | default('') }}"
         _containerfile_args: "{{ _containerfile_args }}"
         build_context_files: "{{ build_context_files }}"
-      tags: [provision, build]
+      tags: [provision, build, archive]
 
     - name: Add arm64 instance to inventory
       ansible.builtin.add_host:
@@ -408,11 +408,11 @@
         registry_namespace: "{{ registry_namespace }}"
         image_name: "{{ image_name }}"
         image_tag: "{{ image_tag }}"
-        quay_username: "{{ quay_username }}"
-        quay_password: "{{ quay_password }}"
+        quay_username: "{{ quay_username | default('') }}"
+        quay_password: "{{ quay_password | default('') }}"
         _containerfile_args: "{{ _containerfile_args }}"
         build_context_files: "{{ build_context_files }}"
-      tags: [provision, build]
+      tags: [provision, build, archive]
 
     - name: Show instance summary
       ansible.builtin.debug:
@@ -422,7 +422,7 @@
       loop: "{{ _all_instances.instances }}"
       loop_control:
         label: "{{ item.tags.Arch }}"
-      tags: [provision, build]
+      tags: [provision, build, archive]
 
 
 ###############################################################################
@@ -562,7 +562,122 @@
 
 
 ###############################################################################
-# Play 4: Destroy infrastructure (only with --tags destroy)
+# Play 4: Build distributable archives via build.sh (parallel on EC2)
+###############################################################################
+- name: Build distributable archives
+  hosts: build_hosts
+  strategy: free
+  become: true
+  gather_facts: false
+  tags: [archive]
+
+  vars:
+    build_sh_env_overrides: {}
+    archive_download_dir: "{{ playbook_dir }}"
+
+  tasks:
+    - name: Install archive build prerequisites (system packages)
+      ansible.builtin.dnf:
+        name:
+          - git
+          - curl
+          - zip
+          - unzip
+          - python3
+          - gcc
+          - gcc-c++
+          - make
+          - openssl-devel
+          - pkg-config
+          - golang
+        state: present
+
+    - name: Install Rust via rustup
+      ansible.builtin.shell: |
+        set -euo pipefail
+        if command -v rustup &>/dev/null; then
+          echo "rustup already installed"
+        else
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        fi
+      args:
+        executable: /bin/bash
+      register: _rustup
+      changed_when: "'already installed' not in _rustup.stdout"
+
+    - name: Install nvm and Node.js 18 + 20
+      ansible.builtin.shell: |
+        set -euo pipefail
+        export NVM_DIR="/root/.nvm"
+        if [ ! -f "$NVM_DIR/nvm.sh" ]; then
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+        fi
+        source "$NVM_DIR/nvm.sh"
+        nvm install 18 && nvm use 18 && corepack enable
+        nvm install 20 && nvm use 20 && corepack enable
+      args:
+        executable: /bin/bash
+      changed_when: true
+
+    - name: Create build context directory
+      ansible.builtin.file:
+        path: /home/ec2-user/build-context
+        state: directory
+        owner: ec2-user
+        mode: "0755"
+
+    - name: Copy build context files
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/{{ item }}"
+        dest: "/home/ec2-user/build-context/{{ item }}"
+        owner: ec2-user
+        mode: "0644"
+      loop: "{{ build_context_files }}"
+
+    - name: Make build.sh executable
+      ansible.builtin.file:
+        path: /home/ec2-user/build-context/build.sh
+        mode: "0755"
+
+    - name: Run build.sh
+      ansible.builtin.shell: |
+        set -euo pipefail
+        export PATH="/root/.cargo/bin:$PATH"
+        export NVM_DIR="/root/.nvm"
+        source "$NVM_DIR/nvm.sh"
+        cd /home/ec2-user/build-context
+        printf '1\n1\n' | bash build.sh
+      args:
+        executable: /bin/bash
+      environment: "{{ build_sh_env_overrides }}"
+      async: 14400
+      poll: 60
+      register: _archive_result
+
+    - name: Find archive ZIP
+      ansible.builtin.find:
+        paths: /home/ec2-user/build-context
+        patterns: "patternfly_tools_*.zip"
+      register: _archive_files
+
+    - name: Verify archive was created
+      ansible.builtin.assert:
+        that: _archive_files.files | length > 0
+        fail_msg: "No archive ZIP found after build.sh completed"
+
+    - name: Download archive to local machine
+      ansible.builtin.fetch:
+        src: "{{ _archive_files.files[0].path }}"
+        dest: "{{ archive_download_dir }}/"
+        flat: true
+
+    - name: Report archive result
+      ansible.builtin.debug:
+        msg: "Archive downloaded: {{ archive_download_dir }}/{{ _archive_files.files[0].path | basename }}"
+
+
+###############################################################################
+# Play 5: Destroy infrastructure (only with --tags destroy)
 ###############################################################################
 - name: Destroy EC2 build infrastructure
   hosts: localhost

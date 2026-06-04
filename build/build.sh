@@ -92,6 +92,10 @@ DT_REPO_URL="https://github.com/DefinitelyTyped/DefinitelyTyped.git"
 REACT_TYPES_FROM="${REACT_TYPES_FROM:-v17}"
 REACT_TYPES_TO="${REACT_TYPES_TO:-v18}"
 
+# ── Global env for node builds ──────────────────────────────────────────
+export PUPPETEER_SKIP_DOWNLOAD=1
+export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+
 # ── State ────────────────────────────────────────────────────────────────
 HOST_PLATFORM=""
 TARGET_PLATFORM=""
