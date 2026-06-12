@@ -49,6 +49,47 @@ The default provider is GCP Vertex AI. Override with `GOOSE_PROVIDER` and the co
 
 Set `GOOSE_MODEL` to override the model (default: `claude-opus-4-6`).
 
+## EC2 Build (Ansible)
+
+Builds multi-arch container images and/or distributable ZIP archives natively on EC2 instances (one amd64, one arm64). See [`ec2-build.yml`](ec2-build.yml) for the full playbook.
+
+### Prerequisites
+
+```bash
+pip install ansible boto3 botocore
+ansible-galaxy collection install amazon.aws community.crypto
+ansible-vault create build/vault.yml   # quay_username + quay_password
+```
+
+### Usage
+
+Every deployment is identified by a `guid`. Re-running with the same GUID reuses existing infrastructure.
+
+```bash
+# Full build (provision EC2 + build container + push)
+ansible-playbook build/ec2-build.yml \
+  -e @build/vault.yml --vault-password-file ~/.vault_pass -e guid=my-build-01
+
+# Build distributable ZIP archives
+ansible-playbook build/ec2-build.yml --tags archive -e guid=my-build-01
+
+# Destroy infrastructure
+ansible-playbook build/ec2-build.yml --tags destroy -e guid=my-build-01
+```
+
+### Tags
+
+| Tag | Description |
+|-----|-------------|
+| `provision` | Create EC2 instances, security group, SSH key |
+| `build` | Build container images, apply labels, push to registry, create manifest |
+| `archive` | Build distributable ZIP archives via `build.sh`, download locally |
+| `destroy` | Terminate instances, delete security group and key pair |
+
+See the playbook header comments for the full variable reference and override examples.
+
+---
+
 ## Source Repositories
 
 | Repo | Purpose |
